@@ -81,28 +81,30 @@ function showQuestion() {
 
     optionsContainer.innerHTML = "";
 
-    q.options.forEach(option => {
+    q.options.forEach((option, index) => {
 
-        const div = document.createElement("div");
-        div.className = "option";
-        div.innerText = option;
+        const optionDiv = document.createElement("div");
+        optionDiv.className = "option";
 
-        if (answers[currentQuestion] === option)
-            div.classList.add("selected");
+        optionDiv.innerHTML = `
+            <label class="option-label">
+                <input
+                    type="radio"
+                    name="answer"
+                    value="${index}"
+                    ${answers[currentQuestion] === index ? "checked" : ""}
+                >
+                <span>${option}</span>
+            </label>
+        `;
 
-        div.onclick = () => {
+        const radio = optionDiv.querySelector("input");
 
-            answers[currentQuestion] = option;
+        radio.addEventListener("change", () => {
+            answers[currentQuestion] = index;
+        });
 
-            document.querySelectorAll(".option").forEach(x =>
-                x.classList.remove("selected")
-            );
-
-            div.classList.add("selected");
-
-        };
-
-        optionsContainer.appendChild(div);
+        optionsContainer.appendChild(optionDiv);
 
     });
 
@@ -173,13 +175,17 @@ function finishQuiz() {
     questionCard.style.display = "none";
     timerBar.style.display = "none";
     resultCard.style.display = "block";
+
     let score = 0;
     let analysis = "";
     let review = "";
 
     quizQuestions.forEach((q, i) => {
 
-        if (answers[i] === q.answer) {
+        const selectedAnswer =
+            answers[i] !== null ? q.options[answers[i]] : null;
+
+        if (selectedAnswer === q.answer) {
 
             score++;
 
@@ -189,7 +195,7 @@ function finishQuiz() {
             <div class="review">
                 <h3>Question ${i + 1}</h3>
                 <p><b>${q.question}</b></p>
-                <p class="wrong">Your Answer: ${answers[i] || "Not Answered"}</p>
+                <p class="wrong">Your Answer: ${selectedAnswer || "Not Answered"}</p>
                 <p class="correct">Correct Answer: ${q.answer}</p>
             </div>`;
         }
