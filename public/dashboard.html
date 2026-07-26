@@ -251,7 +251,7 @@
     <a class="side-link active" data-tab="dashboard">📊 Dashboard</a>
     <a class="side-link" data-tab="careerintel">🧠 Intelligence</a>
     <a class="side-link" data-tab="skillgap">🧩 Skill Gaps</a>
-    <a class="side-link" data-tab="roadmap">🧭 Roadmap</a>
+    <a class="side-link" data-tab="roadmap">🧭 learning-path</a>
     
     <div class="sidebar-title">Preparation</div>
     <a class="side-link" data-tab="resume">📄 Resume Scan</a>
@@ -1235,17 +1235,21 @@
       roadmapList.appendChild(div);
     });
 
-    // Roadmap Tab
     // Learning Path (replaces Roadmap Tab)
     const stepsWrap = document.getElementById('learningPathSteps');
     if (stepsWrap) {
       stepsWrap.innerHTML = '';
+      // Track progress per task in-memory (resets on reload — fine for a prototype)
+      window._learningProgress = window._learningProgress || {};
+
       let inProgressIdx = activeRoadmap.length > 1 ? 1 : (activeRoadmap.length ? 0 : -1);
 
       activeRoadmap.forEach((item, idx) => {
-        const isCompleted = idx === 0;
-        const isInProgress = idx === inProgressIdx && !isCompleted;
-        const progressPct = isInProgress ? 35 : 0; // static placeholder progress for the "current" step
+        const key = item.task;
+        const storedPct = window._learningProgress[key] || 0;
+        const isCompleted = idx === 0 || storedPct >= 100;
+        const isInProgress = !isCompleted && idx === inProgressIdx;
+        const progressPct = isInProgress ? (storedPct || 35) : 0;
 
         const step = document.createElement('div');
         step.className = 'learning-path-step';
@@ -1258,7 +1262,7 @@
           badgeHtml = `
             <div style="display:flex;align-items:center;gap:1rem;">
               <span class="learning-path-badge-inprogress">${progressPct}%</span>
-              <button class="btn btn-primary btn-sm" data-task="${idx}">Continue</button>
+              <button class="btn btn-primary btn-sm" data-task="${escapeHtml(key)}" data-skill="${escapeHtml(item.missing || '')}">Continue</button>
             </div>`;
           cardClass = 'in-progress-card';
         } else {
@@ -1272,7 +1276,7 @@
               <div class="learning-path-number">${idx + 1}</div>
               <div class="learning-path-info">
                 <div class="learning-path-title" style="${isCompleted ? 'text-decoration:line-through;color:var(--muted);' : ''}">${item.task}</div>
-                <div class="learning-path-meta">${item.reward}${isInProgress ? '' : ''}</div>
+                <div class="learning-path-meta">${item.reward}</div>
                 ${isInProgress ? `
                   <div class="learning-path-progress-container" style="margin-top:0.35rem;">
                     <div class="learning-path-progress-bar">
@@ -1287,31 +1291,42 @@
         stepsWrap.appendChild(step);
       });
 
-      // Wire up "Continue" buttons on in-progress step
-      // Wire up "Continue" buttons on in-progress step
+      function handleContinueClick(taskKey, skillName) {
+        const current = window._learningProgress[taskKey] || 35;
+        const next = Math.min(100, current + 35);
+        window._learningProgress[taskKey] = next;
+
+        const meta = skillName ? metaFor(skillName) : null;
+        if (meta && meta.courses && meta.courses.length) {
+          toast(next >= 100 ? `Marked complete! Great work on: ${taskKey}` : `Opening course resource — ${next}% progress logged`);
+          window.open(`https://www.google.com/search?q=${encodeURIComponent(meta.courses[0])}`, '_blank', 'noopener');
+        } else {
+          toast(next >= 100 ? `Marked complete! Great work on: ${taskKey}` : `${next}% progress logged`);
+        }
+        // Re-render to reflect new progress / unlock next step
+        generateDynamicContent(currentResumeData?.skills || [], currentResumeData?.name, resumeScore, maxMatch, interviewCount);
+      }
+
       stepsWrap.querySelectorAll('[data-task]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          toast('Keep going — you\'ve got this!');
-          btn.closest('.learning-path-step').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
+        btn.addEventListener('click', () => handleContinueClick(btn.dataset.task, btn.dataset.skill));
       });
 
       // Continue Learning footer — driven by the current in-progress item
       const footer = document.getElementById('continueLearningCard');
       if (footer) {
-        if (inProgressIdx >= 0 && activeRoadmap[inProgressIdx]) {
-          const current = activeRoadmap[inProgressIdx];
+        const activeItem = activeRoadmap[inProgressIdx];
+        if (activeItem && (window._learningProgress[activeItem.task] || 35) < 100) {
+          const pct = window._learningProgress[activeItem.task] || 35;
           footer.style.display = 'flex';
-          document.getElementById('continueLearningSubject').textContent = current.task;
-          document.getElementById('continueLearningBarFill').style.width = '35%';
-          document.getElementById('continueLearningPct').textContent = '35%';
-          document.getElementById('continueLearningBtn').onclick = () => switchTab('roadmap');
+          document.getElementById('continueLearningSubject').textContent = activeItem.task;
+          document.getElementById('continueLearningBarFill').style.width = pct + '%';
+          document.getElementById('continueLearningPct').textContent = pct + '%';
+          document.getElementById('continueLearningBtn').onclick = () => handleContinueClick(activeItem.task, activeItem.missing || '');
         } else {
           footer.style.display = 'none';
         }
       }
     }
-
     // Dynamic AI Insight
     let insight = "Your resume has been successfully scanned. Try introducing more numerical parameters (like budgets managed, team members led, or performance gains) under experience to raise your readiness score.";
     if (skills.length < 5) {
