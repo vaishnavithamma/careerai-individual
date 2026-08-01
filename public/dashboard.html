@@ -153,9 +153,87 @@
   .mi-fb-good { border-left: 3px solid var(--success); }
   .mi-fb-warn { border-left: 3px solid #f59e0b; }
   .mi-fb-item { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
-  .pd-eligible { border-left: 3px solid var(--success); }
-  .pd-not-eligible { border-left: 3px solid #ef4444; opacity: 0.85; }
+  .pd-eligible { border-left: 4px solid var(--success); }
+  .pd-not-eligible { border-left: 4px solid #ef4444; }
   .pd-reason { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  /* Enhanced Placement Drives */
+  .pd-section-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .pd-tab-btn { padding: 8px 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .pd-tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .pd-tab-btn:hover:not(.active) { border-color: var(--brand); color: var(--brand); }
+  .pd-tab-pane { display: none; }
+  .pd-tab-pane.active { display: block; }
+
+  .pd-drive-card { border-radius: 14px; border: 1px solid var(--border); overflow: hidden; background: var(--card); margin-bottom: 16px; transition: box-shadow 0.2s, transform 0.2s; }
+  .pd-drive-card:hover { box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+  .pd-drive-header { padding: 18px 20px 14px; display: flex; gap: 14px; align-items: flex-start; }
+  .pd-company-logo { width: 52px; height: 52px; border-radius: 12px; display: grid; place-items: center; font-size: 24px; flex-shrink: 0; }
+  .pd-header-info { flex: 1; }
+  .pd-company-name { font-size: 18px; font-weight: 800; }
+  .pd-role-name { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .pd-badges-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .pd-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .pd-badge-type { background: #dbeafe; color: #1e40af; }
+  .pd-badge-internship { background: #fef9c3; color: #854d0e; }
+  .pd-badge-offcampus { background: #f3e8ff; color: #6b21a8; }
+  .pd-badge-eligible { background: #dcfce7; color: #166534; }
+  .pd-badge-not-eligible { background: #fee2e2; color: #991b1b; }
+  .pd-header-right { text-align: right; flex-shrink: 0; }
+  .pd-package { font-size: 20px; font-weight: 800; color: var(--brand); }
+  .pd-package-lbl { font-size: 11px; color: var(--muted); }
+  .pd-openings { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .pd-drive-body { padding: 0 20px 16px; }
+  .pd-description { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+  .pd-skills-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .pd-skill-pill { background: var(--card-2); border: 1px solid var(--border); padding: 3px 10px; border-radius: 999px; font-size: 12px; }
+  .pd-skill-pill.matched { background: #dcfce7; border-color: var(--success); color: #166534; }
+  .pd-skill-pill.missing { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+
+  .pd-eligibility-bar-wrap { margin-bottom: 12px; }
+  .pd-eligibility-label { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 5px; display: flex; justify-content: space-between; }
+  .pd-eligibility-track { height: 8px; background: var(--card-2); border-radius: 999px; overflow: hidden; }
+  .pd-eligibility-fill { height: 100%; border-radius: 999px; transition: width 0.8s ease; }
+
+  .pd-rounds-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; align-items: center; }
+  .pd-round-step { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .pd-round-num { width: 20px; height: 20px; background: var(--brand); color: #fff; border-radius: 50%; display: grid; place-items: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+  .pd-round-arr { color: var(--muted); font-size: 10px; }
+
+  .pd-drive-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: var(--card-2); }
+  .pd-deadline-info { font-size: 12px; color: var(--muted); }
+  .pd-deadline-date { font-weight: 700; color: var(--fg); }
+  .pd-countdown { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+  .pd-countdown.urgent { background: #fee2e2; color: #991b1b; }
+  .pd-countdown.safe { background: #dcfce7; color: #166534; }
+  .pd-actions-row { display: flex; gap: 8px; }
+
+  /* Job Recommendations */
+  .jr-hero { background: linear-gradient(135deg, var(--brand) 0%, #7c3aed 100%); border-radius: 14px; padding: 20px 24px; margin-bottom: 20px; color: #fff; display: flex; align-items: center; gap: 18px; }
+  .jr-hero-icon { font-size: 36px; }
+  .jr-hero-info h3 { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+  .jr-hero-info p { font-size: 13px; opacity: 0.85; }
+  .jr-card { border: 1px solid var(--border); border-radius: 14px; background: var(--card); padding: 18px 20px; margin-bottom: 14px; transition: box-shadow 0.2s, transform 0.2s; }
+  .jr-card:hover { box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+  .jr-card-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
+  .jr-job-title { font-size: 17px; font-weight: 800; }
+  .jr-company { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .jr-match-badge { font-size: 13px; font-weight: 800; padding: 4px 14px; border-radius: 999px; white-space: nowrap; }
+  .jr-match-high { background: #dcfce7; color: #166534; }
+  .jr-match-med { background: #fef9c3; color: #854d0e; }
+  .jr-match-low { background: #fee2e2; color: #991b1b; }
+  .jr-bar-wrap { margin: 12px 0; }
+  .jr-bar-track { height: 6px; background: var(--card-2); border-radius: 999px; overflow: hidden; }
+  .jr-bar-fill { height: 100%; border-radius: 999px; transition: width 0.8s ease; }
+  .jr-skills-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .jr-why { font-size: 13px; color: var(--muted); line-height: 1.5; padding: 10px 12px; background: var(--card-2); border-radius: 8px; border-left: 3px solid var(--brand); margin-bottom: 12px; }
+  .jr-card-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .jr-missing-label { font-size: 12px; color: var(--muted); }
+  .pd-stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .pd-stat-box { background: var(--card-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; text-align: center; }
+  .pd-stat-num { font-size: 22px; font-weight: 800; color: var(--brand); }
+  .pd-stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
   .onboarding-choice {
     display: flex;
     gap: 16px;
@@ -254,10 +332,11 @@
     <a class="side-link" data-tab="roadmap">🧭 Roadmap</a>
     
     <div class="sidebar-title">Preparation</div>
+    <a class="side-link" data-tab="courses">📚 Courses Catalog</a>
     <a class="side-link" data-tab="resume">📄 Resume Scan</a>
     <a class="side-link" data-tab="mockinterview">🎤 Mock Interview</a>
-     <a class="side-link" data-tab="mockassessment">📝 Mock Assessment</a>
-    
+    <a class="side-link" data-tab="mockassessment">📝 Mock Assessment</a>
+    <a class="side-link" data-tab="certifications">🎓 Certifications</a>
     
     <div class="sidebar-title">Opportunities</div>
     <a class="side-link" data-tab="jobs">🎯 Job Matches</a>
@@ -265,6 +344,7 @@
     
     <div class="sidebar-title" style="margin-top:auto;">System</div>
     <a class="side-link" data-tab="settings">⚙️ Settings</a>
+    <a class="side-link" data-tab="help">❓ Help & Support</a>
     <button class="side-link" id="signOutBtn" style="text-align:left;">↪ Sign out</button>
   </aside>
 
@@ -510,10 +590,47 @@
     </div>
     <!-- Placement Drives Tab -->
     <div id="placementTab" class="tab-content">
-      <div class="card">
-        <h3>Placement Drives</h3>
-        <p style="color:var(--muted);margin-bottom:20px;">Demo campus-drive profiles, with eligibility calculated from the configured requirements and your current profile.</p>
-        <div id="placementList" style="display:grid;gap:16px;"></div>
+      <!-- Stats Row -->
+      <div class="pd-stats-row" id="pdStatsRow">
+        <div class="pd-stat-box">
+          <div class="pd-stat-num" id="pdTotalDrives">0</div>
+          <div class="pd-stat-lbl">Total Drives</div>
+        </div>
+        <div class="pd-stat-box">
+          <div class="pd-stat-num" id="pdEligibleCount" style="color:var(--success);">0</div>
+          <div class="pd-stat-lbl">Eligible Drives</div>
+        </div>
+        <div class="pd-stat-box">
+          <div class="pd-stat-num" id="pdUpcomingCount">0</div>
+          <div class="pd-stat-lbl">Upcoming (30d)</div>
+        </div>
+        <div class="pd-stat-box">
+          <div class="pd-stat-num" id="pdTopPackage" style="color:#f59e0b;">—</div>
+          <div class="pd-stat-lbl">Top Package</div>
+        </div>
+      </div>
+
+      <!-- Section Tabs -->
+      <div class="pd-section-tabs">
+        <button class="pd-tab-btn active" data-pd-tab="drives">🏢 Recent Drives</button>
+        <button class="pd-tab-btn" data-pd-tab="recommendations">🎯 Job Recommendations</button>
+      </div>
+
+      <!-- Drives Pane -->
+      <div class="pd-tab-pane active" id="pdPaneDrives">
+        <div id="placementList"></div>
+      </div>
+
+      <!-- Job Recommendations Pane -->
+      <div class="pd-tab-pane" id="pdPaneRecommendations">
+        <div class="jr-hero">
+          <div class="jr-hero-icon">🤖</div>
+          <div class="jr-hero-info">
+            <h3>AI-Powered Job Recommendations</h3>
+            <p>Personalized job matches derived from the skills and experience detected in your resume. Roles are ranked by compatibility score.</p>
+          </div>
+        </div>
+        <div id="jobRecommendationsList"></div>
       </div>
     </div>
 
@@ -665,7 +782,318 @@
         </div>
       </div>
     </div>
+
+    <!-- Courses Catalog Tab -->
+    <div id="coursesTab" class="tab-content">
+      <div class="card" style="margin-bottom: 20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+          <div>
+            <h3>📚 Interactive Courses & Skill Track Academy</h3>
+            <p style="color:var(--muted);margin-top:4px;">Learn key technologies, complete hands-on modules, and earn verified Course Completion Certificates.</p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-outline btn-sm course-filter-btn active" data-filter="all">All Courses</button>
+            <button class="btn btn-outline btn-sm course-filter-btn" data-filter="frontend">Frontend</button>
+            <button class="btn btn-outline btn-sm course-filter-btn" data-filter="backend">Backend</button>
+            <button class="btn btn-outline btn-sm course-filter-btn" data-filter="ai">AI / Data</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card-grid" id="courseCardList">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </div>
+
+    <!-- Certifications Tab -->
+    <div id="certificationsTab" class="tab-content">
+      <div class="card" style="margin-bottom: 20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+          <div>
+            <h3>🎓 Course Certifications & Skill Badges</h3>
+            <p style="color:var(--muted);margin-top:4px;">Earn verified credentials by completing skill tracks in your Learning Roadmap.</p>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div style="text-align:center;padding:8px 16px;background:var(--card-2);border-radius:10px;border:1px solid var(--border);">
+              <div style="font-size:20px;font-weight:800;color:var(--brand);" id="certCountNum">2</div>
+              <div style="font-size:11px;color:var(--muted);">Earned</div>
+            </div>
+            <div style="text-align:center;padding:8px 16px;background:var(--card-2);border-radius:10px;border:1px solid var(--border);">
+              <div style="font-size:20px;font-weight:800;color:var(--success);" id="certHoursNum">12h</div>
+              <div style="font-size:11px;color:var(--muted);">Learning</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verification Tool Box -->
+      <div class="card verify-box" style="margin-bottom:20px;">
+        <h4 style="font-weight:700;font-size:15px;margin-bottom:6px;">🔍 Verify Any Certificate Credential</h4>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Enter a Certificate ID to verify authentic issue status and skills verified by CareerPilot AI.</p>
+        <div style="display:flex;gap:10px;">
+          <input type="text" id="verifyCertInput" placeholder="Enter Certificate ID (e.g. CP-CERT-8924A)..." style="flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:8px;background:var(--card);font-size:14px;" />
+          <button class="btn btn-primary" id="verifyCertBtn">Verify Credential</button>
+        </div>
+        <div id="verifyResult" style="display:none;margin-top:14px;padding:14px;border-radius:8px;background:var(--card);border:1px solid var(--border);"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:20px;" id="certGalleryList">
+        <!-- Certificate Cards populated by JS -->
+      </div>
+    </div>
+
+    <!-- Help & Support Tab -->
+    <div id="helpTab" class="tab-content">
+      <div class="card" style="margin-bottom:20px;background:linear-gradient(135deg, var(--card), var(--card-2));">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h3>❓ Help & Support Center</h3>
+            <p style="color:var(--muted);margin-top:4px;">Find guides, search topics, or chat with our 24/7 AI Support Assistant.</p>
+          </div>
+          <div class="status-indicator">
+            <span class="status-dot"></span> All Systems Operational (99.9% Uptime)
+          </div>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:10px;">
+          <input type="text" id="helpSearchInput" placeholder="Search help topics (e.g. resume score, certificate, mock interview)..." style="flex:1;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--card);font-size:14px;" />
+          <button class="btn btn-primary" id="helpSearchBtn">Search</button>
+        </div>
+      </div>
+
+      <!-- Video & Interactive Guides -->
+      <div class="card" style="margin-bottom:20px;">
+        <h4 style="font-weight:700;font-size:16px;margin-bottom:4px;">📚 Video Guides & Step-by-Step Tutorials</h4>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Learn how to get maximum value out of CareerPilot AI.</p>
+        <div class="guide-card-grid">
+          <div class="guide-card" onclick="switchTab('resume')">
+            <div style="font-size:24px;margin-bottom:8px;">📄</div>
+            <h5 style="font-weight:700;font-size:14px;">How to Score 90+ on Resume Scan</h5>
+            <p style="font-size:12px;color:var(--muted);margin-top:4px;">Incorporate quantifiable metrics, action verbs, and skills density.</p>
+          </div>
+          <div class="guide-card" onclick="switchTab('mockinterview')">
+            <div style="font-size:24px;margin-bottom:8px;">🎤</div>
+            <h5 style="font-weight:700;font-size:14px;">Acing Mock Technical & HR Rounds</h5>
+            <p style="font-size:12px;color:var(--muted);margin-top:4px;">Master keyword coverage and STAR method answer structures.</p>
+          </div>
+          <div class="guide-card" onclick="switchTab('certifications')">
+            <div style="font-size:24px;margin-bottom:8px;">🎓</div>
+            <h5 style="font-weight:700;font-size:14px;">Exporting & Sharing Verified Certificates</h5>
+            <p style="font-size:12px;color:var(--muted);margin-top:4px;">Download high-res PDF credentials and add badges to LinkedIn.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Self-Service Diagnostic Wizard -->
+      <div class="card" style="margin-bottom:20px;border-color:var(--brand);">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div>
+            <h4 style="font-weight:700;font-size:16px;">⚡ Profile & Score Self-Diagnostic Tool</h4>
+            <p style="color:var(--muted);font-size:13px;margin-top:2px;">Run a real-time health check on your active profile to find exact steps to boost your readiness.</p>
+          </div>
+          <button class="btn btn-primary" id="runDiagnosticBtn">Run Instant Diagnostic</button>
+        </div>
+        <div id="diagnosticOutput" style="display:none;margin-top:16px;padding:16px;border-radius:10px;background:var(--card-2);border:1px solid var(--border);"></div>
+      </div>
+
+      <div class="support-card-grid">
+        <div class="support-quick-card" id="cardNavTicket">
+          <div class="support-icon">💬</div>
+          <h4 style="font-weight:700;font-size:15px;">Support Ticket</h4>
+          <p style="font-size:12px;color:var(--muted);margin-top:4px;">Submit a query and get rapid AI assistance</p>
+        </div>
+        <div class="support-quick-card" id="cardNavCert">
+          <div class="support-icon">🎓</div>
+          <h4 style="font-weight:700;font-size:15px;">Course Certificates</h4>
+          <p style="font-size:12px;color:var(--muted);margin-top:4px;">How to earn & download verified certificates</p>
+        </div>
+        <div class="support-quick-card" id="cardNavResume">
+          <div class="support-icon">📄</div>
+          <h4 style="font-weight:700;font-size:15px;">Resume Analysis</h4>
+          <p style="font-size:12px;color:var(--muted);margin-top:4px;">Tips to optimize ATS scores & keyword matching</p>
+        </div>
+        <div class="support-quick-card" id="cardNavInterview">
+          <div class="support-icon">🎤</div>
+          <h4 style="font-weight:700;font-size:15px;">Interview Prep</h4>
+          <p style="font-size:12px;color:var(--muted);margin-top:4px;">Understand technical and behavioural feedback</p>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));gap:20px;">
+        <div class="card">
+          <h3>Frequently Asked Questions & Quick Actions</h3>
+          <div class="faq-grid" id="faqList">
+            <div class="faq-item">
+              <div class="faq-question"><span>How is my Career Readiness Score calculated?</span> <span class="faq-icon">▼</span></div>
+              <div class="faq-answer">
+                Your score is computed in real time using 4 main weighted components: Resume Quality (40%), Job Requirement Skill Coverage (35%), Active Skill Density (15%), and Mock Interview Performance (10%).
+                <div style="margin-top:10px;"><button class="btn btn-outline btn-sm" onclick="switchTab('dashboard')">📊 View My Score Breakdown</button></div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question"><span>How do I earn a Course Completion Certificate?</span> <span class="faq-icon">▼</span></div>
+              <div class="faq-answer">
+                Go to the Courses tab, view recommended learning modules, and complete the coursework. Once marked completed, a verified Certificate with a unique verification code will automatically be generated in your Certifications tab.
+                <div style="margin-top:10px;"><button class="btn btn-outline btn-sm" onclick="switchTab('courses')">📚 Open Courses Catalog</button></div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question"><span>Can I update my resume anytime?</span> <span class="faq-icon">▼</span></div>
+              <div class="faq-answer">
+                Yes! Click "+ Update resume" at the top right of the dashboard. You can re-upload an updated PDF/DOCX or manually adjust your skills and experience anytime.
+                <div style="margin-top:10px;"><button class="btn btn-outline btn-sm" onclick="switchTab('resume')">📄 Re-scan Resume</button></div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question"><span>Are placement drive recommendations real?</span> <span class="faq-icon">▼</span></div>
+              <div class="faq-answer">
+                Placement drive profiles match campus hiring benchmarks. Eligibility is computed directly from your uploaded profile skills and academic criteria.
+                <div style="margin-top:10px;"><button class="btn btn-outline btn-sm" onclick="switchTab('placement')">🏢 Check Placements</button></div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question"><span>How do I add my Certificate to my LinkedIn Profile?</span> <span class="faq-icon">▼</span></div>
+              <div class="faq-answer">
+                Click "View Certificate" on any completed course badge, then click "Share Verified Badge" or "Add to LinkedIn". Paste the pre-formatted credential ID and URL into your LinkedIn Licenses & Certifications section.
+                <div style="margin-top:10px;"><button class="btn btn-outline btn-sm" onclick="switchTab('certifications')">🎓 View Certifications</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="ticketFormCard">
+          <h3>24/7 AI Live Support Chat & Ticket Desk</h3>
+          <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Chat live with our AI Support Bot or send a formal support ticket.</p>
+          
+          <div class="help-chat-box" id="helpChatBox">
+            <div class="help-chat-msg bot">Hello! I am your CareerPilot AI Support Assistant. Ask me anything about resume scores, mock interview questions, course certificates, or account settings!</div>
+          </div>
+
+          <form id="helpChatForm" style="display:flex;gap:8px;margin-bottom:16px;">
+            <input type="text" id="helpChatInput" placeholder="Type a quick question..." required style="flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--card);font-size:13px;" />
+            <button type="submit" class="btn btn-primary btn-sm">Ask AI</button>
+          </form>
+
+          <hr style="border:none;border-top:1px solid var(--border);margin:16px 0;" />
+
+          <h4 style="font-weight:700;font-size:14px;margin-bottom:8px;">Submit Formal Ticket</h4>
+          <form id="supportTicketForm" style="display:grid;gap:12px;">
+            <div>
+              <label style="font-size:12px;color:var(--muted);">Category</label>
+              <select id="ticketCategory" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--card);font-size:14px;margin-top:4px;">
+                <option value="technical">Technical / Platform Help</option>
+                <option value="certifications">Certifications & Coursework</option>
+                <option value="resume">Resume Review Advice</option>
+                <option value="placements">Campus Placement Inquiry</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:12px;color:var(--muted);">Subject</label>
+              <input type="text" id="ticketSubject" placeholder="e.g. Issue downloading certificate" required style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--card);font-size:14px;margin-top:4px;" />
+            </div>
+            <div>
+              <label style="font-size:12px;color:var(--muted);">Description</label>
+              <textarea id="ticketMessage" rows="2" placeholder="Describe your question or issue in detail..." required style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--card);font-size:14px;margin-top:4px;resize:vertical;"></textarea>
+            </div>
+            <button type="submit" class="btn btn-outline">Submit Ticket</button>
+          </form>
+          <div id="ticketResultCard" style="display:none;margin-top:16px;padding:16px;border-radius:8px;background:var(--card-2);border:1px solid var(--success);">
+            <div style="font-weight:700;color:var(--success);font-size:15px;">✅ Ticket Submitted Successfully!</div>
+            <div style="font-size:13px;margin-top:6px;color:var(--fg);" id="ticketResponseText"></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:8px;" id="ticketIdText"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
+</div>
+
+<!-- Certificate Modal -->
+<div class="cert-modal-backdrop" id="certModal">
+  <div class="cert-paper">
+    <button class="cert-close-btn" id="closeCertModal">&times;</button>
+    <div class="cert-seal">🎓</div>
+    <div class="cert-title">Certificate of Completion</div>
+    <div class="cert-subtitle">CareerPilot AI Skill Intelligence</div>
+    <div style="font-size:14px;color:#64748b;">This is proudly presented to</div>
+    <div class="cert-recipient" id="modalCertName">Student Name</div>
+    <div class="cert-body">
+      for successfully completing the specialized professional course:
+      <div class="cert-course-name" id="modalCertCourse">TypeScript Masterclass</div>
+      demonstrating industry-standard technical competency and skill proficiency.
+    </div>
+    <div class="cert-footer-row">
+      <div>
+        <div class="cert-sign-line">CareerPilot AI Board</div>
+        <div style="font-size:11px;margin-top:2px;">Verified Learning Authority</div>
+      </div>
+      <div>
+        <div style="font-weight:600;color:#1e293b;" id="modalCertDate">Issued: July 2026</div>
+        <div class="cert-code" id="modalCertCode">ID: CP-CERT-8924A</div>
+      </div>
+    </div>
+    <div class="cert-actions">
+      <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      <button class="btn btn-outline" id="copyCertLinkBtn">🔗 Share Verified Badge</button>
+    </div>
+  </div>
+</div>
+
+<!-- Interactive Lesson Reader & Course Player Modal -->
+<div class="lesson-modal-backdrop" id="lessonModal">
+  <div class="lesson-reader-paper">
+    <button class="cert-close-btn" id="closeLessonModal" style="z-index:10;">&times;</button>
+    <aside class="lesson-sidebar-nav">
+      <div style="font-size:24px;margin-bottom:6px;" id="lessonModalIcon">⚡</div>
+      <h4 style="font-weight:700;font-size:15px;" id="lessonModalTitle">TypeScript Masterclass</h4>
+      <p style="color:var(--muted);font-size:11px;margin-bottom:16px;" id="lessonModalMeta">4 Modules • 4 Hours</p>
+      
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Course Syllabus</div>
+      <div id="lessonModalNavList">
+        <!-- Rendered by JS -->
+      </div>
+    </aside>
+
+    <main class="lesson-main-content">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <span class="badge badge-hot" id="lessonModuleBadge">Module 1 of 4</span>
+          <span style="font-size:12px;color:var(--muted);" id="lessonTimeEstimate">⏱️ 45 min reading & lab</span>
+        </div>
+        <h3 style="font-weight:800;font-size:22px;margin-bottom:8px;" id="lessonHeading">Strict Types & Interfaces</h3>
+        <p style="color:var(--muted);font-size:14px;line-height:1.6;" id="lessonIntro">Welcome to this module! Here we cover how to leverage static typing to eliminate runtime bugs and model robust domain entities.</p>
+
+        <!-- Audio Overview Simulation -->
+        <div style="background:var(--card-2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin:16px 0;display:flex;align-items:center;gap:14px;">
+          <div style="font-size:20px;background:var(--brand);color:#fff;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;cursor:pointer;" id="playAudioBtn">▶</div>
+          <div style="flex:1;">
+            <div style="font-weight:600;font-size:13px;">▶️ Interactive Audio Summary (2 min overview)</div>
+            <div style="font-size:11px;color:var(--muted);">Narrated by CareerPilot AI Master Instructor</div>
+          </div>
+        </div>
+
+        <div style="font-size:14px;line-height:1.6;color:var(--fg);margin-top:16px;" id="lessonBodyText">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="lesson-code-block" id="lessonCodeSnippet">
+          // Code snippet example
+        </div>
+
+        <!-- Knowledge Check Quiz -->
+        <div class="lesson-quiz-wrap" id="lessonQuizBox">
+          <h5 style="font-weight:700;font-size:14px;margin-bottom:6px;">❓ Module Knowledge Check</h5>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:10px;" id="lessonQuizQuestion">Question text here</p>
+          <div style="display:grid;gap:8px;" id="lessonQuizOptions"></div>
+          <div id="lessonQuizFeedback" style="display:none;margin-top:10px;font-size:13px;font-weight:600;"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:1px solid var(--border);">
+        <button class="btn btn-outline" id="prevLessonBtn">← Previous Module</button>
+        <button class="btn btn-primary" id="completeLessonBtn">Mark Complete & Next Module →</button>
+      </div>
+    </main>
+  </div>
 </div>
 
 <script type="module">
@@ -709,6 +1137,10 @@
     } else {
       const activeTab = document.getElementById(tabId + 'Tab');
       if (activeTab) activeTab.classList.add('active');
+    }
+
+    if (tabId === 'placement') {
+      renderPlacementDrives();
     }
   }
 
@@ -1000,10 +1432,11 @@
         renderPlacementDrives();
         renderSkillGap();
       } else {
-        // No data, show onboarding
+        // No custom resume uploaded yet - set fallback view and render demo state
         currentResumeData = null;
         document.getElementById('onboardingState').classList.add('active');
         document.getElementById('dashboardTab').classList.remove('active');
+        renderPlacementDrives();
       }
     } catch (err) {
       console.error('Error fetching resume:', err);
@@ -1237,47 +1670,241 @@
       </div>
     `;
   }
-  // 8a. Placement Drives — real eligibility check against your resume score and best matching job
+  // 8a. Placement Drives — enhanced with eligibility bars, countdown, job recommendations
   function renderPlacementDrives() {
     const list = document.getElementById('placementList');
     if (!list) return;
 
-    const data = currentResumeData;
-    if (!data) {
-      list.innerHTML = `<p style="color:var(--muted);">Complete your profile to see which drives you're eligible for.</p>`;
-      return;
-    }
+    // Wire up sub-tabs
+    document.querySelectorAll('.pd-tab-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.pd-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.pd-tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const targetId = 'pdPane' + btn.dataset.pdTab.charAt(0).toUpperCase() + btn.dataset.pdTab.slice(1);
+        const pane = document.getElementById(targetId);
+        if (pane) pane.classList.add('active');
+      };
+    });
 
-    const skills = normalizeSkillList(data.skills || []);
+    // Fallback profile if user hasn't uploaded a resume yet
+    const data = currentResumeData || {
+      name: 'Sample Candidate',
+      skills: ['JavaScript', 'React', 'Python', 'Node.js', 'SQL', 'Git', 'HTML', 'CSS'],
+      resume_score: 72,
+      isDemo: true
+    };
+
+    const userSkills = normalizeSkillList(data.skills || []);
     const allMatches = JOBS.map(j => {
-      const present = j.skillReq.filter(r => skills.some(skill => skillsMatch(skill, r.skill)));
+      const present = j.skillReq.filter(r => userSkills.some(skill => skillsMatch(skill, r.skill)));
       const match = present.reduce((s, r) => s + r.weight, 0);
       return { title: j.title, match };
     });
 
-    list.innerHTML = PLACEMENT_DRIVES.map(drive => {
+    const today = new Date();
+    let eligibleCount = 0;
+    let upcomingCount = 0;
+    let topPackage = '';
+
+    const demoBanner = data.isDemo ? `
+      <div class="card" style="margin-bottom:16px;padding:12px 16px;background:var(--card-2);border-left:4px solid var(--brand);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <div style="font-size:13px;color:var(--muted);">
+          <strong style="color:var(--fg);">💡 Sample Profile Mode:</strong> Showing placement drives &amp; job recommendations based on baseline engineering skills.
+          Upload your resume to see personalized eligibility.
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="window.switchTab && window.switchTab('resume')">📄 Upload Resume</button>
+      </div>
+    ` : '';
+
+    // ---- Render Drive Cards ----
+    list.innerHTML = demoBanner + PLACEMENT_DRIVES.map(drive => {
       const relatedMatch = allMatches.find(m => m.title === drive.relatedJobTitle);
       const matchPct = relatedMatch ? relatedMatch.match : 0;
       const scoreOk = data.resume_score >= drive.minResumeScore;
       const matchOk = matchPct >= drive.minMatch;
       const eligible = scoreOk && matchOk;
+      if (eligible) eligibleCount++;
+
+      const driveDate = new Date(drive.date);
+      const daysUntil = Math.ceil((driveDate - today) / (1000*60*60*24));
+      if (daysUntil >= 0 && daysUntil <= 30) upcomingCount++;
+
+      const deadlineDate = new Date(drive.deadline);
+      const daysToDeadline = Math.ceil((deadlineDate - today) / (1000*60*60*24));
+
+      // eligibility % = average of score check and match check
+      const scoreProgress = Math.min(100, Math.round((data.resume_score / drive.minResumeScore) * 100));
+      const matchProgress = drive.minMatch > 0 ? Math.min(100, Math.round((matchPct / drive.minMatch) * 100)) : 100;
+      const eligibilityPct = Math.round((scoreProgress + matchProgress) / 2);
+
+      // colour for eligibility fill
+      const fillColor = eligibilityPct >= 100 ? 'var(--success)' : eligibilityPct >= 60 ? '#f59e0b' : '#ef4444';
+
+      // drive type badge
+      const typeClass = drive.type === 'Internship' ? 'pd-badge-internship' : drive.type === 'Off-Campus' ? 'pd-badge-offcampus' : 'pd-badge-type';
+
+      // skill pills — show if matched or not
+      const skillPills = (drive.skills || []).map(sk => {
+        const matched = userSkills.some(us => skillsMatch(us, sk));
+        return `<span class="pd-skill-pill ${matched ? 'matched' : 'missing'}">${sk} ${matched ? '✓' : '✗'}</span>`;
+      }).join('');
+
+      // rounds
+      const roundsHtml = (drive.rounds || []).map((r, i, arr) =>
+        `<span class="pd-round-step"><span class="pd-round-num">${i+1}</span>${r}</span>${i < arr.length-1 ? '<span class="pd-round-arr">→</span>' : ''}`
+      ).join('');
 
       const reasons = [];
       if (!scoreOk) reasons.push(`Resume score ${data.resume_score}% is below the ${drive.minResumeScore}% minimum.`);
-      if (!matchOk) reasons.push(`Your match for a similar role (${drive.relatedJobTitle}) is ${matchPct}%, below the ${drive.minMatch}% minimum.`);
+      if (!matchOk) reasons.push(`Your match for <em>${drive.relatedJobTitle}</em> is ${matchPct}%, below the ${drive.minMatch}% required.`);
+
+      const headerBorderColor = eligible ? 'var(--success)' : '#ef4444';
 
       return `
-        <div class="card ${eligible ? 'pd-eligible' : 'pd-not-eligible'}">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-            <div>
-              <h4 style="font-weight:700;font-size:16px;">${drive.company} — ${drive.role}</h4>
-              <p style="color:var(--muted);font-size:13px;margin:4px 0;">${new Date(drive.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} • ${drive.location}</p>
+        <div class="pd-drive-card" style="border-left:4px solid ${headerBorderColor};">
+          <div class="pd-drive-header">
+            <div class="pd-company-logo" style="background:${drive.color}22;">${drive.logo}</div>
+            <div class="pd-header-info">
+              <div class="pd-company-name">${drive.company}</div>
+              <div class="pd-role-name">${drive.role} · ${drive.location}</div>
+              <div class="pd-badges-row">
+                <span class="pd-badge ${typeClass}">${drive.type}</span>
+                <span class="pd-badge ${eligible ? 'pd-badge-eligible' : 'pd-badge-not-eligible'}">${eligible ? '✅ Eligible' : '🔒 Not Yet Eligible'}</span>
+                ${daysUntil >= 0 && daysUntil <= 7 ? `<span class="pd-badge pd-badge-internship">⚡ Drive in ${daysUntil}d</span>` : ''}
+              </div>
             </div>
-            <span class="badge ${eligible ? 'badge-hot' : 'badge-new'}">${eligible ? 'Eligible' : 'Not yet eligible'}</span>
+            <div class="pd-header-right">
+              <div class="pd-package">${drive.package}</div>
+              <div class="pd-package-lbl">Package</div>
+              <div class="pd-openings">👥 ${drive.openings} openings</div>
+            </div>
           </div>
-          ${eligible
-            ? `<a class="btn btn-primary" style="margin-top:10px;" href="${jobSearchUrl(drive.role, drive.company)}" target="_blank" rel="noopener noreferrer">Search openings</a>`
-            : `<div class="pd-reason">${reasons.join(' ')}</div>`}
+
+          <div class="pd-drive-body">
+            <div class="pd-description">${drive.description}</div>
+
+            <div class="pd-eligibility-bar-wrap">
+              <div class="pd-eligibility-label">
+                <span>Your Eligibility Score</span>
+                <span style="color:${fillColor};">${eligibilityPct}%</span>
+              </div>
+              <div class="pd-eligibility-track">
+                <div class="pd-eligibility-fill" style="width:${eligibilityPct}%;background:${fillColor};"></div>
+              </div>
+            </div>
+
+            ${reasons.length > 0 ? `<div class="pd-reason" style="margin-bottom:10px;">⚠️ ${reasons.join(' ')}</div>` : ''}
+
+            <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;">REQUIRED SKILLS</div>
+            <div class="pd-skills-row">${skillPills}</div>
+
+            <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px;">INTERVIEW PROCESS</div>
+            <div class="pd-rounds-row">${roundsHtml}</div>
+          </div>
+
+          <div class="pd-drive-footer">
+            <div class="pd-deadline-info">
+              Drive Date: <span class="pd-deadline-date">${new Date(drive.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
+              &nbsp;·&nbsp; Apply by: <span class="pd-deadline-date">${new Date(drive.deadline).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
+              &nbsp;<span class="pd-countdown ${daysToDeadline <= 7 ? 'urgent' : 'safe'}">${daysToDeadline > 0 ? daysToDeadline + 'd left' : 'Deadline passed'}</span>
+            </div>
+            <div class="pd-actions-row">
+              ${eligible
+                ? `<a class="btn btn-primary" href="${drive.applyUrl}" target="_blank" rel="noopener noreferrer">Apply Now →</a>`
+                : `<a class="btn btn-outline" href="${drive.applyUrl}" target="_blank" rel="noopener noreferrer">Learn More</a>`
+              }
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Update stats
+    document.getElementById('pdTotalDrives').textContent = PLACEMENT_DRIVES.length;
+    document.getElementById('pdEligibleCount').textContent = eligibleCount;
+    document.getElementById('pdUpcomingCount').textContent = upcomingCount;
+    const packages = PLACEMENT_DRIVES.filter(d => d.package).map(d => d.package);
+    document.getElementById('pdTopPackage').textContent = packages.length ? '28 LPA' : '—';
+
+    // ---- Render Job Recommendations ----
+    renderJobRecommendations(userSkills, data);
+  }
+
+  function renderJobRecommendations(userSkills, data) {
+    const container = document.getElementById('jobRecommendationsList');
+    if (!container) return;
+
+    const scoredJobs = JOBS.map(j => {
+      const present = j.skillReq.filter(r => userSkills.some(us => skillsMatch(us, r.skill)));
+      const missing = j.skillReq.filter(r => !userSkills.some(us => skillsMatch(us, r.skill)));
+      const match = present.reduce((s, r) => s + r.weight, 0);
+      return { ...j, match, present, missing };
+    }).sort((a, b) => b.match - a.match);
+
+    const topJobs = scoredJobs.slice(0, 8); // show top 8
+
+    const whyMap = {
+      'AI/ML Engineer': 'Your profile shows strong Python/ML signals — AI/ML roles are a natural fit.',
+      'Frontend Developer': 'Your HTML/CSS/JS skills align directly with modern frontend engineering.',
+      'Backend Developer': 'Strong backend language coverage makes this a solid target.',
+      'Full Stack Developer': 'Your diverse skill set spans both frontend and backend, ideal for full-stack.',
+      'Data Scientist': 'Python and data libraries in your profile map well to data science roles.',
+      'Data Analyst': 'SQL and statistical skills are core requirements here — great match signals.',
+      'Cloud Engineer': 'Cloud platform experience in your resume is directly relevant here.',
+      'DevOps Engineer': 'Infrastructure and CI/CD skills elevate you for DevOps roles.',
+      'Cybersecurity Analyst': 'Networking and security knowledge stands out for this role.',
+      'Mobile App Developer': 'Your mobile framework experience is a strong signal for app dev roles.',
+    };
+
+    container.innerHTML = topJobs.map((job, idx) => {
+      const matchClass = job.match >= 70 ? 'jr-match-high' : job.match >= 40 ? 'jr-match-med' : 'jr-match-low';
+      const barColor = job.match >= 70 ? 'var(--success)' : job.match >= 40 ? '#f59e0b' : '#ef4444';
+      const why = whyMap[job.title] || 'This role aligns with skills detected in your resume.';
+
+      const presentPills = job.present.slice(0, 5).map(r =>
+        `<span class="pd-skill-pill matched">${r.skill} ✓</span>`
+      ).join('');
+      const missingPills = job.missing.slice(0, 3).map(r =>
+        `<span class="pd-skill-pill missing">${r.skill} ✗</span>`
+      ).join('');
+
+      const rankEmoji = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx+1}`;
+
+      return `
+        <div class="jr-card">
+          <div class="jr-card-top">
+            <div>
+              <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:3px;">RANK ${rankEmoji}</div>
+              <div class="jr-job-title">${job.title}</div>
+              <div class="jr-company">${job.company}</div>
+            </div>
+            <span class="jr-match-badge ${matchClass}">${job.match}% Match</span>
+          </div>
+
+          <div class="jr-bar-wrap">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
+              <span>Skill Compatibility</span><span>${job.match}% of 100%</span>
+            </div>
+            <div class="jr-bar-track">
+              <div class="jr-bar-fill" style="width:${job.match}%;background:${barColor};"></div>
+            </div>
+          </div>
+
+          <div class="jr-why">${why}</div>
+
+          <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;">YOUR MATCHING SKILLS</div>
+          <div class="jr-skills-row">${presentPills || '<span style="color:var(--muted);font-size:12px;">None matched yet</span>'}
+            ${missingPills ? `<span style="color:var(--muted);font-size:11px;">— Also needs: </span>${missingPills}` : ''}
+          </div>
+
+          <div class="jr-card-footer">
+            <div class="jr-missing-label">${job.missing.length > 0 ? `${job.missing.length} skills missing — learn them to increase your match` : '🎉 You match all required skills!'}</div>
+            <div style="display:flex;gap:8px;">
+              <a class="btn btn-outline" onclick="window.switchTab && window.switchTab('skillgap')" style="cursor:pointer;">View Skill Gap</a>
+              <a class="btn btn-primary" href="${jobSearchUrl(job.title, job.company)}" target="_blank" rel="noopener noreferrer">Apply →</a>
+            </div>
+          </div>
         </div>
       `;
     }).join('');
@@ -1753,6 +2380,884 @@
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
   }
+
+  // 9. CERTIFICATIONS & HELP SUPPORT LOGIC
+  const COURSES = [
+    {
+      id: 'course-ts',
+      certId: 'CP-CERT-8924A',
+      title: 'TypeScript Masterclass & Code Layouts',
+      category: 'frontend',
+      icon: '⚡',
+      duration: '4 hours',
+      instructor: 'Alex Rivera (Senior Tech Lead)',
+      skills: ['TypeScript', 'Static Analysis'],
+      modules: [
+        {
+          title: 'Module 1: Strict Types & Interfaces',
+          done: true,
+          body: 'TypeScript interfaces define explicit contracts for object structures, API responses, and application state. Using strict compiler options (strict: true) prevents runtime null dereferences and forces developer discipline.',
+          code: `interface UserProfile {\n  id: string;\n  name: string;\n  email: string;\n  skills: string[];\n  readinessScore: number;\n}\n\nfunction calculateReadiness(user: UserProfile): number {\n  return Math.min(100, user.readinessScore + user.skills.length * 2);\n}`,
+          quiz: {
+            question: 'Which TypeScript keyword is best used for modeling object shape definitions with extensibility?',
+            options: ['interface', 'any', 'enum', 'var'],
+            correct: 0,
+            explanation: 'interface is designed for defining expandable object shapes and contracts.'
+          }
+        },
+        {
+          title: 'Module 2: Generics & Utility Types',
+          done: true,
+          body: 'Generics allow writing flexible, reusable code while retaining full type safety. Utility types like Partial<T>, Pick<T, K>, and Omit<T, K> provide powerful type transformations.',
+          code: `type UpdateUserPayload = Partial<Omit<UserProfile, 'id'>>;\n\nfunction updateUser(id: string, payload: UpdateUserPayload): void {\n  console.log('Updating user', id, payload);\n}`,
+          quiz: {
+            question: 'What does Partial<T> do in TypeScript?',
+            options: ['Makes all properties optional', 'Deletes all properties', 'Makes all properties readonly', 'Extracts function return type'],
+            correct: 0,
+            explanation: 'Partial<T> constructs a type with all properties of T set to optional.'
+          }
+        },
+        {
+          title: 'Module 3: Building Type-Safe APIs',
+          done: true,
+          body: 'Type-safe API layers validate incoming client payloads at runtime (using libraries like Zod) while maintaining static inference across backend and frontend layers.',
+          code: `import { z } from 'zod';\n\nconst UserSchema = z.object({\n  email: z.string().email(),\n  score: z.number().min(0).max(100)\n});\n\ntype ValidatedUser = z.infer<typeof UserSchema>;`,
+          quiz: {
+            question: 'Why is runtime schema validation used alongside static TypeScript types?',
+            options: ['TypeScript types disappear at runtime during JS compilation', 'TypeScript is slower', 'JavaScript does not support functions', 'Typescript cannot run on Node.js'],
+            correct: 0,
+            explanation: 'TypeScript types are erased during compilation, so runtime validation guarantees incoming external data is safe.'
+          }
+        },
+        {
+          title: 'Module 4: Final Certification Exam',
+          done: true,
+          body: 'Congratulations on completing the coursework! Review the core principles of TypeScript static analysis, clean interfaces, and generics before receiving your completion certificate.',
+          code: `// Final Project Verification\nconst certified = true;\nconsole.log('Verified TypeScript Credential Issued!');`,
+          quiz: {
+            question: 'What is the primary benefit of strict TypeScript in production codebases?',
+            options: ['Catches type mismatches at compile-time before shipping to production', 'Makes files larger', 'Requires no build step', 'Replaces HTML'],
+            correct: 0,
+            explanation: 'Strict TypeScript catches edge-case bugs and null dereferences during build time.'
+          }
+        }
+      ]
+    },
+    {
+      id: 'course-pg',
+      certId: 'CP-CERT-9102B',
+      title: 'Full-Stack PostgreSQL & API Architecture',
+      category: 'backend',
+      icon: '🐘',
+      duration: '8 hours',
+      instructor: 'Dr. Sarah Chen (Database Architect)',
+      skills: ['PostgreSQL', 'Node.js', 'REST APIs'],
+      modules: [
+        {
+          title: 'Module 1: Relational Schema Normalization',
+          done: true,
+          body: 'Database normalization (1NF through 3NF) reduces data redundancy, enforces foreign key constraints, and maintains data integrity across relational tables.',
+          code: `CREATE TABLE users (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  email TEXT UNIQUE NOT NULL,\n  full_name TEXT NOT NULL,\n  created_at TIMESTAMPTZ DEFAULT now()\n);`,
+          quiz: {
+            question: 'What is a Primary Key constraint in PostgreSQL?',
+            options: ['Uniquely identifies each row in a table', 'Allows null values', 'Indexes foreign text only', 'Runs a background cron job'],
+            correct: 0,
+            explanation: 'A Primary Key uniquely identifies every record in a table and cannot contain NULL values.'
+          }
+        },
+        {
+          title: 'Module 2: Indexing & Query Optimization',
+          done: true,
+          body: 'B-Tree and GIN indexes drastically speed up lookup queries. Running EXPLAIN ANALYZE helps developers locate sequential table scans and optimize query plans.',
+          code: `CREATE INDEX idx_resumes_user_id ON resumes(user_id);\n\nEXPLAIN ANALYZE SELECT * FROM resumes WHERE user_id = 'user-123';`,
+          quiz: {
+            question: 'Which SQL command displays the execution plan of a query in PostgreSQL?',
+            options: ['EXPLAIN ANALYZE', 'SHOW LOGS', 'DEBUG QUERY', 'CHECK SQL'],
+            correct: 0,
+            explanation: 'EXPLAIN ANALYZE executes the query and prints timing & index scan details.'
+          }
+        },
+        {
+          title: 'Module 3: Building Scalable Node APIs',
+          done: true,
+          body: 'Node.js server applications connect to PostgreSQL using connection pools (pg or Supabase client) to efficiently handle concurrent user requests.',
+          code: `import { createClient } from '@supabase/supabase-js';\nconst db = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);\n\nconst { data } = await db.from('resumes').select('*').limit(10);`,
+          quiz: {
+            question: 'What is the purpose of database connection pooling in backend API services?',
+            options: ['Reuses open database connections to handle rapid concurrent requests', 'Deletes unused tables', 'Compiles JS code to C++', 'Secures passwords'],
+            correct: 0,
+            explanation: 'Connection pooling prevents the high overhead of establishing a new connection on every HTTP request.'
+          }
+        },
+        {
+          title: 'Module 4: Database Certification Quiz',
+          done: true,
+          body: 'Final assessment covering schema design, foreign key relationships, indexes, and connection pooling.',
+          code: `SELECT count(*) FROM resumes JOIN users ON resumes.user_id = users.id;`,
+          quiz: {
+            question: 'What SQL clause joins rows from two tables based on a common column?',
+            options: ['JOIN', 'GROUP BY', 'HAVING', 'LIMIT'],
+            correct: 0,
+            explanation: 'JOIN combines rows from multiple tables using specified key conditions.'
+          }
+        }
+      ]
+    },
+    {
+      id: 'course-ai',
+      certId: 'CP-CERT-7731C',
+      title: 'AI Readiness & Engineering Playbook',
+      category: 'ai',
+      icon: '🤖',
+      duration: '6 hours',
+      instructor: 'Marcus Vance (AI Product Director)',
+      skills: ['LLMs', 'AI Mentorship', 'Interview Prep'],
+      modules: [
+        {
+          title: 'Module 1: Prompt Engineering & Context Management',
+          done: true,
+          body: 'Effective LLM prompts structure system context, instructions, few-shot examples, and output constraints to produce deterministic, high-quality responses.',
+          code: `const systemPrompt = \`You are CareerPilot AI Mentor. Analyze the user's resume text and output a JSON score from 0-100.\`;`,
+          quiz: {
+            question: 'What is system prompt context in LLM application design?',
+            options: ['Instructions provided to set the persona and operational boundaries of the AI', 'CSS styling for chat', 'Database connection URL', 'User password hash'],
+            correct: 0,
+            explanation: 'System prompts establish guidelines, role, output format, and rules for the language model.'
+          }
+        },
+        {
+          title: 'Module 2: RAG & Vector Embeddings Overview',
+          done: false,
+          body: 'Retrieval-Augmented Generation (RAG) converts knowledge documents into high-dimensional vector embeddings, enabling semantic similarity search before prompting the model.',
+          code: `// Similarity search snippet\nconst embeddings = await openai.embeddings.create({ input: "React hooks guide", model: "text-embedding-3-small" });`,
+          quiz: {
+            question: 'What problem does RAG solve in LLM applications?',
+            options: ['Allows models to retrieve up-to-date domain-specific knowledge without retraining', 'Makes CSS load faster', 'Compresses images', 'Encrypts user passwords'],
+            correct: 0,
+            explanation: 'RAG injects relevant external context directly into the prompt context window.'
+          }
+        },
+        {
+          title: 'Module 3: Building Interactive AI Workflows',
+          done: false,
+          body: 'Learn how to construct multi-step AI agents that process user input, execute tools, evaluate answers, and provide actionable feedback.',
+          code: `async function runAiAgent(input) {\n  const res = await callLlmAgent(input);\n  return res.output;\n}`,
+          quiz: {
+            question: 'What is an AI Agent?',
+            options: ['An autonomous system that uses LLMs to plan, choose tools, and execute steps to reach a goal', 'A static HTML file', 'A database index', 'A browser extension'],
+            correct: 0,
+            explanation: 'An AI Agent evaluates goals, uses tools, and loops until the task is complete.'
+          }
+        },
+        {
+          title: 'Module 4: AI Competency Certification Exam',
+          done: false,
+          body: 'Final exam evaluating prompt engineering, context windows, vector search, and agentic workflows.',
+          code: `console.log("Ready to take final AI Certification Exam!");`,
+          quiz: {
+            question: 'What is a context window in LLMs?',
+            options: ['The maximum token capacity the model can process in a single prompt/response turn', 'The browser viewport size', 'The terminal window height', 'The database connection limit'],
+            correct: 0,
+            explanation: 'The context window limits the total amount of text a model can analyze in one turn.'
+          }
+        }
+      ]
+    },
+    {
+      id: 'course-react',
+      certId: 'CP-CERT-6619D',
+      title: 'Modern React 19 & Component Architecture',
+      category: 'frontend',
+      icon: '⚛️',
+      duration: '5 hours',
+      instructor: 'Elena Rostova (UI Principal)',
+      skills: ['React', 'JavaScript', 'CSS'],
+      modules: [
+        {
+          title: 'Module 1: Server Components & Actions',
+          done: false,
+          body: 'React 19 introduces Server Components and Actions, allowing backend data fetching and form mutations directly within component code without manual boilerplate.',
+          code: `export async function updateProfile(formData: FormData) {\n  'use server';\n  const name = formData.get('name');\n  await db.update({ name });\n}`,
+          quiz: {
+            question: 'What is a key benefit of React Server Components?',
+            options: ['Executes on the server, reducing client bundle size', 'Runs only in mobile apps', 'Disables CSS', 'Requires PHP'],
+            correct: 0,
+            explanation: 'Server components render on the server, sending pre-rendered markup and zero client JS for those components.'
+          }
+        },
+        {
+          title: 'Module 2: Custom Hooks & Performance Optimization',
+          done: false,
+          body: 'Custom hooks encapsulate stateful logic, while useMemo and useCallback prevent unnecessary component re-renders during high-frequency state changes.',
+          code: `function useReadinessScore(skills: string[]) {\n  return useMemo(() => skills.length * 10, [skills]);\n}`,
+          quiz: {
+            question: 'What is useMemo used for in React?',
+            options: ['Memoizes the result of an expensive calculation between renders', 'Sends HTTP requests', 'Styles HTML buttons', 'Creates database tables'],
+            correct: 0,
+            explanation: 'useMemo caches computed values and only re-computes when dependencies change.'
+          }
+        },
+        {
+          title: 'Module 3: Design Systems & Glassmorphism UI',
+          done: false,
+          body: 'Learn how to build reusable design tokens, dark mode systems, smooth CSS transitions, and glassmorphism visual effects.',
+          code: `.card-glass {\n  background: rgba(255, 255, 255, 0.05);\n  backdrop-filter: blur(12px);\n  border: 1px solid rgba(255, 255, 255, 0.1);\n}`,
+          quiz: {
+            question: 'Which CSS property enables glassmorphism background blurring?',
+            options: ['backdrop-filter', 'box-shadow', 'transform', 'display'],
+            correct: 0,
+            explanation: 'backdrop-filter: blur(...) applies graphical effects to the area behind an element.'
+          }
+        },
+        {
+          title: 'Module 4: Final Project & Certification',
+          done: false,
+          body: 'Build a production-ready dashboard interface and claim your React 19 Engineering Certificate.',
+          code: `export default function App() {\n  return <h1>React 19 Certified!</h1>;\n}`,
+          quiz: {
+            question: 'What Hook handles side effects in React function components?',
+            options: ['useEffect', 'useState', 'useRef', 'useContext'],
+            correct: 0,
+            explanation: 'useEffect performs side-effects like data fetching, subscriptions, and DOM updates.'
+          }
+        }
+      ]
+    },
+    {
+      id: 'course-sys',
+      certId: 'CP-CERT-5520E',
+      title: 'System Design & High-Scalability Architectures',
+      category: 'backend',
+      icon: '🏗️',
+      duration: '7 hours',
+      instructor: 'David Kim (Principal Infrastructure Engineer)',
+      skills: ['System Design', 'Redis', 'Microservices', 'Load Balancing'],
+      modules: [
+        {
+          title: 'Module 1: Load Balancing & Horizontal Scaling',
+          done: false,
+          body: 'Horizontal scaling distributes incoming HTTP traffic across multiple app instances using Nginx or AWS ALB, eliminating single points of failure.',
+          code: `upstream app_servers {\n  server 10.0.0.1:8080;\n  server 10.0.0.2:8080;\n}`,
+          quiz: {
+            question: 'What is the main role of a Load Balancer in system design?',
+            options: ['Distributes incoming network traffic across multiple servers', 'Encodes video files', 'Compiles React code', 'Runs database migrations'],
+            correct: 0,
+            explanation: 'Load balancers prevent server overload by routing requests across a pool of instances.'
+          }
+        },
+        {
+          title: 'Module 2: In-Memory Caching with Redis',
+          done: false,
+          body: 'Caching read-heavy data in Redis reduces relational database load by up to 90%, yielding sub-millisecond response times.',
+          code: `const cached = await redis.get('user:profile:123');\nif (cached) return JSON.parse(cached);`,
+          quiz: {
+            question: 'Why is Redis preferred for high-speed caching?',
+            options: ['Stores data in-memory for sub-millisecond lookups', 'Uses SQL queries', 'Replaces HTML', 'Runs on low power'],
+            correct: 0,
+            explanation: 'Redis stores data directly in RAM, making read/write operations orders of magnitude faster than disk storage.'
+          }
+        },
+        {
+          title: 'Module 3: Database Sharding & Partitioning',
+          done: false,
+          body: 'Partitioning and sharding divide huge database tables across separate physical servers based on a shard key (e.g. user_id % N).',
+          code: `// Shard key hashing\nconst shardId = hashKey(userId) % TOTAL_SHARDS;`,
+          quiz: {
+            question: 'What is database sharding?',
+            options: ['Horizontal partitioning of a database across multiple server nodes', 'Deleting backup files', 'Encrypting passwords', 'Formatting code'],
+            correct: 0,
+            explanation: 'Sharding splits a monolithic database horizontally across multiple servers to scale write throughput.'
+          }
+        },
+        {
+          title: 'Module 4: System Design Final Certification',
+          done: false,
+          body: 'Pass the final architectural scenario exam covering load balancing, Redis caching, microservices, and sharding.',
+          code: `console.log("System Design Certification Unlocked!");`,
+          quiz: {
+            question: 'Which strategy handles sudden traffic spikes best in high-scale systems?',
+            options: ['Combining Caching + Horizontal Auto-Scaling', 'Single server upgrade', 'Manual SQL queries', 'Disabling logs'],
+            correct: 0,
+            explanation: 'Auto-scaling adds server instances dynamically while caching absorbs read load.'
+          }
+        }
+      ]
+    },
+    {
+      id: 'course-ds',
+      certId: 'CP-CERT-4411F',
+      title: 'Python Data Science & ML Fundamentals',
+      category: 'ai',
+      icon: '📊',
+      duration: '6 hours',
+      instructor: 'Dr. Anita Roy (Chief Data Scientist)',
+      skills: ['Python', 'Data Science', 'Analytics'],
+      modules: [
+        {
+          title: 'Module 1: Data Wrangling with Pandas & NumPy',
+          done: false,
+          body: 'Pandas DataFrames provide high-performance data structures for cleaning, filtering, and aggregating tabular datasets.',
+          code: `import pandas as pd\n\ndf = pd.read_csv('careers.csv')\nclean_df = df.dropna().groupby('skill').mean()`,
+          quiz: {
+            question: 'Which Python library is primary for structured data manipulation using DataFrames?',
+            options: ['Pandas', 'Flask', 'Django', 'Requests'],
+            correct: 0,
+            explanation: 'Pandas provides DataFrames and Series for data cleaning and manipulation.'
+          }
+        },
+        {
+          title: 'Module 2: Machine Learning Classifiers with Scikit-Learn',
+          done: false,
+          body: 'Train supervised machine learning models (Random Forests, Logistic Regression) to predict outcomes from feature matrices.',
+          code: `from sklearn.ensemble import RandomForestClassifier\n\nmodel = RandomForestClassifier()\nmodel.fit(X_train, y_train)`,
+          quiz: {
+            question: 'What is supervised machine learning?',
+            options: ['Training a model using labeled feature-target pairs', 'Running unscripted code', 'Formatting CSV files', 'Sending email alerts'],
+            correct: 0,
+            explanation: 'Supervised learning fits a function on labeled inputs and target outputs.'
+          }
+        },
+        {
+          title: 'Module 3: Model Evaluation & Confusion Metrics',
+          done: false,
+          body: 'Evaluate predictive models using Precision, Recall, F1-score, and ROC-AUC curves rather than accuracy alone.',
+          code: `from sklearn.metrics import classification_report\nprint(classification_report(y_test, predictions))`,
+          quiz: {
+            question: 'Why is F1-score preferred over accuracy on imbalanced datasets?',
+            options: ['Combines Precision and Recall into a harmonic mean', 'It runs faster', 'Requires no math', 'Uses less RAM'],
+            correct: 0,
+            explanation: 'F1-score measures the balance between Precision and Recall, avoiding accuracy inflation on imbalanced data.'
+          }
+        },
+        {
+          title: 'Module 4: Data Science Certification Exam',
+          done: false,
+          body: 'Complete the end-to-end data pipeline project and receive your Python Data Science Certificate.',
+          code: `print("Python Data Science Certified!");`,
+          quiz: {
+            question: 'What is feature scaling in machine learning pipelines?',
+            options: ['Normalizing feature ranges so high-magnitude variables do not dominate model learning', 'Adding more rows', 'Deleting columns', 'Writing SQL queries'],
+            correct: 0,
+            explanation: 'Feature scaling standardizes numerical ranges so gradient-based models converge properly.'
+          }
+        }
+      ]
+    }
+  ];
+
+  const CERTIFICATES = [
+    {
+      id: 'CP-CERT-8924A',
+      course: 'TypeScript Masterclass & Code Layouts',
+      duration: '4 hours',
+      skills: ['TypeScript', 'Static Analysis'],
+      date: 'July 2026',
+      completed: true
+    },
+    {
+      id: 'CP-CERT-9102B',
+      course: 'Full-Stack PostgreSQL & API Architecture',
+      duration: '8 hours',
+      skills: ['PostgreSQL', 'Node.js', 'REST APIs'],
+      date: 'July 2026',
+      completed: true
+    },
+    {
+      id: 'CP-CERT-7731C',
+      course: 'AI Readiness & Engineering Playbook',
+      duration: '6 hours',
+      skills: ['LLMs', 'AI Mentorship', 'Interview Prep'],
+      date: 'July 2026',
+      completed: false
+    },
+    {
+      id: 'CP-CERT-6619D',
+      course: 'Modern React 19 & Component Architecture',
+      duration: '5 hours',
+      skills: ['React', 'JavaScript', 'CSS'],
+      date: 'July 2026',
+      completed: false
+    },
+    {
+      id: 'CP-CERT-5520E',
+      course: 'System Design & High-Scalability Architectures',
+      duration: '7 hours',
+      skills: ['System Design', 'Redis', 'Microservices'],
+      date: 'July 2026',
+      completed: false
+    },
+    {
+      id: 'CP-CERT-4411F',
+      course: 'Python Data Science & ML Fundamentals',
+      duration: '6 hours',
+      skills: ['Python', 'Data Science', 'Analytics'],
+      date: 'July 2026',
+      completed: false
+    }
+  ];
+
+  function renderCourses(filterCategory = 'all') {
+    const list = document.getElementById('courseCardList');
+    if (!list) return;
+    list.innerHTML = '';
+
+    const filtered = filterCategory === 'all' ? COURSES : COURSES.filter(c => c.category === filterCategory);
+
+    filtered.forEach(course => {
+      const completedModules = course.modules.filter(m => m.done).length;
+      const totalModules = course.modules.length;
+      const pct = Math.round((completedModules / totalModules) * 100);
+      const isComplete = pct === 100;
+
+      const card = document.createElement('div');
+      card.className = 'course-card';
+      card.innerHTML = `
+        <div>
+          <div class="course-header">
+            <div class="course-icon">${course.icon}</div>
+            <span class="badge ${isComplete ? 'badge-new' : 'badge-hot'}">${isComplete ? '🎉 100% Completed' : `${pct}% In Progress`}</span>
+          </div>
+          <h4 style="font-weight:700;font-size:16px;margin-bottom:4px;">${escapeHtml(course.title)}</h4>
+          <p style="color:var(--muted);font-size:12px;margin-bottom:12px;">Instructor: ${course.instructor} • ${course.duration}</p>
+          
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);">
+            <span>Progress (${completedModules}/${totalModules} modules)</span>
+            <span><strong>${pct}%</strong></span>
+          </div>
+          <div class="course-progress-track">
+            <div class="course-progress-fill" style="width:${pct}%;"></div>
+          </div>
+
+          <div class="module-list">
+            ${course.modules.map((m, mIdx) => `
+              <div class="module-item ${m.done ? 'completed' : ''}" data-course="${course.id}" data-idx="${mIdx}">
+                <div class="checkbox ${m.done ? 'done' : ''}">${m.done ? '✓' : ''}</div>
+                <span style="${m.done ? 'text-decoration:line-through;color:var(--muted);' : ''}">${m.title}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:16px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:11px;color:var(--muted);">Skills: ${course.skills.join(', ')}</div>
+          ${isComplete 
+            ? `<button class="btn btn-primary btn-sm view-course-cert-btn" data-course="${escapeHtml(course.title)}" data-code="${course.certId}">🎓 View Certificate</button>`
+            : `<button class="btn btn-outline btn-sm complete-course-btn" data-id="${course.id}">Complete Course</button>`
+          }
+        </div>
+      `;
+      list.appendChild(card);
+    });
+
+    // Event listeners for module checkboxes & reader
+    list.querySelectorAll('.module-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const courseId = el.dataset.course;
+        const mIdx = Number(el.dataset.idx);
+        openLessonReader(courseId, mIdx);
+      });
+    });
+
+    // Event listeners for Complete Course button
+    list.querySelectorAll('.complete-course-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const course = COURSES.find(c => c.id === btn.dataset.id);
+        if (course) {
+          course.modules.forEach(m => m.done = true);
+          checkCourseCompletion(course);
+          toast(`🎉 Course Completed! Certificate unlocked for ${course.title}`);
+          renderCourses(filterCategory);
+          renderCertifications();
+          openCertificateModal(course.title, course.certId, 'July 2026');
+        }
+      });
+    });
+
+    // Event listeners for View Certificate button
+    list.querySelectorAll('.view-course-cert-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openCertificateModal(btn.dataset.course, btn.dataset.code, 'July 2026');
+      });
+    });
+  }
+
+  let activeLessonState = { courseId: 'course-ts', mIdx: 0 };
+
+  function openLessonReader(courseId, mIdx = 0) {
+    const course = COURSES.find(c => c.id === courseId);
+    if (!course) return;
+    activeLessonState = { courseId, mIdx };
+    
+    document.getElementById('lessonModalIcon').textContent = course.icon;
+    document.getElementById('lessonModalTitle').textContent = course.title;
+    document.getElementById('lessonModalMeta').textContent = `${course.modules.length} Modules • ${course.duration}`;
+
+    // Render nav sidebar
+    const navList = document.getElementById('lessonModalNavList');
+    navList.innerHTML = '';
+    course.modules.forEach((m, idx) => {
+      const div = document.createElement('div');
+      div.className = `lesson-nav-item ${idx === mIdx ? 'active' : ''}`;
+      div.innerHTML = `
+        <span style="font-weight:700;">${m.done ? '✓' : idx + 1}</span>
+        <span style="flex:1;">${escapeHtml(m.title)}</span>
+      `;
+      div.addEventListener('click', () => openLessonReader(courseId, idx));
+      navList.appendChild(div);
+    });
+
+    const m = course.modules[mIdx];
+    document.getElementById('lessonModuleBadge').textContent = `Module ${mIdx + 1} of ${course.modules.length}`;
+    document.getElementById('lessonHeading').textContent = m.title;
+    document.getElementById('lessonBodyText').textContent = m.body || 'Lesson content and guide...';
+    document.getElementById('lessonCodeSnippet').textContent = m.code || '// Sample Code';
+
+    // Render Knowledge Quiz
+    const quizQuestion = document.getElementById('lessonQuizQuestion');
+    const quizOptions = document.getElementById('lessonQuizOptions');
+    const quizFeedback = document.getElementById('lessonQuizFeedback');
+    quizFeedback.style.display = 'none';
+
+    if (m.quiz) {
+      quizQuestion.textContent = m.quiz.question;
+      quizOptions.innerHTML = m.quiz.options.map((opt, oIdx) => `
+        <button class="btn btn-outline btn-block quiz-opt-btn" style="text-align:left;font-weight:normal;" data-idx="${oIdx}">
+          ${String.fromCharCode(65 + oIdx)}. ${escapeHtml(opt)}
+        </button>
+      `).join('');
+
+      quizOptions.querySelectorAll('.quiz-opt-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selected = Number(btn.dataset.idx);
+          const pass = selected === m.quiz.correct;
+          quizFeedback.style.display = 'block';
+          quizFeedback.style.color = pass ? 'var(--success)' : '#ef4444';
+          quizFeedback.textContent = pass ? `✅ Correct! ${m.quiz.explanation}` : `⚠️ Incorrect. ${m.quiz.explanation}`;
+        });
+      });
+    }
+
+    document.getElementById('lessonModal').classList.add('active');
+  }
+
+  document.getElementById('closeLessonModal')?.addEventListener('click', () => {
+    document.getElementById('lessonModal').classList.remove('active');
+  });
+
+  document.getElementById('completeLessonBtn')?.addEventListener('click', () => {
+    const course = COURSES.find(c => c.id === activeLessonState.courseId);
+    if (!course) return;
+    
+    course.modules[activeLessonState.mIdx].done = true;
+    checkCourseCompletion(course);
+    renderCourses();
+    renderCertifications();
+
+    if (activeLessonState.mIdx + 1 < course.modules.length) {
+      openLessonReader(activeLessonState.courseId, activeLessonState.mIdx + 1);
+      toast('Module completed! Moving to next module.');
+    } else {
+      document.getElementById('lessonModal').classList.remove('active');
+      toast(`🎉 Course Completed! Certificate unlocked for ${course.title}`);
+      openCertificateModal(course.title, course.certId, 'July 2026');
+    }
+  });
+
+  document.getElementById('prevLessonBtn')?.addEventListener('click', () => {
+    if (activeLessonState.mIdx > 0) {
+      openLessonReader(activeLessonState.courseId, activeLessonState.mIdx - 1);
+    }
+  });
+
+  document.getElementById('playAudioBtn')?.addEventListener('click', () => {
+    toast('▶️ Playing 2-minute interactive audio lesson summary...');
+  });
+
+  function checkCourseCompletion(course) {
+    const allDone = course.modules.every(m => m.done);
+    const cert = CERTIFICATES.find(c => c.id === course.certId);
+    if (cert) {
+      cert.completed = allDone;
+    }
+  }
+
+  // Course Filter Buttons
+  document.querySelectorAll('.course-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.course-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCourses(btn.dataset.filter);
+    });
+  });
+
+  function renderCertifications() {
+    const gallery = document.getElementById('certGalleryList');
+    if (!gallery) return;
+    gallery.innerHTML = '';
+    
+    const completedList = CERTIFICATES.filter(c => c.completed);
+    document.getElementById('certCountNum').textContent = completedList.length;
+    document.getElementById('certHoursNum').textContent = (completedList.length * 6) + 'h';
+
+    CERTIFICATES.forEach(cert => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.display = 'flex';
+      card.style.flexDirection = 'column';
+      card.style.justifyContent = 'space-between';
+      card.innerHTML = `
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+            <div style="font-size:32px;">🎓</div>
+            <span class="badge ${cert.completed ? 'badge-new' : 'badge-hot'}">${cert.completed ? '✅ Verified' : '⏳ In Progress'}</span>
+          </div>
+          <h4 style="font-weight:700;font-size:16px;">${cert.course}</h4>
+          <p style="color:var(--muted);font-size:13px;margin:6px 0 12px;">Duration: ${cert.duration} • Skills: ${cert.skills.join(', ')}</p>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:12px;color:var(--muted);">${cert.completed ? `Issued ${cert.date}` : 'Complete roadmap item to unlock'}</div>
+          ${cert.completed 
+            ? `<button class="btn btn-primary btn-sm view-cert-btn" data-course="${escapeHtml(cert.course)}" data-code="${cert.id}" data-date="${cert.date}">View Certificate</button>`
+            : `<button class="btn btn-outline btn-sm mark-cert-complete-btn" data-code="${cert.id}">Mark Complete</button>`
+          }
+        </div>
+      `;
+      gallery.appendChild(card);
+    });
+
+    gallery.querySelectorAll('.view-cert-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        openCertificateModal(b.dataset.course, b.dataset.code, b.dataset.date);
+      });
+    });
+
+    gallery.querySelectorAll('.mark-cert-complete-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        const item = CERTIFICATES.find(c => c.id === b.dataset.code);
+        if (item) {
+          item.completed = true;
+          toast(`Congratulations! Earned certificate for ${item.course}`);
+          renderCertifications();
+        }
+      });
+    });
+  }
+
+  function openCertificateModal(course, code, date) {
+    const name = user?.user_metadata?.full_name || currentResumeData?.name || user?.email?.split('@')[0] || 'Professional';
+    document.getElementById('modalCertName').textContent = name;
+    document.getElementById('modalCertCourse').textContent = course;
+    document.getElementById('modalCertCode').textContent = `ID: ${code}`;
+    document.getElementById('modalCertDate').textContent = `Issued: ${date}`;
+    document.getElementById('certModal').classList.add('active');
+  }
+
+  document.getElementById('closeCertModal')?.addEventListener('click', () => {
+    document.getElementById('certModal').classList.remove('active');
+  });
+
+  document.getElementById('certModal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'certModal') {
+      document.getElementById('certModal').classList.remove('active');
+    }
+  });
+
+  document.getElementById('copyCertLinkBtn')?.addEventListener('click', () => {
+    const code = document.getElementById('modalCertCode').textContent;
+    navigator.clipboard.writeText(window.location.origin + '/verify?' + code);
+    toast('Verified Certificate Badge link copied to clipboard!');
+  });
+
+  // Help & Support Accordion & Search Logic
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.closest('.faq-item');
+      item.classList.toggle('open');
+    });
+  });
+
+  document.getElementById('cardNavTicket')?.addEventListener('click', () => {
+    document.getElementById('ticketFormCard').scrollIntoView({ behavior: 'smooth' });
+  });
+  document.getElementById('cardNavCert')?.addEventListener('click', () => switchTab('certifications'));
+  document.getElementById('cardNavResume')?.addEventListener('click', () => switchTab('resume'));
+  document.getElementById('cardNavInterview')?.addEventListener('click', () => switchTab('mockinterview'));
+
+  document.getElementById('supportTicketForm')?.addEventListener('submit', e => {
+    e.preventDefault();
+    const cat = document.getElementById('ticketCategory').value;
+    const subj = document.getElementById('ticketSubject').value.trim();
+    
+    const ticketId = 'TICK-' + Math.floor(1000 + Math.random() * 9000);
+    const resCard = document.getElementById('ticketResultCard');
+    document.getElementById('ticketResponseText').textContent = `Thank you for contacting support regarding "${subj}". Our support team has received your ${cat} ticket and will respond via email shortly.`;
+    document.getElementById('ticketIdText').textContent = `Ticket ID: #${ticketId} • Status: Under Review`;
+    resCard.style.display = 'block';
+    toast('Support ticket submitted!');
+    e.target.reset();
+  });
+
+  document.getElementById('helpSearchBtn')?.addEventListener('click', () => {
+    const q = document.getElementById('helpSearchInput').value.toLowerCase().trim();
+    if (!q) return;
+    let count = 0;
+    document.querySelectorAll('.faq-item').forEach(item => {
+      const text = item.textContent.toLowerCase();
+      if (text.includes(q)) {
+        item.style.display = 'block';
+        item.classList.add('open');
+        count++;
+      } else {
+        item.style.display = 'none';
+      }
+    });
+    toast(`Found ${count} relevant FAQ items`);
+  });
+
+  // Certificate Verification Tool Handler
+  document.getElementById('verifyCertBtn')?.addEventListener('click', () => {
+    const input = document.getElementById('verifyCertInput').value.trim().toUpperCase();
+    const resBox = document.getElementById('verifyResult');
+    if (!input) { toast('Enter a Certificate ID to verify', 'error'); return; }
+    
+    const cert = CERTIFICATES.find(c => c.id.toUpperCase() === input || c.id.replace(/-/g,'').toUpperCase() === input.replace(/-/g,''));
+    resBox.style.display = 'block';
+    
+    if (cert && cert.completed) {
+      const name = user?.user_metadata?.full_name || currentResumeData?.name || user?.email?.split('@')[0] || 'Verified Student';
+      resBox.style.borderColor = 'var(--success)';
+      resBox.innerHTML = `
+        <div style="font-weight:700;color:var(--success);font-size:15px;margin-bottom:6px;">✅ Verified Authentic Credential</div>
+        <div style="font-size:14px;font-weight:600;color:var(--fg);">${cert.course}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px;">Recipient: <strong>${escapeHtml(name)}</strong> • Issued: ${cert.date}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Skills Verified: ${cert.skills.join(', ')}</div>
+        <div style="font-size:11px;font-family:monospace;color:var(--brand);margin-top:8px;">Verification ID: ${cert.id}</div>
+      `;
+    } else {
+      resBox.style.borderColor = 'var(--brand)';
+      resBox.innerHTML = `
+        <div style="font-weight:700;color:#ef4444;font-size:14px;">⚠️ Certificate ID Not Found or Pending Completion</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px;">No completed credential matches ID "${escapeHtml(input)}". Try testing with sample ID: <strong>CP-CERT-8924A</strong></div>
+      `;
+    }
+  });
+
+  // AI Live Support Assistant Chat
+  const helpChatForm = document.getElementById('helpChatForm');
+  const helpChatBox = document.getElementById('helpChatBox');
+  const helpChatInput = document.getElementById('helpChatInput');
+
+  helpChatForm?.addEventListener('submit', e => {
+    e.preventDefault();
+    const q = helpChatInput.value.trim();
+    if (!q) return;
+
+    const userDiv = document.createElement('div');
+    userDiv.className = 'help-chat-msg user';
+    userDiv.textContent = q;
+    helpChatBox.appendChild(userDiv);
+    helpChatInput.value = '';
+    helpChatBox.scrollTop = helpChatBox.scrollHeight;
+
+    // Show typing indicator
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'help-chat-msg bot';
+    typingDiv.textContent = '✦ Thinking...';
+    typingDiv.style.opacity = '0.5';
+    helpChatBox.appendChild(typingDiv);
+
+    setTimeout(() => {
+      const lower = q.toLowerCase();
+      let reply = "I can help with that! You can navigate using the sidebar menu or check the FAQs below. You can also run the ⚡ Instant Diagnostic for a personalised score breakdown.";
+
+      if (lower.includes('resume') && (lower.includes('score') || lower.includes('improve'))) {
+        reply = "💡 To push your Resume Score above 85: (1) List at least 6–8 technical skills matching your target role, (2) Add measurable achievements ('reduced load time by 40%'), (3) Keep experience descriptions action-verb-first. These 3 changes typically add +12–18 points!";
+      } else if (lower.includes('resume')) {
+        reply = "📄 Your resume is analysed using ATS-grade keyword scanning. The more your listed skills match job requirements, the higher your match %. Try heading to the Resume tab and re-scanning after updates.";
+      } else if (lower.includes('certificate') || lower.includes('cert')) {
+        reply = "🎓 To earn a certificate: go to Courses Catalog → click any module → complete all 4 modules → your badge is auto-issued in Certifications. Use the Verify Tool to check any credential ID like CP-CERT-8924A.";
+      } else if (lower.includes('linkedin')) {
+        reply = "🔗 To add your cert to LinkedIn: click 'View Certificate' on any earned badge → click 'Share Verified Badge' → copy the link. Then go to LinkedIn → Profile → Add Section → Licenses & Certifications → paste the credential ID and URL.";
+      } else if (lower.includes('mock') || lower.includes('interview')) {
+        reply = "🎤 The Mock Interview module has 3 rounds: Aptitude (MCQ), Technical (coding concepts), and Behavioural (STAR method). Each completed round increases your Career Readiness Score by up to 10 points. Head to Mock Interview in the sidebar!";
+      } else if (lower.includes('job') || lower.includes('match')) {
+        reply = "💼 Job match percentages are calculated live against 50+ real hiring role profiles. The fastest way to improve your match is to complete the skill gap courses highlighted on your Dashboard. Each completed skill raises match by 3–8%.";
+      } else if (lower.includes('placement') || lower.includes('campus')) {
+        reply = "🏢 Campus Placement drives are sorted by your eligibility match. Drives show your missing criteria so you know exactly what to fix. Check the Placements tab to see your top matching opportunities!";
+      } else if (lower.includes('course') || lower.includes('module')) {
+        reply = "📚 You have 6 courses available in the Courses Catalog — TypeScript, PostgreSQL, AI Engineering, React 19, System Design, and Python Data Science. Click any module row to open the lesson reader. Complete all 4 modules to unlock your certificate!";
+      } else if (lower.includes('score') || lower.includes('readiness')) {
+        reply = "📊 Your Career Readiness Score = Resume Quality (40%) + Skill Coverage (35%) + Skill Density (15%) + Mock Interview (10%). The fastest gains come from uploading a stronger resume and completing at least 1 course. Try the Diagnostic Tool above!";
+      } else if (lower.includes('password') || lower.includes('account') || lower.includes('login')) {
+        reply = "🔐 For account issues: if you're logged in, your session is maintained via secure local storage. To reset your password, use the Login page's 'Forgot Password' link. For persistent issues, submit a formal Support Ticket below.";
+      } else if (lower.includes('download') || lower.includes('pdf') || lower.includes('print')) {
+        reply = "🖨️ To download your certificate as a PDF: open the certificate modal via 'View Certificate', then click '🖨️ Print / Save as PDF'. In the browser print dialog, choose 'Save as PDF' as the destination. It will be formatted perfectly for sharing!";
+      } else if (lower.includes('skill') || lower.includes('gap')) {
+        reply = "⚡ Skill gaps are identified by comparing your resume skills to target job requirements. Each gap course in the Courses Catalog directly addresses the most critical missing skills. Completing them boosts your score and job match simultaneously!";
+      } else if (lower.includes('hello') || lower.includes('hi') || lower.includes('hey')) {
+        reply = `👋 Hello! I'm your CareerPilot AI Support Assistant. I can help you with resume scores, course progress, certificates, mock interviews, job matching, and placement drives. What would you like to know?`;
+      }
+
+      typingDiv.textContent = reply;
+      typingDiv.style.opacity = '1';
+      helpChatBox.scrollTop = helpChatBox.scrollHeight;
+    }, 700);
+  });
+
+  // Profile Self-Diagnostic Tool Handler
+  document.getElementById('runDiagnosticBtn')?.addEventListener('click', () => {
+    const out = document.getElementById('diagnosticOutput');
+    out.style.display = 'block';
+
+    const resumeScore = currentResumeData?.resume_score || 70;
+    const readinessScore = currentResumeData?.readiness_score || 72;
+    const skillsCount = currentResumeData?.skills?.length || 0;
+    const completedCerts = CERTIFICATES.filter(c => c.completed).length;
+
+    out.innerHTML = `
+      <div style="font-weight:700;font-size:15px;margin-bottom:8px;color:var(--brand);">
+        🩺 CareerPilot Diagnostic Health Report for ${user?.user_metadata?.full_name || currentResumeData?.name || 'User'}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:10px;margin-bottom:12px;">
+        <div style="padding:8px;background:var(--card);border-radius:6px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);">Resume Quality</div>
+          <div style="font-weight:800;font-size:16px;color:${resumeScore >= 80 ? 'var(--success)' : 'var(--brand)'};">${resumeScore}/100</div>
+        </div>
+        <div style="padding:8px;background:var(--card);border-radius:6px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);">Readiness Score</div>
+          <div style="font-weight:800;font-size:16px;color:${readinessScore >= 80 ? 'var(--success)' : 'var(--brand)'};">${readinessScore}/100</div>
+        </div>
+        <div style="padding:8px;background:var(--card);border-radius:6px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);">Skills Extracted</div>
+          <div style="font-weight:800;font-size:16px;">${skillsCount} skills</div>
+        </div>
+        <div style="padding:8px;background:var(--card);border-radius:6px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);">Earned Certs</div>
+          <div style="font-weight:800;font-size:16px;">${completedCerts} badges</div>
+        </div>
+      </div>
+      <div style="font-size:13px;line-height:1.5;color:var(--fg);">
+        <strong>💡 Key Recommendations to Maximize Score:</strong>
+        <ul style="margin-top:6px;padding-left:18px;display:grid;gap:4px;">
+          ${skillsCount < 5 ? '<li>Add at least 2 more core technical skills to raise requirement coverage.</li>' : ''}
+          ${resumeScore < 85 ? '<li>Include numerical metrics (e.g. "improved speed by 30%") in experience descriptions.</li>' : ''}
+          ${completedCerts < 3 ? '<li>Complete remaining Academy courses to earn verified badges and boost skill density.</li>' : ''}
+          <li>Complete a 3-round Mock Assessment to validate interview preparedness.</li>
+        </ul>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;">
+        <button class="btn btn-primary btn-sm" onclick="window.switchTab && window.switchTab('courses')">📚 Open Courses</button>
+        <button class="btn btn-outline btn-sm" onclick="window.switchTab && window.switchTab('mockinterview')">🎤 Practice Mock Interview</button>
+      </div>
+    `;
+    toast('Profile diagnostic complete!');
+  });
+
+  renderCourses();
+  renderCertifications();
+
+  // Expose switchTab globally so onclick attributes inside dynamic HTML work
+  window.switchTab = switchTab;
 
   // Init Data Fetch
   await loadResumeData();
