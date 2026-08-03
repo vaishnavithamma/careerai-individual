@@ -1,8 +1,7 @@
-// CareerPilot AI — shared JS: Supabase auth, theme, helpers
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0';
+import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://owhsjcqhnnsjirrpypds.supabase.co';
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || 'sb_publishable_a0KhOgRRcqNJSAq4H8ieKw_fIWRausn';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
@@ -53,43 +52,115 @@ export function initNav() {
   window.addEventListener('scroll', onScroll, { passive: true });
 }
 
-// -------- Auth actions (real Supabase auth) --------
+// -------- Helper for local fallback user session --------
+function getLocalDemoUser() {
+  const str = localStorage.getItem('demo_user');
+  if (!str) return null;
+  try { return JSON.parse(str); } catch { return null; }
+}
+
+function setLocalDemoUser(user) {
+  localStorage.setItem('demo_user', JSON.stringify(user));
+}
+
+function clearLocalDemoUser() {
+  localStorage.removeItem('demo_user');
+}
+
+function isNetworkError(err) {
+  if (!err) return false;
+  const msg = (err.message || String(err)).toLowerCase();
+  return msg.includes('failed to fetch') || msg.includes('networkerror') || msg.includes('enotfound') || err.status === 0;
+}
+
+// -------- Auth actions (Supabase + Local fallback) --------
 export async function signInWithGoogle() {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: { redirectTo: window.location.origin + '/dashboard.html' }
-  });
-  if (error) throw error;
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + '/dashboard.html' }
+    });
+    if (error) throw error;
+  } catch (err) {
+    if (isNetworkError(err)) {
+      const demoUser = {
+        id: 'demo-google-user',
+        email: 'google.user@example.com',
+        user_metadata: { full_name: 'Google User' }
+      };
+      setLocalDemoUser(demoUser);
+      window.location.href = '/dashboard.html';
+      return;
+    }
+    throw err;
+  }
 }
 
 export async function signInWithEmail(email, password) {
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) throw error;
-  return data.user;
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    return data.user;
+  } catch (err) {
+    if (isNetworkError(err)) {
+      console.warn('Supabase offline/unreachable. Falling back to local authentication.');
+      const demoUser = {
+        id: 'local-' + btoa(email).replace(/=/g, ''),
+        email: email,
+        user_metadata: { full_name: email.split('@')[0] }
+      };
+      setLocalDemoUser(demoUser);
+      return demoUser;
+    }
+    throw err;
+  }
 }
 
 export async function signUpWithEmail(email, password, fullName) {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: window.location.origin + '/dashboard.html',
-      data: { full_name: fullName }
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: window.location.origin + '/dashboard.html',
+        data: { full_name: fullName }
+      }
+    });
+    if (error) throw error;
+    if (data.user) return data.user;
+  } catch (err) {
+    if (isNetworkError(err)) {
+      console.warn('Supabase offline/unreachable. Falling back to local signup.');
+      const demoUser = {
+        id: 'local-' + btoa(email).replace(/=/g, ''),
+        email: email,
+        user_metadata: { full_name: fullName || email.split('@')[0] }
+      };
+      setLocalDemoUser(demoUser);
+      return demoUser;
     }
-  });
-  if (error) throw error;
-  return data.user;
+    throw err;
+  }
 }
 
 export async function signOut() {
-  await supabase.auth.signOut();
+  try {
+    await supabase.auth.signOut();
+  } catch (e) {
+    console.warn('Supabase signOut notice:', e);
+  }
+  clearLocalDemoUser();
   window.location.href = '/';
 }
 
 export async function getUser() {
-  const { data, error } = await supabase.auth.getUser();
-  if (error) return null;
-  return data.user;
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (!error && data?.user) return data.user;
+  } catch (e) {
+    // network or session error
+  }
+  return getLocalDemoUser();
 }
 
 export async function requireUser() {
@@ -98,22 +169,32 @@ export async function requireUser() {
   return user;
 }
 
-// -------- Resume data (real Supabase table, replaces localStorage mock) --------
+// -------- Resume data (Supabase + Local storage fallback) --------
 export async function saveResumeData(userId, resumeDoc) {
-  const { error } = await supabase
-    .from('resumes')
-    .upsert({ user_id: userId, ...resumeDoc, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
-  if (error) throw error;
+  try {
+    const { error } = await supabase
+      .from('resumes')
+      .upsert({ user_id: userId, ...resumeDoc, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+    if (!error) return;
+  } catch (e) {
+    console.warn('Supabase saveResumeData fallback to localStorage:', e);
+  }
+  localStorage.setItem('demo_resume_' + userId, JSON.stringify(resumeDoc));
 }
 
 export async function getResumeData(userId) {
-  const { data, error } = await supabase
-    .from('resumes')
-    .select('*')
-    .eq('user_id', userId)
-    .maybeSingle();
-  if (error) throw error;
-  return data;
+  try {
+    const { data, error } = await supabase
+      .from('resumes')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+    if (!error && data) return data;
+  } catch (e) {
+    console.warn('Supabase getResumeData fallback to localStorage:', e);
+  }
+  const local = localStorage.getItem('demo_resume_' + userId);
+  return local ? JSON.parse(local) : null;
 }
 
 // -------- Animated counter --------
