@@ -110,6 +110,74 @@ h2{
     font-weight:bold;
     color:#4ade80;
 }
+
+/* Upgraded styles */
+.review-card {
+    background: #173d73;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border-left: 5px solid #ef4444;
+}
+.review-card.correct-card {
+    border-left-color: #10b981;
+}
+.review-card h3 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #93c5fd;
+}
+.review-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 5px;
+}
+.review-explanation {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    font-size: 13px;
+    color: #cbd5e1;
+}
+.progress-bar-container {
+    height: 12px;
+    background: #163a73;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    position: relative;
+}
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    transition: width 0.3s ease-in-out;
+}
+.option-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: 0.2s;
+}
+.option-label:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.2);
+}
+.option-label input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #38bdf8;
+}
+.submission-review-card {
+    display: none;
+}
 </style>
 </head>
 
@@ -175,9 +243,9 @@ Start Assessment
 
 <ul style="line-height:2">
 
-<li>✅ Total Questions : <b>30</b></li>
+<li>✅ Total Questions : <b>10</b></li>
 
-<li>✅ Total Time : <b>30 Minutes</b></li>
+<li>✅ Total Time : <b>10 Minutes</b></li>
 
 <li>✅ Each Question Carries <b>1 Mark</b></li>
 
@@ -219,7 +287,7 @@ Question
 
 <span id="questionCount">
 
-1 / 30
+1 / 10
 
 </span>
 
@@ -227,7 +295,7 @@ Question
 
 <div id="timer">
 
-30:00
+10:00
 
 </div>
 
@@ -309,71 +377,70 @@ Next
 
 </div>
 
+<!-- Submission Review Card -->
+<div class="card" id="submissionReviewCard" style="display:none;">
+    <h1>📝 Review Your Assessment</h1>
+    <p style="text-align:center; margin-bottom: 20px; color:#cbd5e1;">Double check your status before final submission.</p>
+    
+    <div id="reviewSummaryContent" style="line-height:2.2; margin: 20px 0; font-size:16px;">
+        <!-- Dynamically injected -->
+    </div>
+    
+    <div id="unansweredWarning" style="background:rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding:15px; border-radius:8px; color:#f87171; font-weight:bold; margin-bottom:20px; display:none;">
+        ⚠️ You still have unanswered questions. Please answer all questions before submitting.
+    </div>
+    
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+        <button class="btn" id="reviewGoBackBtn" style="background:#475569;">← Go Back & Complete</button>
+        <button class="btn" id="reviewFinalSubmitBtn" style="background:#10b981;">Confirm & Submit</button>
+    </div>
+</div>
+
 <!-- Result Card -->
-
 <div class="card result-card" id="resultCard">
-
-<h1>🎉 Assessment Completed</h1>
-
-<div
-style="
-font-size:45px;
-font-weight:bold;
-text-align:center;
-color:#4ade80;
-margin:20px 0;">
-
-<span id="scoreText">
-
-0 / 30
-
-</span>
-
-</div>
-
-<h2>Performance Summary</h2>
-
-<div id="analysis">
-
-</div>
-
-<br>
-
-<h2>Wrong Answers Review</h2>
-
-<div id="reviewContainer">
-
-</div>
-
-<br>
-
-<center>
-
-<button class="btn" id="restartBtn">
-
-Restart Assessment
-
-</button>
-
-</center>
-
-<button
-    id="backToDashboard"
-    onclick="window.location.href='dashboard.html'"
-    style="
-        background:#64748b;
-        color:white;
-        border:none;
-        padding:10px 20px;
-        border-radius:8px;
-        cursor:pointer;
-        font-size:15px;
-        margin:15px;
-    "
-    onmouseover="this.style.background='#475569'"
-    onmouseout="this.style.background='#64748b'">
-    ← Back to Dashboard
-</button>
+    <h1>🎉 Assessment Completed</h1>
+    
+    <div style="font-size:45px; font-weight:bold; text-align:center; color:#4ade80; margin:20px 0;">
+        <span id="scoreText">0 / 10</span>
+    </div>
+    
+    <h2>Performance Summary</h2>
+    <div id="analysis" style="line-height:2; margin: 15px 0; font-size:15px;">
+        <!-- Dynamically injected -->
+    </div>
+    
+    <br>
+    
+    <h2>Detailed Questions Review</h2>
+    <div id="reviewContainer" style="margin-top:15px;">
+        <!-- Dynamically injected cards -->
+    </div>
+    
+    <br>
+    
+    <center>
+        <button class="btn" id="restartBtn">Restart Assessment</button>
+    </center>
+    
+    <button
+        id="backToDashboard"
+        onclick="window.location.href='dashboard.html'"
+        style="
+            background:#64748b;
+            color:white;
+            border:none;
+            padding:10px 20px;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:15px;
+            margin-top:25px;
+            display:block;
+            width:fit-content;
+        "
+        onmouseover="this.style.background='#475569'"
+        onmouseout="this.style.background='#64748b'">
+        ← Back to Dashboard
+    </button>
 </div>
 
 </div>

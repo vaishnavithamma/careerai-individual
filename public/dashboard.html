@@ -696,57 +696,1022 @@
     <!-- Mock Interview Tab -->
     <!-- Mock Interview Tab -->
     <div id="mockinterviewTab" class="tab-content">
-      <div class="card mi-card">
+      <!-- Local Mock Interview CSS Styles -->
+      <style>
+        .mi-landing-container {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+          margin-top: 10px;
+        }
+        .mi-header-block {
+          text-align: left;
+        }
+        .mi-header-block h2 {
+          font-size: 28px;
+          font-weight: 800;
+          background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 8px;
+        }
+        .mi-header-block p {
+          color: var(--muted);
+          font-size: 15px;
+          line-height: 1.6;
+        }
+        .mi-cards-row {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 24px;
+        }
+        .mi-select-card {
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          padding: 28px;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          box-shadow: var(--shadow-sm);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+        }
+        .mi-select-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 4px;
+          height: 100%;
+          transition: all 0.3s ease;
+        }
+        .mi-select-card.tech-card::before {
+          background: linear-gradient(to bottom, #3b82f6, #60a5fa);
+        }
+        .mi-select-card.hr-card::before {
+          background: linear-gradient(to bottom, #8b5cf6, #c084fc);
+        }
+        .mi-select-card:hover {
+          transform: translateY(-5px);
+          border-color: rgba(59, 130, 246, 0.4);
+          box-shadow: var(--shadow);
+        }
+        .mi-card-icon {
+          font-size: 32px;
+          width: 56px;
+          height: 56px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .tech-card .mi-card-icon {
+          background: rgba(59, 130, 246, 0.1);
+          color: #3b82f6;
+        }
+        .hr-card .mi-card-icon {
+          background: rgba(139, 92, 246, 0.1);
+          color: #8b5cf6;
+        }
+        .mi-card-title {
+          font-size: 20px;
+          font-weight: 700;
+          color: var(--text);
+        }
+        .mi-card-desc {
+          color: var(--muted);
+          font-size: 14px;
+          line-height: 1.5;
+          min-height: 42px;
+        }
+        .mi-info-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          font-size: 13px;
+          color: var(--text);
+          background: var(--card-2);
+          padding: 12px 16px;
+          border-radius: 8px;
+          border: 1px solid var(--border);
+        }
+        .mi-info-list li {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .mi-card-btn {
+          margin-top: auto;
+          width: 100%;
+          font-weight: 600;
+          justify-content: center;
+        }
 
-        <!-- Landing / start screen -->
+        /* Achievements / Badges */
+        .mi-section-title {
+          font-size: 18px;
+          font-weight: 700;
+          color: var(--text);
+          margin-bottom: 16px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .mi-badge-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+          gap: 16px;
+        }
+        .mi-badge-item {
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 16px;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+          transition: all 0.3s ease;
+          opacity: 0.4;
+          filter: grayscale(1);
+        }
+        .mi-badge-item.unlocked {
+          opacity: 1;
+          filter: none;
+          border-color: rgba(16, 185, 129, 0.3);
+          background: linear-gradient(135deg, var(--card) 0%, rgba(16, 185, 129, 0.03) 100%);
+          transform: translateY(0);
+        }
+        .mi-badge-item.unlocked:hover {
+          transform: translateY(-3px);
+          box-shadow: var(--shadow-sm);
+        }
+        .mi-badge-icon {
+          font-size: 36px;
+        }
+        .mi-badge-name {
+          font-weight: 700;
+          font-size: 13px;
+        }
+        .mi-badge-desc {
+          font-size: 11px;
+          color: var(--muted);
+          line-height: 1.3;
+        }
+
+        /* History */
+        .mi-history-table-wrap {
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          overflow: hidden;
+        }
+        .mi-history-table {
+          width: 100%;
+          border-collapse: collapse;
+          text-align: left;
+          font-size: 14px;
+        }
+        .mi-history-table th {
+          background: var(--card-2);
+          padding: 14px 18px;
+          font-weight: 600;
+          color: var(--muted);
+          border-bottom: 1px solid var(--border);
+        }
+        .mi-history-table td {
+          padding: 14px 18px;
+          border-bottom: 1px solid var(--border);
+        }
+        .mi-history-table tr:last-child td {
+          border-bottom: none;
+        }
+        .mi-score-badge {
+          font-weight: 700;
+          padding: 4px 10px;
+          border-radius: 999px;
+          font-size: 12px;
+          display: inline-block;
+        }
+        .score-good { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .score-avg { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .score-needs { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+        /* Role Selection Screen */
+        .role-select-box {
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          padding: 32px;
+          max-width: 600px;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+        .role-search-input {
+          width: 100%;
+          padding: 12px 16px;
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          background: var(--card-2);
+          color: var(--text);
+          outline: none;
+        }
+        .role-list-results {
+          max-height: 240px;
+          overflow-y: auto;
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          background: var(--card);
+        }
+        .role-item-row {
+          padding: 12px 16px;
+          cursor: pointer;
+          transition: background 0.2s ease;
+          border-bottom: 1px solid var(--border);
+        }
+        .role-item-row:last-child {
+          border-bottom: none;
+        }
+        .role-item-row:hover {
+          background: var(--card-2);
+        }
+
+        /* Confirmation Screen */
+        .conf-box {
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          padding: 32px;
+          max-width: 650px;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        }
+        .conf-details-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 16px;
+        }
+        .conf-item {
+          background: var(--card-2);
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          padding: 14px 18px;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        .conf-label {
+          font-size: 11px;
+          font-weight: 700;
+          color: var(--muted);
+          text-transform: uppercase;
+        }
+        .conf-value {
+          font-size: 15px;
+          font-weight: 600;
+        }
+
+        /* Active Voice Interview Viewport */
+        .mi-active-container {
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          padding: 32px;
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        }
+        .mi-active-header {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+          gap: 16px;
+          border-bottom: 1px solid var(--border);
+          padding-bottom: 20px;
+        }
+        .mi-meta-item {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        .mi-meta-label {
+          font-size: 11px;
+          font-weight: 700;
+          color: var(--muted);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+        .mi-meta-val {
+          font-size: 14px;
+          font-weight: 600;
+        }
+        .mi-avatar-row {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          padding: 20px 0;
+          position: relative;
+        }
+        .mi-interviewer-avatar {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 32px;
+          color: white;
+          box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+          position: relative;
+          z-index: 2;
+        }
+        .avatar-speaking {
+          animation: avatarPulse 1.5s infinite alternate;
+        }
+        @keyframes avatarPulse {
+          0% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+          100% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.7); }
+        }
+        .typing-loader {
+          display: flex;
+          gap: 4px;
+          align-items: center;
+          margin-top: 10px;
+        }
+        .typing-dot {
+          width: 6px;
+          height: 6px;
+          background: var(--brand);
+          border-radius: 50%;
+          animation: typingDot 1.4s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingDot {
+          0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+          40% { transform: scale(1.2); opacity: 1; }
+        }
+        .mi-q-display-box {
+          text-align: center;
+          padding: 20px;
+          background: var(--card-2);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+        }
+        .mi-q-level-pill {
+          display: inline-block;
+          font-size: 10px;
+          font-weight: 800;
+          padding: 3px 8px;
+          border-radius: 999px;
+          margin-bottom: 12px;
+          letter-spacing: 0.05em;
+        }
+        .level-easy { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .level-medium { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .level-advanced { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        
+        .mi-q-text {
+          font-size: 18px;
+          font-weight: 700;
+          line-height: 1.5;
+        }
+        .mi-audio-recorder-panel {
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 24px;
+          background: var(--card);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 16px;
+        }
+        .listening-status-row {
+          font-size: 13px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .status-listening { color: #10b981; }
+        .status-speaking { color: #3b82f6; }
+        .status-muted { color: var(--muted); }
+
+        .waveform-canvas {
+          width: 100%;
+          height: 60px;
+          background: var(--card-2);
+          border-radius: 8px;
+        }
+        .recording-timer {
+          font-family: monospace;
+          font-size: 16px;
+          font-weight: 700;
+          color: var(--text);
+        }
+        .mi-controls-row {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .mi-btn-recording-pulse {
+          animation: redPulse 1.2s infinite alternate;
+        }
+        @keyframes redPulse {
+          0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.4); }
+          100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.8); }
+        }
+        .transcript-viewport {
+          width: 100%;
+          background: var(--card-2);
+          border: 1px dashed var(--border);
+          border-radius: 8px;
+          padding: 16px;
+          max-height: 120px;
+          overflow-y: auto;
+          font-size: 13.5px;
+          line-height: 1.5;
+          color: var(--text);
+        }
+        .transcript-label {
+          font-size: 11px;
+          font-weight: 700;
+          color: var(--muted);
+          margin-bottom: 6px;
+          text-transform: uppercase;
+        }
+
+        /* Loading / Evaluation Screen */
+        .mi-loading-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+          padding: 60px 20px;
+        }
+        .loader-ring {
+          width: 72px;
+          height: 72px;
+          border: 4px solid var(--border);
+          border-top-color: var(--brand);
+          border-radius: 50%;
+          animation: spin 1s infinite linear;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .mi-loading-text {
+          font-weight: 700;
+          font-size: 18px;
+        }
+        .mi-loading-subtext {
+          color: var(--muted);
+          font-size: 13px;
+        }
+
+        /* Report Screen CSS */
+        .report-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 16px;
+          border-bottom: 1px solid var(--border);
+          padding-bottom: 20px;
+          margin-bottom: 24px;
+        }
+        .report-overview-row {
+          display: grid;
+          grid-template-columns: 120px 1fr;
+          gap: 28px;
+          align-items: center;
+          background: var(--card-2);
+          padding: 24px;
+          border-radius: 12px;
+          border: 1px solid var(--border);
+          margin-bottom: 24px;
+        }
+        .score-circle-container {
+          position: relative;
+          width: 110px;
+          height: 110px;
+        }
+        .score-svg-circle {
+          transform: rotate(-90deg);
+        }
+        .score-circle-bg {
+          fill: none;
+          stroke: var(--border);
+          stroke-width: 8;
+        }
+        .score-circle-fill {
+          fill: none;
+          stroke: var(--brand);
+          stroke-width: 8;
+          stroke-linecap: round;
+          transition: stroke-dashoffset 1s ease-out;
+        }
+        .score-circle-text {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          text-align: center;
+        }
+        .score-number {
+          font-size: 26px;
+          font-weight: 800;
+          color: var(--text);
+        }
+        .score-label {
+          font-size: 9px;
+          font-weight: 700;
+          color: var(--muted);
+          text-transform: uppercase;
+        }
+        .report-summary-text h4 {
+          font-size: 18px;
+          font-weight: 700;
+          margin-bottom: 6px;
+        }
+        .report-summary-text p {
+          color: var(--muted);
+          font-size: 13.5px;
+          line-height: 1.5;
+        }
+        .report-metrics-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 24px;
+          margin-bottom: 32px;
+        }
+        .metric-progress-item {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .metric-progress-lbl {
+          display: flex;
+          justify-content: space-between;
+          font-size: 13px;
+          font-weight: 600;
+        }
+        .metric-track {
+          width: 100%;
+          height: 8px;
+          background: var(--border);
+          border-radius: 999px;
+          overflow: hidden;
+        }
+        .metric-fill {
+          height: 100%;
+          border-radius: 999px;
+          background: linear-gradient(to right, #3b82f6, #60a5fa);
+          width: 0%;
+          transition: width 1s ease;
+        }
+        .report-details-section {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 24px;
+          margin-bottom: 32px;
+        }
+        .report-bullets-card {
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 20px;
+        }
+        .report-bullets-card h5 {
+          font-size: 15px;
+          font-weight: 700;
+          margin-bottom: 12px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .report-bullets-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          font-size: 13px;
+          padding-left: 0;
+          list-style: none;
+        }
+        .report-bullets-list li {
+          position: relative;
+          padding-left: 18px;
+          line-height: 1.4;
+        }
+        .report-bullets-list.strengths-list li::before {
+          content: '✓';
+          position: absolute;
+          left: 0;
+          color: #10b981;
+          font-weight: bold;
+        }
+        .report-bullets-list.needs-list li::before {
+          content: '⚠';
+          position: absolute;
+          left: 0;
+          color: #f59e0b;
+          font-weight: bold;
+        }
+        .resource-chip {
+          background: var(--card-2);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          padding: 10px;
+          margin-bottom: 8px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 12px;
+        }
+        .resource-tag {
+          font-size: 10px;
+          font-weight: 700;
+          text-transform: uppercase;
+          background: rgba(59, 130, 246, 0.1);
+          color: #3b82f6;
+          padding: 2px 6px;
+          border-radius: 4px;
+        }
+        .qa-breakdown-card {
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          margin-bottom: 16px;
+          background: var(--card);
+          overflow: hidden;
+        }
+        .qa-header-btn {
+          width: 100%;
+          background: var(--card-2);
+          border: none;
+          padding: 14px 18px;
+          text-align: left;
+          font-size: 14px;
+          font-weight: 700;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: pointer;
+          color: var(--text);
+        }
+        .qa-body {
+          padding: 16px 18px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          font-size: 13.5px;
+          border-top: 1px solid var(--border);
+        }
+        .qa-review-section-title {
+          font-size: 15px;
+          font-weight: 700;
+          margin-top: 8px;
+          color: var(--brand);
+        }
+
+        /* Print formatting */
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          #mockinterviewTab, #mockinterviewTab * {
+            visibility: visible;
+          }
+          #mockinterviewTab {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            background: white !important;
+            color: black !important;
+          }
+          .sidebar, .dash-head, .mi-controls-row, #miReportBackBtn, #miDownloadReportBtn, #miLanding, #miActive, #miEvalLoading, .qa-header-btn span:last-child {
+            display: none !important;
+          }
+          .qa-body {
+            display: flex !important;
+          }
+        }
+      </style>
+
+      <div class="card mi-card" style="padding:0;background:transparent;border:none;">
+
+        <!-- LANDING SCREEN -->
         <div id="miLanding">
-          <h3>Mock Interview</h3>
-          <p style="color:var(--muted);margin-bottom:16px;">A full 3-round hiring simulation — Aptitude, Technical (matched to your top role), and HR — just like a real interview process.</p>
-          <div class="mi-rounds-preview">
-            <div class="mi-round-chip"><span>1</span> Aptitude · 10 MCQs</div>
-            <div class="mi-round-chip"><span>2</span> Technical · role-matched</div>
-            <div class="mi-round-chip"><span>3</span> HR · behavioural</div>
-          </div>
-          <div id="miLandingNote" style="color:var(--muted);font-size:13px;margin:12px 0;"></div>
-          <button class="btn btn-primary" id="miStartBtn">Start Interview</button>
-        </div>
-
-        <!-- Active round: header + question -->
-        <div id="miActive" style="display:none;">
-          <div class="mi-progress-header">
-            <div class="mi-round-indicator" id="miRoundIndicator"></div>
-            <div class="mi-progress-track"><div class="mi-progress-fill" id="miProgressFill"></div></div>
-            <div class="mi-score-tracker" id="miScoreTracker"></div>
-          </div>
-
-          <div class="mi-question-card" id="miQuestionCard">
-            <div class="mi-question-meta" id="miQuestionMeta"></div>
-            <div class="mi-question-text" id="miQuestionText"></div>
-
-            <div id="miMcqOptions" class="mi-mcq-options" style="display:none;"></div>
-            <textarea id="miAnswerInput" class="mi-textarea" style="display:none;" placeholder="Type your answer here..."></textarea>
-
-            <div class="mi-actions">
-              <button class="btn btn-primary" id="miSubmitBtn">Submit answer</button>
+          <div class="mi-landing-container">
+            <div class="mi-header-block">
+              <h2>AI Mock Interview</h2>
+              <p>Practice real interview conversations with an AI interviewer and receive detailed feedback on both your technical knowledge and communication skills.</p>
             </div>
-            <div id="miFeedback" style="margin-top:16px;"></div>
+
+            <!-- Selection Cards -->
+            <div class="mi-cards-row">
+              <div class="mi-select-card tech-card">
+                <div class="mi-card-icon">💻</div>
+                <div class="mi-card-title">Technical Interview</div>
+                <div class="mi-card-desc">Practice role-specific technical interview questions based on your selected skills.</div>
+                <ul class="mi-info-list" style="list-style:none;padding:12px 16px;">
+                  <li><span>🎙️</span> AI Voice Interview</li>
+                  <li><span>❓</span> 5 Technical Questions</li>
+                  <li><span>⚙️</span> Personalized according to profile</li>
+                  <li><span>⏳</span> Estimated Duration: 8–10 mins</li>
+                </ul>
+                <button class="btn btn-primary mi-card-btn" id="miStartTechBtn">Start Technical Interview</button>
+              </div>
+
+              <div class="mi-select-card hr-card">
+                <div class="mi-card-icon">🤝</div>
+                <div class="mi-card-title">HR Interview</div>
+                <div class="mi-card-desc">Practice behavioural and HR interview questions to improve communication and confidence.</div>
+                <ul class="mi-info-list" style="list-style:none;padding:12px 16px;">
+                  <li><span>🎙️</span> AI Voice Interview</li>
+                  <li><span>❓</span> 5 Behavioural Questions</li>
+                  <li><span>📈</span> Confidence Analysis</li>
+                  <li><span>⏳</span> Estimated Duration: 8–10 mins</li>
+                </ul>
+                <button class="btn btn-primary mi-card-btn" id="miStartHrBtn" style="background:#8b5cf6;border-color:#8b5cf6;">Start HR Interview</button>
+              </div>
+            </div>
+
+            <!-- Achievements & Badges -->
+            <div class="mi-achievement-section">
+              <div class="mi-section-title">🏆 Interview Achievements & Badges</div>
+              <div class="mi-badge-grid" id="miBadgeGrid">
+                <!-- Loaded Dynamically -->
+              </div>
+            </div>
+
+            <!-- History Section -->
+            <div class="mi-history-section">
+              <div class="mi-section-title">🕒 Interview Practice History</div>
+              <div class="mi-history-table-wrap">
+                <table class="mi-history-table">
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Date</th>
+                      <th>Score</th>
+                      <th>Duration</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="miHistoryBody">
+                    <tr>
+                      <td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">No interviews completed yet. Start your first session above!</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Round-failed screen -->
-        <div id="miRoundFailed" style="display:none;text-align:center;padding:24px;">
-          <div class="mi-result-icon mi-fail">✕</div>
-          <h4 id="miFailTitle">Round not cleared</h4>
-          <p style="color:var(--muted);font-size:14px;margin:8px 0 20px;" id="miFailSummary"></p>
-          <div id="miFailDetail" style="text-align:left;"></div>
-          <button class="btn btn-primary" id="miFailRestartBtn" style="margin-top:20px;">Start new session</button>
+        <!-- ROLE SELECTION VIEW -->
+        <div id="miRoleSelectionView" style="display:none;">
+          <div class="role-select-box">
+            <h3 style="font-size:22px;font-weight:800;margin-bottom:8px;">Choose Your Target Role</h3>
+            <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Search or select a specialized career path to personalize your interview questions and assessment criteria.</p>
+            
+            <input type="text" id="miRoleSearchInput" class="role-search-input" placeholder="Type to search (e.g. Frontend Developer, Data Scientist)..." />
+            
+            <div class="role-list-results" id="miRoleListResults">
+              <!-- Populated Dynamically -->
+            </div>
+            
+            <div style="display:flex;gap:12px;margin-top:10px;">
+              <button class="btn btn-outline" id="miRoleSelectBackBtn" style="flex:1;justify-content:center;">Back</button>
+            </div>
+          </div>
         </div>
 
-        <!-- Final report -->
-        <div id="miFinalReport" style="display:none;"></div>
+        <!-- CONFIRMATION VIEW -->
+        <div id="miConfirmationView" style="display:none;">
+          <div class="conf-box">
+            <h3 style="font-size:22px;font-weight:800;margin-bottom:8px;">Confirm Interview Parameters</h3>
+            <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Verify your practice session options before launching the AI Interviewer.</p>
+            
+            <div class="conf-details-grid">
+              <div class="conf-item">
+                <span class="conf-label">Target Role</span>
+                <input type="text" id="miConfRoleInput" class="role-search-input" style="padding:6px 10px;font-size:14px;" />
+              </div>
+              <div class="conf-item">
+                <span class="conf-label">Questions count</span>
+                <select id="miConfCountSelect" class="role-search-input" style="padding:6px 10px;font-size:14px;">
+                  <option value="5" selected>5 Questions</option>
+                  <option value="7">7 Questions</option>
+                  <option value="10">10 Questions</option>
+                </select>
+              </div>
+              <div class="conf-item">
+                <span class="conf-label">Difficulty Level</span>
+                <select id="miConfDiffSelect" class="role-search-input" style="padding:6px 10px;font-size:14px;">
+                  <option value="progressive" selected>Progressive (Easy to Hard)</option>
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </div>
+              <div class="conf-item">
+                <span class="conf-label">Interview Language</span>
+                <select id="miConfLangSelect" class="role-search-input" style="padding:6px 10px;font-size:14px;">
+                  <option value="en-US" selected>English (US)</option>
+                  <option value="en-GB">English (UK)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Assessed Skills -->
+            <div class="conf-item" style="display:flex;flex-direction:column;gap:8px;">
+              <span class="conf-label">Assessed Skills</span>
+              <div class="pill-list" id="miConfSkillsList" style="margin-top:0;">
+                <!-- Dynamically loaded skills -->
+              </div>
+              <div style="display:flex;gap:8px;margin-top:6px;">
+                <input type="text" id="miConfAddSkillInput" placeholder="Add custom skill..." class="role-search-input" style="padding:6px 10px;font-size:13px;max-width:200px;" />
+                <button class="btn btn-outline btn-sm" id="miConfAddSkillBtn">Add</button>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:12px;margin-top:10px;">
+              <button class="btn btn-outline" id="miConfBackBtn" style="flex:1;justify-content:center;">Back</button>
+              <button class="btn btn-primary" id="miConfStartBtn" style="flex:2;justify-content:center;">Begin Interview</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVE SCREEN -->
+        <div id="miActive" style="display:none;">
+          <div class="mi-active-container">
+            <!-- Header Block -->
+            <div class="mi-active-header">
+              <div class="mi-meta-item">
+                <span class="mi-meta-label">Candidate</span>
+                <span class="mi-meta-val" id="miActiveCandidateName">-</span>
+              </div>
+              <div class="mi-meta-item">
+                <span class="mi-meta-label">Job Role</span>
+                <span class="mi-meta-val" id="miActiveJobRole">-</span>
+              </div>
+              <div class="mi-meta-item">
+                <span class="mi-meta-label">Interview Type</span>
+                <span class="mi-meta-val" id="miActiveInterviewType">-</span>
+              </div>
+              <div class="mi-meta-item">
+                <span class="mi-meta-label">Progress</span>
+                <span class="mi-meta-val" id="miActiveCounter">Question 1 of 5</span>
+              </div>
+              <div class="mi-meta-item">
+                <span class="mi-meta-label">Time Remaining</span>
+                <span class="mi-meta-val" id="miActiveTimeRemaining">~8-10 mins</span>
+              </div>
+            </div>
+
+            <!-- Interviewer Avatar Area -->
+            <div class="mi-avatar-row">
+              <div class="mi-interviewer-avatar" id="miInterviewerAvatar">🤖</div>
+              <div class="listening-status-row" id="miListeningStatus">
+                <span class="status-muted">AI is idle</span>
+              </div>
+              <div class="typing-loader" id="miSpeakingIndicator" style="display:none;">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+            </div>
+
+            <!-- Question display -->
+            <div class="mi-q-display-box">
+              <span class="mi-q-level-pill level-medium" id="miQuestionLevel">CONCEPT</span>
+              <div class="mi-q-text" id="miQuestionText">Welcome! We are preparing your interview. Please wait...</div>
+            </div>
+
+            <!-- Audio Recording & Transcript panel -->
+            <div class="mi-audio-recorder-panel">
+              <canvas class="waveform-canvas" id="miWaveformCanvas"></canvas>
+              <div class="recording-timer" id="miRecordTimer">00:00</div>
+              
+              <div class="mi-controls-row">
+                <button class="btn btn-outline" id="miMicStartBtn" style="gap:8px;">🎤 Start Recording</button>
+                <button class="btn btn-outline" id="miMicStopBtn" style="gap:8px;display:none;background:rgba(239,68,68,0.1);color:#ef4444;border-color:#ef4444;">⏹ Stop Recording</button>
+                <button class="btn btn-outline" id="miReplayBtn" style="gap:8px;display:none;">▶ Replay Recording</button>
+                <button class="btn btn-primary" id="miNextQuestionBtn" style="gap:8px;display:none;">➡ Next Question</button>
+              </div>
+
+              <!-- Live Transcript Box -->
+              <div style="width:100%;">
+                <div class="transcript-label">Live Speech Transcription</div>
+                <div class="transcript-viewport" id="miTranscriptText">Speak into your microphone. Your voice transcript will appear here in real time...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EVALUATION LOADER -->
+        <div id="miEvalLoading" style="display:none;">
+          <div class="card mi-card" style="background:var(--card);border:1px solid var(--border);border-radius:16px;">
+            <div class="mi-loading-content">
+              <div class="loader-ring"></div>
+              <div class="mi-loading-text">AI is evaluating your interview...</div>
+              <div class="mi-loading-subtext" id="miEvalLoadingSubtext">Calculating technical knowledge & communication metrics</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EVALUATION REPORT -->
+        <div id="miFinalReport" style="display:none;">
+          <div class="card mi-card" style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;">
+            <div class="report-header">
+              <div>
+                <h3 style="font-size:24px;font-weight:800;" id="miReportTitle">Interview Assessment Report</h3>
+                <p style="color:var(--muted);font-size:13px;" id="miReportMeta">Technical Interview | Completed on 05/08/2026</p>
+                <div class="qa-review-section-title" id="miRoleReadinessText" style="font-size:14px;font-weight:700;margin-top:6px;">Role Readiness Score: -</div>
+              </div>
+              <span class="mi-score-badge score-good" style="font-size:14px;padding:8px 16px;" id="miReportRecommendation">STRONG HIRE</span>
+            </div>
+
+            <!-- Overview Grid -->
+            <div class="report-overview-row">
+              <div class="score-circle-container">
+                <svg class="score-svg-circle" width="110" height="110">
+                  <circle class="score-circle-bg" cx="55" cy="55" r="48"></circle>
+                  <circle class="score-circle-fill" id="miReportCircleFill" cx="55" cy="55" r="48" stroke-dasharray="301.6" stroke-dashoffset="301.6"></circle>
+                </svg>
+                <div class="score-circle-text">
+                  <span class="score-number" id="miReportScoreNum">0</span>
+                  <div class="score-label">Overall</div>
+                </div>
+              </div>
+              <div class="report-summary-text">
+                <h4 id="miReportGreeting">Performance Assessment</h4>
+                <p id="miReportSummaryDesc">Your response structure shows high technical capability with clear articulation of definitions. Pacing was excellent, though some advanced scenarios could benefit from more detailed explanations.</p>
+              </div>
+            </div>
+
+            <!-- Metrics bar section -->
+            <div class="mi-section-title">📊 Competency & Skill Analytics</div>
+            <div class="report-metrics-grid" id="miMetricsGrid">
+              <!-- Rendered Dynamically -->
+            </div>
+
+            <!-- Strengths and weaknesses -->
+            <div class="report-details-section">
+              <div class="report-bullets-card">
+                <h5 style="color:#10b981;">✅ Key Strengths</h5>
+                <ul class="report-bullets-list strengths-list" id="miReportStrengths">
+                  <li>Clear definition of core technologies.</li>
+                </ul>
+              </div>
+              <div class="report-bullets-card">
+                <h5 style="color:#f59e0b;">⚠️ Improvement Areas</h5>
+                <ul class="report-bullets-list needs-list" id="miReportWeaknesses">
+                  <li>Elaborate on database indexing mechanics.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Recommended Resources & Topics -->
+            <div style="margin-bottom:32px;">
+              <div class="mi-section-title">📚 Recommended Topics & Resources</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;" id="miReportResources">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <!-- Question list breakdown -->
+            <div style="margin-bottom:32px;">
+              <div class="mi-section-title">🗣️ Detailed Question-by-Question Review & Feedback</div>
+              <div id="miReportQuestionsBreakdown">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <div style="display:flex;gap:12px;">
+              <button class="btn btn-outline" id="miReportBackBtn" style="flex:1;font-weight:700;justify-content:center;">Back to Dashboard</button>
+              <button class="btn btn-primary" id="miDownloadReportBtn" style="flex:1;font-weight:700;justify-content:center;background:#10b981;border-color:#10b981;">📥 Download Report (PDF)</button>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
+
 
     <div id="mockassessmentTab" class="tab-content">
   <div class="card" style="background:#111827; border:1px solid #1f2937; border-radius:15px; padding:25px;">
@@ -1163,6 +2128,12 @@
   import { normalizeSkillList, skillsMatch, getSkillDisplayName } from '/skills.js';
   import { computeResumeScore, computeCareerReadiness } from '/profile-engine.js';
   import { pickAptitudeQuestions, pickTechnicalQuestions, pickHrQuestions, evaluateKeywordAnswer, evaluateHrAnswer } from '/interview-engine.js';
+  import { QuestionService } from '/services/QuestionService.js';
+  import { SpeechService } from '/services/SpeechService.js';
+  import { TtsService } from '/services/TtsService.js';
+  import { EvaluationService } from '/services/EvaluationService.js';
+  import { HistoryService } from '/services/HistoryService.js';
+  import { AnalyticsService } from '/services/AnalyticsService.js';
   
   // 1. Force Authentication
   const user = await requireUser();
@@ -2048,281 +3019,827 @@
     return { topJob: allMatches[0], allMatches };
   }
 
-  const MI_PASS = { aptitude: 8, technical: 8 };
-
+  // UPGRADED AI VOICE INTERVIEW CONTROLLER STATE & FUNCTIONS
   let miState = {
-    round: null,          // 'aptitude' | 'technical' | 'hr'
+    round: null,          // 'technical' | 'hr'
+    selectedRole: "Software Engineer",
+    skills: [],
+    questionCount: 5,
+    difficulty: "progressive",
+    language: "en-US",
     questions: [],
     index: 0,
-    answers: [],           // per-round answer records
-    aptitudeScore: 0,
-    technicalScore: 0,
-    hrScore: 0,
-    technicalCategory: '',
-    topJob: null,
-    selectedOption: null
+    answers: [],           // per-question transcript records
+    isRecording: false,
+    duration: 0,
+    timerInterval: null,
+    isFollowUp: false,
+    currentTranscript: '',
+    followUpQuestionText: '',
+    followUpAnswerText: ''
   };
+
+  const speechService = new SpeechService();
+  const ttsService = new TtsService();
 
   function miEl(id) { return document.getElementById(id); }
 
-  document.getElementById('miStartBtn')?.addEventListener('click', () => {
-    const { topJob } = getTopJobMatch();
-    if (!currentResumeData?.skills?.length) {
-      miEl('miLandingNote').textContent = 'Tip: complete your profile first so the Technical round can be matched to a real role — you can still take the interview now.';
+  // Draw Flat Line Helper
+  function drawFlatLine(canvas, canvasCtx) {
+    canvasCtx.fillStyle = 'rgb(17, 24, 39)';
+    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+    canvasCtx.strokeStyle = '#3b82f6';
+    canvasCtx.lineWidth = 2;
+    canvasCtx.beginPath();
+    canvasCtx.moveTo(0, canvas.height / 2);
+    canvasCtx.lineTo(canvas.width, canvas.height / 2);
+    canvasCtx.stroke();
+  }
+
+  // Waveform Visuals
+  let audioCtx, analyser, dataArray, source, animationFrameId;
+  function startWaveform() {
+    const canvas = document.getElementById('miWaveformCanvas');
+    const canvasCtx = canvas.getContext('2d');
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      drawFlatLine(canvas, canvasCtx);
+      return;
     }
-    miState = { round: 'aptitude', questions: pickAptitudeQuestions(10), index: 0, answers: [], aptitudeScore: 0, technicalScore: 0, hrScore: 0, technicalCategory: '', topJob, selectedOption: null };
-    miEl('miLanding').style.display = 'none';
-    miEl('miRoundFailed').style.display = 'none';
-    miEl('miFinalReport').style.display = 'none';
-    miEl('miActive').style.display = 'block';
-    renderMiQuestion();
-  });
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      source = audioCtx.createMediaStreamSource(stream);
+      source.connect(analyser);
+      analyser.fftSize = 256;
+      const bufferLength = analyser.frequencyBinCount;
+      dataArray = new Uint8Array(bufferLength);
 
-  function roundLabel(round) {
-    return round === 'aptitude' ? 'Round 1 · Aptitude Test'
-      : round === 'technical' ? `Round 2 · Technical (${miState.technicalCategory})`
-      : 'Round 3 · HR Interview';
+      function draw() {
+        if (!miState.isRecording) return;
+        animationFrameId = requestAnimationFrame(draw);
+        analyser.getByteFrequencyData(dataArray);
+        canvasCtx.fillStyle = 'rgb(17, 24, 39)';
+        canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const barWidth = (canvas.width / bufferLength) * 2.5;
+        let barHeight;
+        let x = 0;
+        for (let i = 0; i < bufferLength; i++) {
+          barHeight = dataArray[i] / 2;
+          canvasCtx.fillStyle = 'rgb(' + (barHeight + 100) + ', 162, 235)';
+          canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+          x += barWidth + 1;
+        }
+      }
+      draw();
+    }).catch(err => {
+      console.error("Mic access error for waveform:", err);
+      drawFlatLine(canvas, canvasCtx);
+    });
   }
 
-  function renderMiProgress() {
-    const total = miState.questions.length;
-    const pct = Math.round((miState.index / total) * 100);
-    miEl('miRoundIndicator').innerHTML = `<span>${roundLabel(miState.round)}</span><span>Q${Math.min(miState.index + 1, total)} of ${total}</span>`;
-    miEl('miProgressFill').style.width = pct + '%';
-    const currentScore = miState.round === 'aptitude' ? miState.aptitudeScore : miState.round === 'technical' ? miState.technicalScore : miState.hrScore;
-    miEl('miScoreTracker').textContent = `Score so far: ${currentScore} / ${miState.index}`;
+  function stopWaveform() {
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    if (audioCtx) {
+      try {
+        audioCtx.close();
+      } catch (e) {}
+    }
+    const canvas = document.getElementById('miWaveformCanvas');
+    const canvasCtx = canvas.getContext('2d');
+    drawFlatLine(canvas, canvasCtx);
   }
 
-  function renderMiQuestion() {
-    renderMiProgress();
-    const q = miState.questions[miState.index];
-    miState.selectedOption = null;
-    miEl('miFeedback').innerHTML = '';
+  // Timer Helper
+  function startRecordingTimer() {
+    miState.duration = 0;
+    miEl('miRecordTimer').textContent = '00:00';
+    if (miState.timerInterval) clearInterval(miState.timerInterval);
+    miState.timerInterval = setInterval(() => {
+      miState.duration++;
+      const m = String(Math.floor(miState.duration / 60)).padStart(2, '0');
+      const s = String(miState.duration % 60).padStart(2, '0');
+      miEl('miRecordTimer').textContent = `${m}:${s}`;
+    }, 1000);
+  }
 
-    const metaLabel = miState.round === 'aptitude' ? q.category
-      : miState.round === 'hr' ? 'Behavioural'
-      : q.type === 'mcq' ? 'Multiple choice' : q.type === 'code-output' ? 'Code output' : q.type === 'concept' ? 'Concept' : 'Short answer';
-    miEl('miQuestionMeta').textContent = metaLabel;
-    miEl('miQuestionText').textContent = q.text;
+  function stopRecordingTimer() {
+    if (miState.timerInterval) {
+      clearInterval(miState.timerInterval);
+      miState.timerInterval = null;
+    }
+  }
 
-    const isMcq = miState.round === 'aptitude' || q.type === 'mcq';
-    const mcqWrap = miEl('miMcqOptions');
-    const textInput = miEl('miAnswerInput');
-
-    if (isMcq) {
-      mcqWrap.style.display = 'flex';
-      textInput.style.display = 'none';
-      const letters = ['A', 'B', 'C', 'D'];
-      mcqWrap.innerHTML = q.options.map((opt, i) => `
-        <div class="mi-option" data-idx="${i}">
-          <span class="mi-option-letter">${letters[i]}</span><span>${opt}</span>
+  // Load History and Badges onto Landing Screen
+  async function loadHistoryAndBadges() {
+    const listBody = miEl('miHistoryBody');
+    const badgeGrid = miEl('miBadgeGrid');
+    
+    // Clear lists
+    listBody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">Loading history...</td></tr>`;
+    
+    // Render Badges
+    const unlockedIds = AnalyticsService.getUnlockedBadges(user.id);
+    badgeGrid.innerHTML = AnalyticsService.BADGES.map(b => {
+      const unlocked = unlockedIds.includes(b.id);
+      return `
+        <div class="mi-badge-item ${unlocked ? 'unlocked' : ''}">
+          <div class="mi-badge-icon">${b.icon}</div>
+          <div class="mi-badge-name">${b.name}</div>
+          <div class="mi-badge-desc">${b.desc}</div>
         </div>
-      `).join('');
-      mcqWrap.querySelectorAll('.mi-option').forEach(el => {
-        el.addEventListener('click', () => {
-          mcqWrap.querySelectorAll('.mi-option').forEach(o => o.classList.remove('selected'));
-          el.classList.add('selected');
-          miState.selectedOption = Number(el.dataset.idx);
+      `;
+    }).join('');
+
+    // Fetch and Render History
+    const history = await HistoryService.getInterviews(user.id);
+    if (history.length === 0) {
+      listBody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">No interviews completed yet. Start your first session above!</td></tr>`;
+    } else {
+      listBody.innerHTML = history.map((item, idx) => {
+        const scoreClass = item.overallScore >= 80 ? 'score-good' : item.overallScore >= 60 ? 'score-avg' : 'score-needs';
+        return `
+          <tr>
+            <td style="font-weight:700;">${item.type} (${item.report_data?.selectedRole || 'General'})</td>
+            <td>${item.date}</td>
+            <td><span class="mi-score-badge ${scoreClass}">${item.overallScore}%</span></td>
+            <td>${item.duration}</td>
+            <td>
+              <button class="btn btn-ghost btn-sm revisit-report-btn" data-idx="${idx}" style="padding:4px 10px;font-size:12px;">Revisit Report</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Add click handlers for Revisit Report buttons
+      listBody.querySelectorAll('.revisit-report-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = Number(e.currentTarget.dataset.idx);
+          const selectedReport = history[idx].report_data;
+          renderFinalReport(selectedReport);
         });
       });
-    } else {
-      mcqWrap.style.display = 'none';
-      textInput.style.display = 'block';
-      textInput.value = '';
     }
   }
 
-  document.getElementById('miSubmitBtn')?.addEventListener('click', handleMiSubmit);
+  // Trigger loading details on mount
+  loadHistoryAndBadges();
 
-  function handleMiSubmit() {
-    const q = miState.questions[miState.index];
-    const isMcq = miState.round === 'aptitude' || q.type === 'mcq';
+  // Show Role Selection Screen
+  function openRoleSelection(interviewType) {
+    miState.round = interviewType;
+    
+    miEl('miLanding').style.display = 'none';
+    miEl('miRoleSelectionView').style.display = 'block';
 
-    let pass = false;
-    let feedbackHtml = '';
+    const searchInput = miEl('miRoleSearchInput');
+    searchInput.value = '';
+    
+    renderRoleList("");
 
-    if (isMcq) {
-      if (miState.selectedOption === null) { toast('Select an option first', 'error'); return; }
-      pass = miState.selectedOption === q.correct;
-      const letters = ['A', 'B', 'C', 'D'];
-      feedbackHtml = `<div class="mi-fb-box ${pass ? 'mi-fb-good' : 'mi-fb-warn'}">
-        <div class="mi-fb-item"><strong>${pass ? '✅ Correct' : '⚠️ Incorrect'}</strong> — correct answer: ${letters[q.correct]}. ${q.explanation ? q.explanation : ''}</div>
-      </div>`;
-    } else if (miState.round === 'hr') {
-      const text = miEl('miAnswerInput').value.trim();
-      if (!text) { toast('Write an answer first', 'error'); return; }
-      const evalResult = evaluateHrAnswer(text, q.keywords);
-      pass = evalResult.pass;
-      feedbackHtml = `<div class="mi-fb-box ${pass ? 'mi-fb-good' : 'mi-fb-warn'}">
-        <div class="mi-fb-item"><strong>${pass ? '✅' : '⚠️'} Relevance:</strong> ${Math.round(evalResult.relevance * 100)}% keyword match, ${evalResult.wordCount} words, confidence signal ${Math.round(evalResult.confidence * 100)}%.</div>
-      </div>`;
-    } else {
-      const text = miEl('miAnswerInput').value.trim();
-      if (!text) { toast('Write an answer first', 'error'); return; }
-      const evalResult = evaluateKeywordAnswer(text, q.keywords || []);
-      pass = evalResult.pass;
-      feedbackHtml = `<div class="mi-fb-box ${pass ? 'mi-fb-good' : 'mi-fb-warn'}">
-        <div class="mi-fb-item"><strong>${pass ? '✅' : '⚠️'} Coverage:</strong> matched ${evalResult.matched.length}/${(q.keywords || []).length} key concepts${evalResult.missed.length ? ` (missing: ${evalResult.missed.join(', ')})` : ''}.</div>
-      </div>`;
-    }
-
-    if (miState.round === 'aptitude') miState.aptitudeScore += pass ? 1 : 0;
-    else if (miState.round === 'technical') miState.technicalScore += pass ? 1 : 0;
-    else miState.hrScore += pass ? 1 : 0;
-
-    miState.answers.push({ round: miState.round, question: q.text, pass });
-
-    miEl('miFeedback').innerHTML = feedbackHtml + `<button class="btn btn-primary" id="miNextBtn" style="margin-top:12px;">Next</button>`;
-    miEl('miSubmitBtn').style.display = 'none';
-    miEl('miNextBtn').addEventListener('click', advanceMiQuestion);
+    // Input listener
+    searchInput.oninput = (e) => {
+      renderRoleList(e.target.value);
+    };
   }
 
-  function advanceMiQuestion() {
-    miEl('miSubmitBtn').style.display = 'inline-flex';
-    miState.index++;
-    if (miState.index >= miState.questions.length) {
-      finishMiRound();
-    } else {
-      renderMiQuestion();
+  function renderRoleList(query) {
+    const listResults = miEl('miRoleListResults');
+    const filtered = QuestionService.ROLES.filter(role => role.toLowerCase().includes(query.toLowerCase()));
+    
+    if (filtered.length === 0) {
+      listResults.innerHTML = `<div class="role-item-row" style="color:var(--muted);text-align:center;">No roles matching query.</div>`;
+      return;
     }
+
+    listResults.innerHTML = filtered.map(role => `
+      <div class="role-item-row" data-role="${role}">
+        <strong>${role}</strong>
+      </div>
+    `).join('');
+
+    listResults.querySelectorAll('.role-item-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        const roleName = e.currentTarget.dataset.role;
+        openConfirmationScreen(roleName);
+      });
+    });
   }
 
-  function finishMiRound() {
-    if (miState.round === 'aptitude') {
-      if (miState.aptitudeScore >= MI_PASS.aptitude) {
-        const { category, questions } = pickTechnicalQuestions(miState.topJob, 10);
-        miState.technicalCategory = category;
-        miState.round = 'technical';
-        miState.questions = questions;
-        miState.index = 0;
-        renderMiQuestion();
-      } else {
-        showMiRoundFailed('aptitude');
-      }
-    } else if (miState.round === 'technical') {
-      if (miState.technicalScore >= MI_PASS.technical) {
-        miState.round = 'hr';
-        miState.questions = pickHrQuestions();
-        miState.index = 0;
-        renderMiQuestion();
-      } else {
-        showMiRoundFailed('technical');
-      }
-    } else {
-      showMiFinalReport();
+  // Open Confirmation & Customization Screen
+  function openConfirmationScreen(roleName) {
+    miState.selectedRole = roleName;
+    
+    // Skills loading: Profile first, fallback map
+    let skills = currentResumeData?.skills || [];
+    if (skills.length === 0) {
+      skills = QuestionService.ROLE_SKILLS_MAP[roleName] || ["General Problem Solving", "Analytical Thinking"];
     }
+    miState.skills = [...skills];
+
+    // Populate confirmation UI inputs
+    miEl('miConfRoleInput').value = roleName;
+    miEl('miConfCountSelect').value = "5";
+    miEl('miConfDiffSelect').value = "progressive";
+    miEl('miConfLangSelect').value = "en-US";
+    
+    renderConfSkillsList();
+
+    miEl('miRoleSelectionView').style.display = 'none';
+    miEl('miConfirmationView').style.display = 'block';
   }
 
-  function showMiRoundFailed(round) {
-    miEl('miActive').style.display = 'none';
-    miEl('miRoundFailed').style.display = 'block';
-    const score = round === 'aptitude' ? miState.aptitudeScore : miState.technicalScore;
-    const needed = MI_PASS[round];
-    miEl('miFailTitle').textContent = round === 'aptitude' ? 'Aptitude round not cleared' : 'Technical round not cleared';
-    miEl('miFailSummary').textContent = `You scored ${score}/10 — you need at least ${needed}/10 to advance to the next round.`;
+  function renderConfSkillsList() {
+    const skillsListEl = miEl('miConfSkillsList');
+    skillsListEl.innerHTML = miState.skills.map((skill, idx) => `
+      <span class="pill" style="display:inline-flex;align-items:center;gap:6px;">
+        ${skill}
+        <span class="remove-skill-btn" data-idx="${idx}" style="cursor:pointer;font-weight:bold;color:var(--danger);">×</span>
+      </span>
+    `).join('');
 
-    const roundAnswers = miState.answers.filter(a => a.round === round);
-    const wrongAnswers = roundAnswers.filter(a => !a.pass);
-    const weakAreas = round === 'aptitude'
-      ? [...new Set(miState.questions
-          .filter((q, i) => roundAnswers[i] && !roundAnswers[i].pass)
-          .map(q => q.category))]
-      : [];
-
-    let detailHtml = `<h5 style="font-size:14px;font-weight:700;margin-bottom:10px;">What to review</h5>`;
-    if (wrongAnswers.length) {
-      detailHtml += wrongAnswers.map(a => `<div class="mi-fail-row"><span>${a.question}</span><span style="color:var(--danger);font-weight:700;">✕</span></div>`).join('');
-    }
-    if (weakAreas.length) {
-      detailHtml += `<h5 style="font-size:14px;font-weight:700;margin:16px 0 10px;">Weak areas</h5><div class="mi-tag-list">${weakAreas.map(w => `<span class="mi-tag mi-tag-weak">${w}</span>`).join('')}</div>`;
-    }
-    detailHtml += `<h5 style="font-size:14px;font-weight:700;margin:16px 0 10px;">Improvement tips</h5>
-      <p style="color:var(--muted);font-size:13px;">${round === 'aptitude'
-        ? 'Practice timed quant/logical/verbal/data-interpretation sets daily and revisit the categories you missed above.'
-        : `Strengthen your fundamentals in ${miState.technicalCategory} — revisit core concepts and practice explaining them out loud before retrying.`}</p>`;
-    miEl('miFailDetail').innerHTML = detailHtml;
+    skillsListEl.querySelectorAll('.remove-skill-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = Number(e.currentTarget.dataset.idx);
+        miState.skills.splice(idx, 1);
+        renderConfSkillsList();
+      });
+    });
   }
 
-  document.getElementById('miFailRestartBtn')?.addEventListener('click', resetMiToLanding);
+  // Add custom skill button handler
+  miEl('miConfAddSkillBtn').addEventListener('click', () => {
+    const input = miEl('miConfAddSkillInput');
+    const val = input.value.trim();
+    if (val && !miState.skills.includes(val)) {
+      miState.skills.push(val);
+      renderConfSkillsList();
+      input.value = '';
+    }
+  });
 
-  function resetMiToLanding() {
-    miEl('miRoundFailed').style.display = 'none';
+  // Start interview workflow after confirmation
+  async function startVoiceInterview() {
+    // Read final customized state values
+    miState.selectedRole = miEl('miConfRoleInput').value.trim() || "Software Engineer";
+    miState.questionCount = Number(miEl('miConfCountSelect').value);
+    miState.difficulty = miEl('miConfDiffSelect').value;
+    miState.language = miEl('miConfLangSelect').value;
+
+    const candidateName = currentResumeData?.name || 'Vaishnavi';
+
+    miEl('miConfirmationView').style.display = 'none';
+    miEl('miEvalLoading').style.display = 'block';
+    miEl('miEvalLoadingSubtext').textContent = "AI Interviewer is preparing customized questions...";
+
+    try {
+      miState.questions = miState.round === 'technical'
+        ? await QuestionService.getTechnicalQuestions(miState, miState.questionCount)
+        : await QuestionService.getHrQuestions(miState.questionCount);
+    } catch (e) {
+      console.warn("AI generation failed, falling back to local questions:", e);
+      miState.questions = [];
+    }
+
+    if (!Array.isArray(miState.questions) || miState.questions.length === 0) {
+      toast("Unable to generate AI questions. Using backup interview questions.", "warning");
+      miState.questions = miState.round === 'technical'
+        ? QuestionService.getLocalTechnicalQuestions(miState, miState.questionCount)
+        : QuestionService.getLocalHrQuestions(miState.questionCount);
+    }
+
+    // Emergency final guarantee
+    if (!Array.isArray(miState.questions) || miState.questions.length === 0) {
+      miState.questions = [{
+        text: "Please describe your professional background and core skill sets.",
+        level: "MEDIUM",
+        difficulty: "MEDIUM",
+        category: "General",
+        expectedAnswer: "Details of professional background.",
+        idealAnswer: "Details of professional background.",
+        keywords: ["background", "skills"],
+        missingPoints: [],
+        improvementSuggestions: []
+      }];
+      miState.questionCount = 1;
+    }
+
+    miEl('miEvalLoading').style.display = 'none';
+
+    miState.index = 0;
+    miState.answers = [];
+    miState.isRecording = false;
+    miState.duration = 0;
+    miState.timerInterval = null;
+    miState.isFollowUp = false;
+    miState.currentTranscript = '';
+    miState.followUpQuestionText = '';
+    miState.followUpAnswerText = '';
+
+    // Apply language to speech service
+    speechService.recognition.lang = miState.language;
+
+    // Update active screen meta elements
+    miEl('miActiveCandidateName').textContent = candidateName;
+    miEl('miActiveJobRole').textContent = miState.selectedRole;
+    miEl('miActiveInterviewType').textContent = miState.round === 'technical' ? 'Technical' : 'HR Interview';
+    miEl('miActiveCounter').textContent = `Question 1 of ${miState.questionCount}`;
+    miEl('miActiveTimeRemaining').textContent = `~${miState.questionCount * 2} mins`;
+
+    // Visual switches
     miEl('miFinalReport').style.display = 'none';
-    miEl('miActive').style.display = 'none';
-    miEl('miLanding').style.display = 'block';
+    miEl('miActive').style.display = 'block';
+
+    // Cancel any playing TTS
+    ttsService.cancel();
+
+    // AI Intro Greeting
+    const greetingText = miState.round === 'technical'
+      ? `Hello ${candidateName}. Welcome to CareerAI. Today I will conduct your technical interview for the ${miState.selectedRole} position. I will ask you ${miState.questionCount} questions based on your selected skills. Please answer naturally. Let's begin.`
+      : `Welcome to the HR Interview for the ${miState.selectedRole} position. I'll ask you ${miState.questionCount} behavioural questions. Please answer naturally. Let's begin.`;
+
+    speakInterviewer(greetingText, () => {
+      loadVoiceQuestion();
+    });
   }
 
-  function overallStatus(pct) {
-    if (pct >= 80) return { label: 'Excellent', cls: 'mi-status-excellent' };
-    if (pct >= 60) return { label: 'Good', cls: 'mi-status-good' };
-    return { label: 'Needs Improvement', cls: 'mi-status-needs' };
+  // Helper for TTS + Speaking animation
+  function speakInterviewer(text, onComplete) {
+    miEl('miListeningStatus').innerHTML = `<span class="status-speaking">AI Interviewer is speaking...</span>`;
+    miEl('miSpeakingIndicator').style.display = 'flex';
+    miEl('miInterviewerAvatar').classList.add('avatar-speaking');
+    
+    // Hide controls during speech
+    miEl('miMicStartBtn').style.display = 'none';
+    miEl('miMicStopBtn').style.display = 'none';
+    miEl('miReplayBtn').style.display = 'none';
+    miEl('miNextQuestionBtn').style.display = 'none';
+
+    ttsService.speak(text, null, () => {
+      miEl('miSpeakingIndicator').style.display = 'none';
+      miEl('miInterviewerAvatar').classList.remove('avatar-speaking');
+      miEl('miListeningStatus').innerHTML = `<span class="status-muted">AI is idle</span>`;
+      if (onComplete) onComplete();
+    }, () => {
+      miEl('miSpeakingIndicator').style.display = 'none';
+      miEl('miInterviewerAvatar').classList.remove('avatar-speaking');
+      miEl('miListeningStatus').innerHTML = `<span class="status-muted">AI is idle</span>`;
+      if (onComplete) onComplete();
+    });
   }
 
-  function showMiFinalReport() {
+  function loadVoiceQuestion() {
+    if (!miState.questions || miState.questions.length === 0) {
+      toast("No questions available.", "error");
+      return;
+    }
+    const q = miState.questions[miState.index] || miState.questions[0];
+    if (!q) {
+      toast("Error loading question.", "error");
+      return;
+    }
+    miState.isFollowUp = false;
+    miState.currentTranscript = '';
+
+    miEl('miActiveCounter').textContent = `Question ${miState.index + 1} of ${miState.questionCount}`;
+    
+    // Question difficulty pill
+    const levelPill = miEl('miQuestionLevel');
+    levelPill.className = 'mi-q-level-pill';
+    const level = q.level || q.difficulty || 'MEDIUM';
+    if (level === 'EASY') levelPill.classList.add('level-easy');
+    else if (level === 'ADVANCED') levelPill.classList.add('level-advanced');
+    else levelPill.classList.add('level-medium');
+    levelPill.textContent = level;
+
+    miEl('miQuestionText').textContent = q.text || "Please describe your experience.";
+    miEl('miTranscriptText').textContent = 'Speak into your microphone. Your voice transcript will appear here in real time...';
+
+    // Speak the question
+    speakInterviewer(q.text || "", () => {
+      startVoiceListening();
+    });
+  }
+
+  async function loadVoiceFollowUp() {
+    miState.isFollowUp = true;
+    miState.currentTranscript = '';
+    miEl('miListeningStatus').innerHTML = `<span>AI is processing follow-up question...</span>`;
+    
+    const q = miState.questions[miState.index] || miState.questions[0] || { text: "" };
+    const previousContext = miState.answers.slice(0, miState.index);
+    let followUp = "Can you expand on that?";
+    try {
+      followUp = await QuestionService.getFollowUpQuestion(q.text || "", miState.answers[miState.index]?.text || "", previousContext);
+    } catch (e) {
+      console.warn("Follow-up generation failed, using fallback:", e);
+    }
+    miState.followUpQuestionText = followUp;
+
+    const levelPill = miEl('miQuestionLevel');
+    levelPill.className = 'mi-q-level-pill level-medium';
+    levelPill.textContent = 'FOLLOW-UP';
+
+    miEl('miQuestionText').textContent = followUp;
+    miEl('miTranscriptText').textContent = 'Speak into your microphone. Your voice transcript will appear here in real time...';
+
+    speakInterviewer(followUp, () => {
+      startVoiceListening();
+    });
+  }
+
+  // Speech Recognition Start/Stop
+  function startVoiceListening() {
+    if (miState.isRecording) return;
+    miState.isRecording = true;
+
+    miEl('miListeningStatus').innerHTML = `<span class="status-listening">🔴 AI is listening...</span>`;
+    miEl('miMicStartBtn').style.display = 'none';
+    miEl('miMicStopBtn').style.display = 'inline-flex';
+    miEl('miMicStopBtn').classList.add('mi-btn-recording-pulse');
+    miEl('miReplayBtn').style.display = 'none';
+    miEl('miNextQuestionBtn').style.display = 'none';
+
+    startWaveform();
+    startRecordingTimer();
+
+    speechService.startListening((text) => {
+      miState.currentTranscript = text;
+      miEl('miTranscriptText').textContent = text || 'Listening...';
+    }, (err) => {
+      toast("Voice Input Error: " + err, "error");
+      stopVoiceListening();
+    }, (finalText) => {
+      miState.currentTranscript = finalText;
+      miEl('miTranscriptText').textContent = finalText || 'No speech captured. Try clicking Replay/Start Recording.';
+    });
+  }
+
+  function stopVoiceListening() {
+    if (!miState.isRecording) return;
+    miState.isRecording = false;
+
+    stopRecordingTimer();
+    stopWaveform();
+    speechService.stopListening();
+
+    miEl('miListeningStatus').innerHTML = `<span class="status-muted">Speech captured</span>`;
+    miEl('miMicStopBtn').style.display = 'none';
+    miEl('miMicStopBtn').classList.remove('mi-btn-recording-pulse');
+    
+    miEl('miMicStartBtn').style.display = 'inline-flex';
+    miEl('miMicStartBtn').innerHTML = `🎤 Redo Recording`;
+    miEl('miReplayBtn').style.display = 'inline-flex';
+    miEl('miNextQuestionBtn').style.display = 'inline-flex';
+    miEl('miNextQuestionBtn').textContent = miState.isFollowUp ? 'Next Question ➡' : 'Submit Response ➡';
+  }
+
+  // Handle advancement
+  function handleNextBtnClick() {
+    const transcript = miState.currentTranscript.trim();
+    if (!transcript || transcript === 'Speak into your microphone. Your voice transcript will appear here in real time...') {
+      toast("Please record your answer before proceeding.", "warning");
+      return;
+    }
+
+    if (!miState.isFollowUp) {
+      miState.answers.push({
+        question: miState.questions[miState.index].text,
+        text: transcript,
+        duration: miState.duration,
+        followUpQuestion: '',
+        followUpAnswer: ''
+      });
+      loadVoiceFollowUp();
+    } else {
+      miState.answers[miState.index].followUpQuestion = miState.followUpQuestionText;
+      miState.answers[miState.index].followUpAnswer = transcript;
+
+      miState.index++;
+      if (miState.index >= miState.questionCount) {
+        finishVoiceInterview();
+      } else {
+        loadVoiceQuestion();
+      }
+    }
+  }
+
+  async function finishVoiceInterview() {
+    ttsService.cancel();
+    stopRecordingTimer();
+    stopWaveform();
+    speechService.stopListening();
+
     miEl('miActive').style.display = 'none';
-    const { topJob, allMatches } = getTopJobMatch();
-    const overallPct = Math.round(((miState.aptitudeScore + miState.technicalScore + miState.hrScore) / 30) * 100);
-    const status = overallStatus(overallPct);
+    miEl('miEvalLoading').style.display = 'block';
 
-    const skills = currentResumeData?.skills || [];
-    const normalizedSkills = normalizeSkillList(skills);
-    const strongSkills = normalizedSkills.slice(0, 6).map(s => getSkillDisplayNameSafe(s));
-    const weakSkills = (topJob?.missing || []).slice(0, 6).map(r => r.skill);
+    const loadingStages = [
+      "Calculating speech clarity and grammar analytics...",
+      "Analyzing technical keyword density and concepts...",
+      "Synthesizing response quality and confidence levels...",
+      "Compiling strengths and recommended topics..."
+    ];
 
-    const recommendedRoles = (allMatches || []).slice(0, 3).map(j => `${j.title} · ${j.company}`);
+    let stageIdx = 0;
+    const stageInterval = setInterval(() => {
+      if (stageIdx < loadingStages.length) {
+        miEl('miEvalLoadingSubtext').textContent = loadingStages[stageIdx];
+        stageIdx++;
+      }
+    }, 1200);
 
-    const chance = Math.min(95, Math.max(5, overallPct - 5));
+    setTimeout(async () => {
+      clearInterval(stageInterval);
 
+      let report;
+      if (miState.round === 'technical') {
+        report = EvaluationService.evaluateTechnicalInterview(miState.questions, miState.answers, miState.selectedRole);
+      } else {
+        report = EvaluationService.evaluateHrInterview(miState.questions, miState.answers);
+      }
+
+      await HistoryService.saveInterview(user.id, report);
+
+      const unlockedIds = AnalyticsService.evaluateAchievements(report);
+      if (unlockedIds.length > 0) {
+        AnalyticsService.saveUnlockedBadges(user.id, unlockedIds);
+        toast(`🎉 Unlocked badges: ${unlockedIds.map(id => AnalyticsService.BADGES.find(b=>b.id===id)?.name).join(', ')}!`);
+      }
+
+      loadResumeData();
+      renderFinalReport(report);
+      loadHistoryAndBadges();
+
+      miEl('miEvalLoading').style.display = 'none';
+      miEl('miFinalReport').style.display = 'block';
+    }, 5000);
+  }
+
+  function renderFinalReport(report) {
+    miEl('miLanding').style.display = 'none';
+    miEl('miActive').style.display = 'none';
+    miEl('miConfirmationView').style.display = 'none';
+    miEl('miRoleSelectionView').style.display = 'none';
     miEl('miFinalReport').style.display = 'block';
-    miEl('miFinalReport').innerHTML = `
-      <div class="mi-status-banner ${status.cls}">
-        <div style="font-size:36px;font-weight:800;">${overallPct}%</div>
-        <div style="font-weight:700;margin-top:4px;">${status.label}</div>
-        <div style="color:var(--muted);font-size:13px;margin-top:6px;">Overall Hiring Score across all 3 rounds</div>
-      </div>
 
-      <div class="mi-report-grid">
-        <div class="mi-report-stat"><div class="mi-stat-value">${miState.aptitudeScore}/10</div><div class="mi-stat-label">Aptitude</div></div>
-        <div class="mi-report-stat"><div class="mi-stat-value">${miState.technicalScore}/10</div><div class="mi-stat-label">Technical</div></div>
-        <div class="mi-report-stat"><div class="mi-stat-value">${miState.hrScore}/10</div><div class="mi-stat-label">HR</div></div>
-        <div class="mi-report-stat"><div class="mi-stat-value">${chance}%</div><div class="mi-stat-label">Est. Selection Chance</div></div>
-      </div>
+    // Populate Report text
+    miEl('miReportTitle').textContent = `${report.type} Interview Assessment`;
+    miEl('miReportMeta').textContent = `${report.type} Interview | Completed on ${report.date} | Duration: ${report.duration}`;
+    
+    // Readiness Score Subtitle
+    miEl('miRoleReadinessText').textContent = report.type === 'Technical'
+      ? `Your readiness for the ${report.selectedRole || 'Software Engineer'} role is ${report.roleReadinessScore}%`
+      : `You are currently ${report.roleReadinessScore}% ready for HR Behavioural loops.`;
 
-      <div class="mi-report-section">
-        <h5>Recommended roles</h5>
-        <div class="mi-tag-list">${recommendedRoles.map(r => `<span class="mi-tag">${r}</span>`).join('') || '<span style="color:var(--muted);font-size:13px;">Complete your profile to see matches.</span>'}</div>
-      </div>
+    // recommendation badge
+    const recBadge = miEl('miReportRecommendation');
+    recBadge.textContent = report.hiringRecommendation;
+    recBadge.className = 'mi-score-badge';
+    if (report.overallScore >= 80) recBadge.classList.add('score-good');
+    else if (report.overallScore >= 60) recBadge.classList.add('score-avg');
+    else recBadge.classList.add('score-needs');
 
-      <div class="mi-report-section">
-        <h5>Strong skills</h5>
-        <div class="mi-tag-list">${strongSkills.map(s => `<span class="mi-tag mi-tag-strong">${s}</span>`).join('') || '<span style="color:var(--muted);font-size:13px;">No skills on file yet.</span>'}</div>
-      </div>
+    // Circular Overall Score
+    miEl('miReportScoreNum').textContent = report.overallScore;
+    const offset = 301.6 - (301.6 * report.overallScore) / 100;
+    miEl('miReportCircleFill').style.strokeDashoffset = offset;
 
-      <div class="mi-report-section">
-        <h5>Topics to learn</h5>
-        <div class="mi-tag-list">${weakSkills.map(s => `<span class="mi-tag mi-tag-weak">${s}</span>`).join('') || '<span style="color:var(--muted);font-size:13px;">No major gaps detected against your top match.</span>'}</div>
-      </div>
+    // Greeting / summary
+    miEl('miReportGreeting').textContent = report.overallScore >= 80 ? "Excellent Performance!" : report.overallScore >= 60 ? "Good Performance" : "Needs Improvement";
+    miEl('miReportSummaryDesc').textContent = report.type === 'Technical'
+      ? `Your technical responses score an overall accuracy rate of ${report.metrics.accuracy}%. You communicated key technical terms clearly, maintaining a average pacing response time of ${report.metrics.averageResponseTime} seconds.`
+      : `Your personality assessment yields an overall personality compatibility score of ${report.overallScore}%. Soft skills like Professionalism (${report.metrics.professionalism}%) and Adaptability (${report.metrics.adaptability}%) are strong.`;
 
-      <div class="mi-report-section">
-        <h5>Resume &amp; interview tips</h5>
-        <p style="color:var(--muted);font-size:13px;line-height:1.6;">
-          ${overallPct >= 80 ? 'Strong performance across all rounds — focus on tightening your resume\'s quantified impact statements and keep practicing HR storytelling.' : ''}
-          ${overallPct >= 60 && overallPct < 80 ? 'Solid foundation. Revisit the topics listed above and practice explaining technical concepts concisely before your next attempt.' : ''}
-          ${overallPct < 60 ? 'Focus on core fundamentals for the topics above, and rebuild your resume around specific, quantified project outcomes before your next mock interview.' : ''}
-        </p>
-      </div>
+    // Metrics progress bars
+    const metricsGrid = miEl('miMetricsGrid');
+    metricsGrid.innerHTML = '';
+    
+    const displayMetrics = report.type === 'Technical' ? [
+      { name: 'Technical Knowledge', value: report.metrics.technicalKnowledge },
+      { name: 'Problem Solving', value: report.metrics.problemSolving },
+      { name: 'Accuracy', value: report.metrics.accuracy },
+      { name: 'Communication Style', value: report.metrics.communication },
+      { name: 'Confidence Score', value: report.metrics.confidence }
+    ] : [
+      { name: 'Communication Skills', value: report.metrics.communication },
+      { name: 'Confidence', value: report.metrics.confidence },
+      { name: 'Leadership Signal', value: report.metrics.leadership },
+      { name: 'Professionalism', value: report.metrics.professionalism },
+      { name: 'Teamwork Alignment', value: report.metrics.teamwork },
+      { name: 'Adaptability Score', value: report.metrics.adaptability }
+    ];
 
-      <button class="btn btn-primary" id="miReportRestartBtn" style="margin-top:20px;">Start new session</button>
-    `;
-    document.getElementById('miReportRestartBtn')?.addEventListener('click', resetMiToLanding);
+    displayMetrics.forEach(m => {
+      metricsGrid.innerHTML += `
+        <div class="metric-progress-item">
+          <div class="metric-progress-lbl">
+            <span>${m.name}</span>
+            <span>${m.value}%</span>
+          </div>
+          <div class="metric-track">
+            <div class="metric-fill" style="width: ${m.value}%;"></div>
+          </div>
+        </div>
+      `;
+    });
 
-    // Recalculate Career Readiness to include interview activity points
-    loadResumeData();
+    // Strengths
+    const strengthsList = miEl('miReportStrengths');
+    strengthsList.innerHTML = report.strengths.map(s => `<li>${s}</li>`).join('');
+
+    // Weaknesses / Gaps
+    const weaknessesList = miEl('miReportWeaknesses');
+    const gaps = report.type === 'Technical' ? report.weakAreas : report.weaknesses;
+    weaknessesList.innerHTML = gaps.map(w => `<li>${w}</li>`).join('');
+
+    // Recommended Resources & Topics
+    const resourceGrid = miEl('miReportResources');
+    resourceGrid.innerHTML = '';
+    
+    if (report.type === 'Technical') {
+      report.suggestedResources.forEach(res => {
+        resourceGrid.innerHTML += `
+          <div class="resource-chip">
+            <span><strong>${res.title}</strong></span>
+            <span class="resource-tag">${res.type}</span>
+          </div>
+        `;
+      });
+    } else {
+      report.recommendedPractice.forEach(topic => {
+        resourceGrid.innerHTML += `
+          <div class="resource-chip">
+            <span><strong>${topic}</strong></span>
+            <span class="resource-tag">Practice</span>
+          </div>
+        `;
+      });
+    }
+
+    // QA Review List (expandable cards with detailed feedback, ideal answer, missing points, and progress score bars)
+    const qaList = miEl('miReportQuestionsBreakdown');
+    qaList.innerHTML = report.answers.map((ans, idx) => {
+      const isTech = report.type === 'Technical';
+      
+      const barsHtml = isTech ? `
+        <div class="report-metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px;">
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Technical Accuracy</span><span>${ans.scores.accuracy}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.accuracy * 10}%;"></div></div>
+          </div>
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Communication</span><span>${ans.scores.communication}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.communication * 10}%;"></div></div>
+          </div>
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Confidence</span><span>${ans.scores.confidence}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.confidence * 10}%;"></div></div>
+          </div>
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Completeness</span><span>${ans.scores.completeness}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.completeness * 10}%;"></div></div>
+          </div>
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Clarity</span><span>${ans.scores.clarity}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.clarity * 10}%;"></div></div>
+          </div>
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Problem Solving</span><span>${ans.scores.problemSolving}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.problemSolving * 10}%;"></div></div>
+          </div>
+        </div>
+      ` : `
+        <div class="report-metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px;">
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Communication</span><span>${ans.scores.communication}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.communication * 10}%;"></div></div>
+          </div>
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Confidence</span><span>${ans.scores.confidence}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.confidence * 10}%;"></div></div>
+          </div>
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Leadership</span><span>${ans.scores.leadership}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.leadership * 10}%;"></div></div>
+          </div>
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Adaptability</span><span>${ans.scores.adaptability}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.adaptability * 10}%;"></div></div>
+          </div>
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Teamwork</span><span>${ans.scores.teamwork}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.teamwork * 10}%;"></div></div>
+          </div>
+          <div class="metric-progress-item">
+            <div class="metric-progress-lbl" style="font-size:11px;"><span>Professionalism</span><span>${ans.scores.professionalism}/10</span></div>
+            <div class="metric-track" style="height:5px;"><div class="metric-fill" style="width: ${ans.scores.professionalism * 10}%;"></div></div>
+          </div>
+        </div>
+      `;
+
+      return `
+        <div class="qa-breakdown-card">
+          <button class="qa-header-btn" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'flex' : 'none'">
+            <span><strong>Q${idx + 1}:</strong> ${ans.question}</span>
+            <span>▼</span>
+          </button>
+          <div class="qa-body" style="display:none; flex-direction:column; gap:12px;">
+            <div>
+              <div class="qa-review-section-title">Candidate's Response:</div>
+              <div style="background:var(--card-2); padding:10px 14px; border-radius:6px; font-style:italic;">"${ans.answer || 'No response recorded'}"</div>
+            </div>
+
+            ${ans.followUpQuestion ? `
+              <div>
+                <div class="qa-review-section-title">Conversational Follow-up Question:</div>
+                <div style="font-weight:600; margin-bottom:4px;">"${ans.followUpQuestion}"</div>
+                <div style="background:var(--card-2); padding:10px 14px; border-radius:6px; font-style:italic;">"${ans.followUpAnswer || 'No response recorded'}"</div>
+              </div>
+            ` : ''}
+
+            <div>
+              <div class="qa-review-section-title">AI Evaluation:</div>
+              <div>${isTech 
+                ? `Your response covers approximately ${ans.coverageScore}% of key matching concepts. technical accuracy is rated at ${ans.scores.accuracy}/10.`
+                : `Your behavioral response shows strong communication cues. Professionalism alignment is rated at ${ans.scores.professionalism}/10.`}
+              </div>
+            </div>
+
+            <div>
+              <div class="qa-review-section-title">${isTech ? 'Ideal Answer (Interview Ready):' : 'Suggested Better Answer:'}</div>
+              <div style="background:rgba(16,185,129,0.05); border-left: 3px solid #10b981; padding:10px 14px; border-radius:6px; line-height: 1.5;">
+                ${ans.idealAnswer || 'Focus on demonstrating direct conceptual definitions alongside real-world applications.'}
+              </div>
+            </div>
+
+            <div>
+              <div class="qa-review-section-title">Missing Points:</div>
+              <ul style="padding-left:20px; margin: 4px 0;">
+                ${(ans.missingPoints || []).map(pt => `<li>${pt}</li>`).join('') || '<li>No major points missed. Excellent response!</li>'}
+              </ul>
+            </div>
+
+            <div>
+              <div class="qa-review-section-title">${isTech ? 'Improvement Suggestions:' : 'Tips for Improvement:'}</div>
+              <ul style="padding-left:20px; margin: 4px 0;">
+                ${(ans.improvementSuggestions || []).map(tip => `<li>${tip}</li>`).join('') || (isTech 
+                  ? '<li>Start by defining the core technology, mention how it runs in memory, and list a real-world use case.</li>'
+                  : '<li>Always use the STAR method. State Situation, Task, Action, and finalize with Result values.</li>')}
+              </ul>
+            </div>
+
+            <div>
+              <div class="qa-review-section-title">Answer Score Analysis:</div>
+              ${barsHtml}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
-  function getSkillDisplayNameSafe(s) {
-    try { return getSkillDisplayName(s); } catch { return s; }
-  }
+  // EVENT LISTENERS
+  document.getElementById('miStartTechBtn')?.addEventListener('click', () => openRoleSelection('technical'));
+  document.getElementById('miStartHrBtn')?.addEventListener('click', () => openRoleSelection('hr'));
+  
+  // Search view Back button
+  document.getElementById('miRoleSelectBackBtn')?.addEventListener('click', () => {
+    miEl('miRoleSelectionView').style.display = 'none';
+    miEl('miLanding').style.display = 'block';
+  });
+
+  // Confirmation view Back button
+  document.getElementById('miConfBackBtn')?.addEventListener('click', () => {
+    miEl('miConfirmationView').style.display = 'none';
+    miEl('miRoleSelectionView').style.display = 'block';
+  });
+
+  // Begin interview button
+  document.getElementById('miConfStartBtn')?.addEventListener('click', startVoiceInterview);
+
+  document.getElementById('miMicStartBtn')?.addEventListener('click', startVoiceListening);
+  document.getElementById('miMicStopBtn')?.addEventListener('click', stopVoiceListening);
+  document.getElementById('miNextQuestionBtn')?.addEventListener('click', handleNextBtnClick);
+  
+  // Replay TTS Question
+  document.getElementById('miReplayBtn')?.addEventListener('click', () => {
+    const text = miEl('miQuestionText').textContent;
+    speakInterviewer(text, () => {
+      startVoiceListening();
+    });
+  });
+
+  // Report Back button
+  document.getElementById('miReportBackBtn')?.addEventListener('click', () => {
+    miEl('miFinalReport').style.display = 'none';
+    miEl('miLanding').style.display = 'block';
+    loadHistoryAndBadges();
+  });
+
+  // Download PDF Report
+  document.getElementById('miDownloadReportBtn')?.addEventListener('click', () => {
+    window.print();
+  });
   // 9. Career Intelligence — computed from real match data, not static text
   function renderCareerIntelligence() {
     const skills = currentResumeData?.skills || [];
