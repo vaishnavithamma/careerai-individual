@@ -164,22 +164,37 @@ startBtn.onclick = () => {
 };
 
 function initializeQuiz() {
-    // 1. Filter questions by selected language keywords or keep it general
-    let pool = [...uniqueQuestionsList];
     const langLower = selectedLanguage.toLowerCase();
-    
-    // Sort pool to prioritize questions relevant to selected language
-    pool.sort((a, b) => {
-        const aMatch = a.question.toLowerCase().includes(langLower) || a.options.some(o => o.toLowerCase().includes(langLower));
-        const bMatch = b.question.toLowerCase().includes(langLower) || b.options.some(o => o.toLowerCase().includes(langLower));
-        return (bMatch ? 1 : 0) - (aMatch ? 1 : 0);
-    });
+    const targetLang = langLower.includes("python")
+      ? "Python"
+      : langLower.includes("java")
+      ? "Java"
+      : "C";
 
-    // 2. Select 10 questions randomly
-    const shuffledPool = shuffleArray(pool.slice(0, 20)); // Mix top matching questions
-    quizQuestions = shuffledPool.slice(0, 10);
+    // 1. Language-specific coding/technical questions
+    const langSpecific = uniqueQuestionsList.filter(q => q.language === targetLang);
+
+    // 2. Aptitude & Communication questions
+    const aptitude = uniqueQuestionsList.filter(q => q.category === "Aptitude");
+    const comm = uniqueQuestionsList.filter(q => q.category === "Communication");
+
+    // 3. Balanced assembly: 5 Language specific, 3 Aptitude, 2 Communication = 10 total
+    const selectedLang = shuffleArray([...langSpecific]).slice(0, 5);
+    const selectedApt = shuffleArray([...aptitude]).slice(0, 3);
+    const selectedComm = shuffleArray([...comm]).slice(0, 2);
+
+    let combined = [...selectedLang, ...selectedApt, ...selectedComm];
+
+    // Fallback if any section is short
+    if (combined.length < 10) {
+      const remainingNeeded = 10 - combined.length;
+      const unused = uniqueQuestionsList.filter(q => !combined.includes(q));
+      combined = combined.concat(shuffleArray(unused).slice(0, remainingNeeded));
+    }
+
+    quizQuestions = shuffleArray(combined).slice(0, 10);
     
-    // 3. Shuffle options for each selected question
+    // 4. Shuffle options for each selected question
     quizQuestions.forEach(q => {
         q.shuffledOptions = shuffleArray([...q.options]);
     });
@@ -206,24 +221,33 @@ function showQuestion() {
 
     q.shuffledOptions.forEach((option, index) => {
         const optionDiv = document.createElement("div");
-        optionDiv.className = "option";
+        const isSelected = answers[currentQuestion] === index;
+        optionDiv.className = `option-item ${isSelected ? 'selected' : ''}`;
 
         optionDiv.innerHTML = `
-            <label class="option-label">
-                <input
-                    type="radio"
-                    name="answer"
-                    value="${index}"
-                    ${answers[currentQuestion] === index ? "checked" : ""}
-                >
-                <span>${option}</span>
-            </label>
+            <input
+                type="radio"
+                name="answer"
+                value="${index}"
+                ${isSelected ? "checked" : ""}
+            >
+            <span>${option}</span>
         `;
 
-        const radio = optionDiv.querySelector("input");
-        radio.addEventListener("change", () => {
+        optionDiv.addEventListener("click", () => {
             answers[currentQuestion] = index;
-            // Enable next button or remove warnings
+            // Update active styling across all option items
+            const allItems = optionsContainer.querySelectorAll(".option-item");
+            allItems.forEach((item, i) => {
+                const radio = item.querySelector("input");
+                if (i === index) {
+                    item.classList.add("selected");
+                    radio.checked = true;
+                } else {
+                    item.classList.remove("selected");
+                    radio.checked = false;
+                }
+            });
             nextBtn.disabled = false;
         });
 
@@ -393,14 +417,14 @@ function finishQuiz() {
     document.getElementById("scoreText").innerText = `${score} / ${quizQuestions.length}`;
 
     const analysisHtml = `
-        <p>📊 <b>Programming Language:</b> ${selectedLanguage}</p>
-        <p>📋 <b>Total Questions:</b> ${quizQuestions.length}</p>
-        <p>✅ <b>Correct:</b> ${score}</p>
-        <p>❌ <b>Incorrect:</b> ${quizQuestions.length - score}</p>
-        <p>📈 <b>Percentage Score:</b> ${((score / quizQuestions.length) * 100).toFixed(1)}%</p>
-        <p>⏱️ <b>Time Taken:</b> ${timeTakenMinStr}</p>
-        <p>💪 <b>Strengths:</b> ${strengths.join(", ")}</p>
-        <p>⚠️ <b>Weak Areas:</b> <span style="color:#f87171;">${weakAreas.join(", ")}</span></p>
+        <div class="stat-badge">📊 <b>Track:</b> ${selectedLanguage}</div>
+        <div class="stat-badge">📋 <b>Total Questions:</b> ${quizQuestions.length}</div>
+        <div class="stat-badge">✅ <b>Correct:</b> <span style="color:#10b981;font-weight:bold;">${score}</span></div>
+        <div class="stat-badge">❌ <b>Incorrect:</b> <span style="color:#ef4444;font-weight:bold;">${quizQuestions.length - score}</span></div>
+        <div class="stat-badge">📈 <b>Percentage Score:</b> <span style="color:#60a5fa;font-weight:bold;">${((score / quizQuestions.length) * 100).toFixed(1)}%</span></div>
+        <div class="stat-badge">⏱️ <b>Time Taken:</b> ${timeTakenMinStr}</div>
+        <div class="stat-badge">💪 <b>Strengths:</b> ${strengths.join(", ")}</div>
+        <div class="stat-badge">⚠️ <b>Weak Areas:</b> <span style="color:#f87171;">${weakAreas.join(", ")}</span></div>
     `;
 
     document.getElementById("analysis").innerHTML = analysisHtml;

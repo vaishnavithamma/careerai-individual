@@ -3,8 +3,11 @@
 export class TtsService {
   constructor() {
     this.synth = window.speechSynthesis;
-    this.utterance = null;
     this.audioElement = null;
+    this.resumeInterval = null;
+    this.isSpeaking = false;
+    this.currentChunks = [];
+    this.currentChunkIndex = 0;
   }
 
   isSupported() {
@@ -21,9 +24,9 @@ export class TtsService {
         body: JSON.stringify({ text })
       });
 
-      // If key is missing or failed, throw error to trigger fallback
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
+      const contentType = response.headers.get("content-type") || "";
+      if (!response.ok || contentType.includes("application/json")) {
+        const errData = contentType.includes("application/json") ? await response.json().catch(() => ({})) : {};
         throw new Error(errData.error || "TTS Failed");
       }
 
@@ -33,10 +36,12 @@ export class TtsService {
       this.audioElement = new Audio(audioUrl);
       
       this.audioElement.onplay = () => {
+        this.isSpeaking = true;
         if (onStart) onStart();
       };
       
       this.audioElement.onended = () => {
+        this.isSpeaking = false;
         if (onEnd) onEnd();
       };
       
@@ -48,7 +53,7 @@ export class TtsService {
       this.audioElement.play();
 
     } catch (e) {
-      console.warn("OpenAI TTS failed or is unconfigured, falling back to native browser speechSynthesis:", e);
+      console.warn("OpenAI TTS unconfigured or failed, falling back to native browser speechSynthesis:", e.message || e);
       this.fallbackSpeak(text, onStart, onEnd, onError);
     }
   }
@@ -59,34 +64,92 @@ export class TtsService {
       return;
     }
 
-    this.utterance = new SpeechSynthesisUtterance(text);
+    this.cancel();
+    this.isSpeaking = true;
+
+    // Split text into manageable sentence chunks to prevent Chromium SpeechSynthesis 15s timeout cut-off
+    const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+    this.currentChunks = sentences.map(s => s.trim()).filter(Boolean);
+    if (this.currentChunks.length === 0) this.currentChunks = [text];
+    this.currentChunkIndex = 0;
+
+    // Start a heartbeat timer to prevent Chrome from silently pausing SpeechSynthesis mid-sentence
+    this.startHeartbeatTimer();
+
+    if (onStart) onStart();
+    this.speakNextChunk(onEnd, onError);
+  }
+
+  speakNextChunk(onEnd, onError) {
+    if (!this.isSpeaking || this.currentChunkIndex >= this.currentChunks.length) {
+      this.isSpeaking = false;
+      this.stopHeartbeatTimer();
+      if (onEnd) onEnd();
+      return;
+    }
+
+    const chunkText = this.currentChunks[this.currentChunkIndex];
+    const utterance = new SpeechSynthesisUtterance(chunkText);
+
     const voices = this.synth.getVoices();
-    const englishVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) ||
+    const englishVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Natural'))) ||
                          voices.find(v => v.lang.startsWith('en')) || 
                          voices[0];
     if (englishVoice) {
-      this.utterance.voice = englishVoice;
+      utterance.voice = englishVoice;
     }
 
-    this.utterance.rate = 1.0;
-    this.utterance.pitch = 1.0;
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
 
-    this.utterance.onstart = () => {
-      if (onStart) onStart();
+    utterance.onend = () => {
+      this.currentChunkIndex++;
+      this.speakNextChunk(onEnd, onError);
     };
 
-    this.utterance.onend = () => {
-      if (onEnd) onEnd();
+    utterance.onerror = (e) => {
+      console.warn("SpeechSynthesis error on chunk:", e);
+      // Advance to next chunk or finish gracefully
+      this.currentChunkIndex++;
+      if (this.currentChunkIndex < this.currentChunks.length) {
+        this.speakNextChunk(onEnd, onError);
+      } else {
+        this.isSpeaking = false;
+        this.stopHeartbeatTimer();
+        if (onEnd) onEnd();
+      }
     };
 
-    this.utterance.onerror = (e) => {
-      if (onError) onError(e);
-    };
+    try {
+      this.synth.speak(utterance);
+    } catch (err) {
+      console.error("Failed to start SpeechSynthesis:", err);
+      this.stopHeartbeatTimer();
+      if (onError) onError(err);
+    }
+  }
 
-    this.synth.speak(this.utterance);
+  startHeartbeatTimer() {
+    this.stopHeartbeatTimer();
+    this.resumeInterval = setInterval(() => {
+      if (this.synth && this.synth.speaking) {
+        this.synth.pause();
+        this.synth.resume();
+      }
+    }, 5000);
+  }
+
+  stopHeartbeatTimer() {
+    if (this.resumeInterval) {
+      clearInterval(this.resumeInterval);
+      this.resumeInterval = null;
+    }
   }
 
   cancel() {
+    this.isSpeaking = false;
+    this.stopHeartbeatTimer();
+
     if (this.audioElement) {
       this.audioElement.pause();
       this.audioElement = null;

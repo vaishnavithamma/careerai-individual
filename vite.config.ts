@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { Buffer } from "node:buffer";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,6 +25,16 @@ export default defineConfig(({ mode }) => {
         }
       });
     });
+  }
+
+  // Clean LLM JSON outputs (strip markdown code blocks and extract JSON structure)
+  function cleanJsonOutput(output: string): string {
+    let clean = output.replace(/```json/gi, "").replace(/```/g, "").trim();
+    const arrayMatch = clean.match(/\[[\s\S]*\]/);
+    if (arrayMatch) return arrayMatch[0];
+    const objectMatch = clean.match(/\{[\s\S]*\}/);
+    if (objectMatch) return objectMatch[0];
+    return clean;
   }
 
   // LLM generation helper
@@ -61,24 +72,11 @@ export default defineConfig(({ mode }) => {
     return "";
   }
 
-  return {
-    root: "public",
-    envDir: "../",
-    build: {
-      rollupOptions: {
-        input: {
-          main: resolve(__dirname, "public/index.html"),
-          login: resolve(__dirname, "public/login.html"),
-          signup: resolve(__dirname, "public/signup.html"),
-          dashboard: resolve(__dirname, "public/dashboard.html")
-        }
-      }
-    },
-    server: {
-      port: 5173,
-      strictPort: true,
-      configureServer(server: any) {
-        server.middlewares.use(async (req: any, res: any, next: any) => {
+  // API middleware plugin (configureServer is a plugin-level hook, not a server option)
+  const apiMiddlewarePlugin = {
+    name: "api-middleware",
+    configureServer(server: any) {
+      server.middlewares.use(async (req: any, res: any, next: any) => {
           // Parse path neglecting any query arguments
           const parsedUrl = new URL(req.url || "", `http://${req.headers.host || "localhost"}`);
           const urlPath = parsedUrl.pathname;
@@ -115,7 +113,7 @@ export default defineConfig(({ mode }) => {
               }`;
 
               const output = await generateLLMText(prompt, "You are a professional technical interviewer who only outputs valid JSON arrays.");
-              const cleanOutput = output.replace(/```json/g, "").replace(/```/g, "").trim();
+              const cleanOutput = cleanJsonOutput(output);
               
               // Validate that the output is indeed a parsable JSON array
               try {
@@ -130,20 +128,28 @@ export default defineConfig(({ mode }) => {
             // 2. Generate Follow-up
             if (urlPath === "/api/generate-followup" && req.method === "POST") {
               const body = await getRequestBody(req);
-              const { questionText, answerText, previousContext } = body;
+              const { questionText, answerText, previousContext, round } = body;
 
               if (!GEMINI_API_KEY && !OPENAI_API_KEY) {
                 return res.end(JSON.stringify({ error: "API_KEYS_MISSING" }));
               }
 
-              const prompt = `You are conducting a job interview.
+              const isHr = round === "hr";
+              const prompt = `You are conducting a ${isHr ? "behavioural HR" : "technical"} job interview.
               Current Question: "${questionText}"
               Candidate Answer: "${answerText}"
               Previous Context: ${JSON.stringify(previousContext)}
               
-              Ask exactly one short, conversational, contextual follow-up question. Do not include any greeting or conversational filler.`;
+              ${isHr
+                ? "Ask exactly one short, empathetic, conversational follow-up question that digs deeper into the candidate's feelings, motivations, or interpersonal dynamics. Focus on the human side of their story. Do NOT ask technical or coding questions."
+                : "Ask exactly one short, precise technical follow-up question to probe their depth of understanding. Do not ask behavioural or soft-skill questions."}
+              Do not include any greeting or conversational filler. Output only the question.`;
 
-              const followUp = await generateLLMText(prompt, "You are a professional AI recruiter.");
+              const systemInstruction = isHr
+                ? "You are a senior HR interviewer skilled in behavioural interviewing techniques like STAR. You only ask emotionally intelligent, situation-based follow-up questions."
+                : "You are a senior technical interviewer. You only ask precise, focused technical follow-up questions.";
+
+              const followUp = await generateLLMText(prompt, systemInstruction);
               return res.end(JSON.stringify({ followUp: followUp.trim() }));
             }
 
@@ -198,8 +204,14 @@ export default defineConfig(({ mode }) => {
               }`;
 
               const output = await generateLLMText(prompt, "You are an expert technical interviewer and senior talent manager who only outputs valid JSON.");
-              const cleanOutput = output.replace(/```json/g, "").replace(/```/g, "").trim();
-              return res.end(cleanOutput);
+              const cleanOutput = cleanJsonOutput(output);
+              try {
+                JSON.parse(cleanOutput);
+                return res.end(cleanOutput);
+              } catch (e) {
+                console.warn("LLM evaluation output is not valid JSON:", cleanOutput);
+                return res.end(JSON.stringify({ error: "INVALID_LLM_JSON" }));
+              }
             }
 
             // 4. TTS (Text-to-Speech)
@@ -208,6 +220,7 @@ export default defineConfig(({ mode }) => {
               const { text } = body;
 
               if (!OPENAI_API_KEY) {
+                res.statusCode = 400;
                 return res.end(JSON.stringify({ error: "OPENAI_KEY_MISSING" }));
               }
 
@@ -275,6 +288,25 @@ export default defineConfig(({ mode }) => {
           }
         });
       }
+    };
+
+  return {
+    root: "public",
+    envDir: "../",
+    plugins: [apiMiddlewarePlugin],
+    build: {
+      rollupOptions: {
+        input: {
+          main: resolve(__dirname, "public/index.html"),
+          login: resolve(__dirname, "public/login.html"),
+          signup: resolve(__dirname, "public/signup.html"),
+          dashboard: resolve(__dirname, "public/dashboard.html")
+        }
+      }
+    },
+    server: {
+      port: 5173,
+      strictPort: true
     }
   };
 });

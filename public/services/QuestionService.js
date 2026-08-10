@@ -378,11 +378,11 @@ export class QuestionService {
     return mapped.slice(0, count).map((q, idx) => ({ ...q, index: idx + 1 }));
   }
 
-  static async getFollowUpQuestion(questionText, answerText, previousContext = []) {
+  static async getFollowUpQuestion(questionText, answerText, previousContext = [], round = 'technical') {
     const data = await this.safeFetchJson("/api/generate-followup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ questionText, answerText, previousContext })
+      body: JSON.stringify({ questionText, answerText, previousContext, round })
     });
 
     if (data && data.followUp) {
@@ -390,7 +390,8 @@ export class QuestionService {
     }
 
     console.warn("LLM Follow-up unavailable, using fallback:", data);
-    const followUps = [
+
+    const technicalFollowUps = [
       "Can you explain that aspect in a bit more detail?",
       "What alternative approach or solution would you consider?",
       "What happens if the input size becomes very large or constraints change?",
@@ -398,6 +399,17 @@ export class QuestionService {
       "Can you give a practical, real-world example of this concept?",
       "What is the biggest challenge or drawback of this method?"
     ];
-    return followUps[Math.floor(Math.random() * followUps.length)];
+
+    const hrFollowUps = [
+      "Can you walk me through what you were thinking at that moment?",
+      "How did that experience shape the way you work with teams today?",
+      "What would you do differently if you faced that situation again?",
+      "How did the people around you respond to your approach?",
+      "What did that teach you about yourself as a professional?",
+      "How did you manage your emotions or stress during that time?"
+    ];
+
+    const pool = round === 'hr' ? hrFollowUps : technicalFollowUps;
+    return pool[Math.floor(Math.random() * pool.length)];
   }
 }

@@ -10,7 +10,8 @@
     "noEmit": true,
     "strict": true,
     "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types"],
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "public/**/*"]
+  "include": ["vite.config.ts"]
 }
