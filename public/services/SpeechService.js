@@ -60,16 +60,17 @@ export class SpeechService {
               });
               const data = await response.json();
               if (data.error === "OPENAI_KEY_MISSING") {
-                console.warn("OpenAI key missing. Whispering disabled. Please use native browser fallback transcript below.");
-                if (onEnd) onEnd(this.transcript || "No speech captured. (API key missing for Whisper)");
+                console.warn("OpenAI key missing for Whisper. Using complete browser recognition transcript.");
+                if (onEnd) onEnd(this.transcript.trim() || "No speech captured.");
                 return;
               }
-              this.transcript = data.text || "";
+              const whisperText = data.text ? data.text.trim() : "";
+              this.transcript = whisperText || this.transcript.trim();
               if (onResult) onResult(this.transcript);
               if (onEnd) onEnd(this.transcript);
             } catch (err) {
-              console.error("Whisper transcription failed, falling back to local text:", err);
-              if (onEnd) onEnd(this.transcript || "Failed to transcribe audio.");
+              console.error("Whisper transcription failed, falling back to browser text:", err);
+              if (onEnd) onEnd(this.transcript.trim() || "Failed to transcribe audio.");
             }
           };
 
@@ -86,29 +87,42 @@ export class SpeechService {
       this.startFallbackRecognition(onResult, onError, onEnd);
     }
 
-    // Always start fallback browser SpeechRecognition in parallel to capture real-time text guidelines
+    // Always start fallback browser SpeechRecognition in parallel to capture real-time text
     if (this.recognition) {
       this.recognition.onresult = (event) => {
-        let interimTranscript = '';
         let finalTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
+        let interimTranscript = '';
+
+        // Iterate through all results from index 0 to accumulate complete candidate response
+        for (let i = 0; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
+            finalTranscript += event.results[i][0].transcript + ' ';
           } else {
             interimTranscript += event.results[i][0].transcript;
           }
         }
-        const text = finalTranscript || interimTranscript;
-        this.transcript = text;
-        // Only update onResult if Whisper is still recording or has failed
+        
+        const fullText = (finalTranscript + interimTranscript).trim();
+        this.transcript = fullText;
+
+        // Update UI callback continuously while recording
         if (onResult && (!this.mediaRecorder || this.mediaRecorder.state === 'recording')) {
-          onResult(text);
+          onResult(fullText);
         }
       };
 
       this.recognition.onerror = (event) => {
         console.error("Fallback Speech Recognition Error:", event.error);
         if (!this.mediaRecorder && onError) onError(event.error);
+      };
+
+      this.recognition.onend = () => {
+        // Auto-restart recognition if browser paused it while user is still recording
+        if (this.isRecording) {
+          try {
+            this.recognition.start();
+          } catch (e) {}
+        }
       };
 
       try {
@@ -118,7 +132,6 @@ export class SpeechService {
   }
 
   startFallbackRecognition(onResult, onError, onEnd) {
-    // MediaRecorder wasn't available, only rely on browser SpeechRecognition callbacks
     if (!this.recognition) {
       if (onError) onError("Browser voice recognition is not supported.");
     }

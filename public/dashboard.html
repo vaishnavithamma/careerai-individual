@@ -1585,39 +1585,43 @@
 
             <!-- Interviewer Avatar Area -->
             <div class="mi-avatar-row">
-              <div class="mi-interviewer-avatar" id="miInterviewerAvatar">🤖</div>
+              <div class="mi-interviewer-avatar-wrap" style="position:relative;display:flex;flex-direction:column;align-items:center;">
+                <div class="mi-interviewer-avatar" id="miInterviewerAvatar">🤖</div>
+                <div class="typing-loader" id="miSpeakingIndicator" style="display:none;position:absolute;bottom:-8px;">
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+                </div>
+              </div>
               <div class="listening-status-row" id="miListeningStatus">
                 <span class="status-muted">AI is idle</span>
-              </div>
-              <div class="typing-loader" id="miSpeakingIndicator" style="display:none;">
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
               </div>
             </div>
 
             <!-- Question display -->
-            <div class="mi-q-display-box">
+            <div class="mi-q-display-box" style="background:var(--card-2);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.2);">
               <span class="mi-q-level-pill level-medium" id="miQuestionLevel">CONCEPT</span>
-              <div class="mi-q-text" id="miQuestionText">Welcome! We are preparing your interview. Please wait...</div>
+              <div class="mi-q-text" id="miQuestionText" style="font-size:19px;font-weight:700;line-height:1.5;color:var(--fg);">Welcome! We are preparing your interview. Please wait...</div>
             </div>
 
             <!-- Audio Recording & Transcript panel -->
-            <div class="mi-audio-recorder-panel">
-              <canvas class="waveform-canvas" id="miWaveformCanvas"></canvas>
-              <div class="recording-timer" id="miRecordTimer">00:00</div>
+            <div class="mi-audio-recorder-panel" style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:18px;">
+              <div style="width:100%;position:relative;">
+                <canvas class="waveform-canvas" id="miWaveformCanvas" height="60" style="width:100%;height:60px;background:var(--card-2);border-radius:10px;border:1px solid var(--border);"></canvas>
+              </div>
+              <div class="recording-timer" id="miRecordTimer" style="font-family:monospace;font-size:18px;font-weight:700;color:var(--brand);background:var(--card-2);padding:4px 14px;border-radius:999px;border:1px solid var(--border);">00:00</div>
               
-              <div class="mi-controls-row">
-                <button class="btn btn-outline" id="miMicStartBtn" style="gap:8px;">🎤 Start Recording</button>
-                <button class="btn btn-outline" id="miMicStopBtn" style="gap:8px;display:none;background:rgba(239,68,68,0.1);color:#ef4444;border-color:#ef4444;">⏹ Stop Recording</button>
-                <button class="btn btn-outline" id="miReplayBtn" style="gap:8px;display:none;">▶ Replay Recording</button>
-                <button class="btn btn-primary" id="miNextQuestionBtn" style="gap:8px;display:none;">➡ Next Question</button>
+              <div class="mi-controls-row" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%;">
+                <button class="btn btn-primary" id="miMicStartBtn" style="gap:8px;padding:12px 24px;font-weight:700;background:linear-gradient(135deg, var(--brand), #2563eb);">🎤 Start Recording</button>
+                <button class="btn btn-outline" id="miMicStopBtn" style="gap:8px;display:none;background:rgba(239,68,68,0.15);color:#ef4444;border-color:#ef4444;padding:12px 24px;font-weight:700;">⏹ Stop Recording</button>
+                <button class="btn btn-outline" id="miReplayBtn" style="gap:8px;display:none;padding:12px 24px;font-weight:600;">▶ Replay Recording</button>
+                <button class="btn btn-primary" id="miNextQuestionBtn" style="gap:8px;display:none;padding:12px 24px;font-weight:700;background:linear-gradient(135deg, #10b981, #059669);border:none;">➡ Next Question</button>
               </div>
 
               <!-- Live Transcript Box -->
               <div style="width:100%;">
-                <div class="transcript-label">Live Speech Transcription</div>
-                <div class="transcript-viewport" id="miTranscriptText">Speak into your microphone. Your voice transcript will appear here in real time...</div>
+                <div class="transcript-label" style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Live Speech Transcription</div>
+                <div class="transcript-viewport" id="miTranscriptText" style="width:100%;background:var(--card-2);border:1px dashed var(--border);border-radius:10px;padding:16px;min-height:70px;max-height:120px;overflow-y:auto;font-size:14px;line-height:1.6;color:var(--fg);">Speak into your microphone. Your voice transcript will appear here in real time...</div>
               </div>
             </div>
           </div>
@@ -1714,35 +1718,44 @@
 
 
     <div id="mockassessmentTab" class="tab-content">
-  <div class="card" style="background:#111827; border:1px solid #1f2937; border-radius:15px; padding:25px;">
+      <div class="card" style="background:linear-gradient(135deg, var(--card) 0%, var(--card-2) 100%); border:1px solid var(--border); border-radius:18px; padding:32px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:20px; margin-bottom:24px;">
+          <div>
+            <h3 style="color:#ffffff; font-size:24px; font-weight:800; margin-bottom:8px; display:flex; align-items:center; gap:10px;">
+              📝 Technical & Aptitude Mock Assessment
+            </h3>
+            <p style="color:var(--muted); font-size:14px; max-width:650px; line-height:1.6;">
+              Test your core domain knowledge, logical aptitude, and communication skills under exam-like timed conditions with automated scoring and instant feedback.
+            </p>
+          </div>
+          <button
+            id="startAssessmentBtn"
+            onclick="window.location.href='mockassessment.html'"
+            class="btn btn-primary"
+            style="padding:14px 28px; font-size:16px; font-weight:700; background:linear-gradient(135deg, var(--brand), #2563eb); border:none; box-shadow:0 4px 20px rgba(59,130,246,0.4); flex-shrink:0;">
+            🚀 Launch Assessment Suite →
+          </button>
+        </div>
 
-    <h3 style="color:#ffffff; margin-bottom:10px;">
-      📝 Mock Assessment
-    </h3>
-
-    <p style="color:#9ca3af; margin-bottom:20px;">
-      Evaluate your aptitude, coding, communication, and technical skills through AI-powered assessments.
-    </p>
-
-    <button
-      id="startAssessmentBtn"
-      onclick="window.location.href='mockassessment.html'"
-      style="
-        background:#2563eb;
-        color:white;
-        border:none;
-        padding:12px 25px;
-        border-radius:8px;
-        cursor:pointer;
-        font-size:16px;
-      "
-      onmouseover="this.style.background='#1d4ed8'"
-      onmouseout="this.style.background='#2563eb'">
-      Start Assessment
-    </button>
-
-  </div>
-</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-top:20px;">
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:14px; padding:18px; text-align:center;">
+            <div style="font-size:32px; margin-bottom:8px;">☕</div>
+            <div style="font-weight:700; font-size:15px; color:#fff;">Java Track</div>
+            <div style="font-size:12px; color:var(--muted); margin-top:4px;">OOPs, JVM, Collections</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:14px; padding:18px; text-align:center;">
+            <div style="font-size:32px; margin-bottom:8px;">🐍</div>
+            <div style="font-weight:700; font-size:15px; color:#fff;">Python Track</div>
+            <div style="font-size:12px; color:var(--muted); margin-top:4px;">Functions, Data Structures</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:14px; padding:18px; text-align:center;">
+            <div style="font-size:32px; margin-bottom:8px;">💻</div>
+            <div style="font-weight:700; font-size:15px; color:#fff;">C Track</div>
+            <div style="font-size:12px; color:var(--muted); margin-top:4px;">Pointers, Memory, Logic</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Career Intelligence Tab -->
     <!-- Career Intelligence Tab -->
@@ -3046,6 +3059,9 @@
 
   // Draw Flat Line Helper
   function drawFlatLine(canvas, canvasCtx) {
+    if (!canvas || !canvasCtx) return;
+    canvas.width = canvas.offsetWidth || 600;
+    canvas.height = canvas.offsetHeight || 60;
     canvasCtx.fillStyle = 'rgb(17, 24, 39)';
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
     canvasCtx.strokeStyle = '#3b82f6';
@@ -3060,6 +3076,9 @@
   let audioCtx, analyser, dataArray, source, animationFrameId;
   function startWaveform() {
     const canvas = document.getElementById('miWaveformCanvas');
+    if (!canvas) return;
+    canvas.width = canvas.offsetWidth || 600;
+    canvas.height = canvas.offsetHeight || 60;
     const canvasCtx = canvas.getContext('2d');
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       drawFlatLine(canvas, canvasCtx);
@@ -3085,7 +3104,7 @@
         let barHeight;
         let x = 0;
         for (let i = 0; i < bufferLength; i++) {
-          barHeight = dataArray[i] / 2;
+          barHeight = (dataArray[i] / 255) * canvas.height;
           canvasCtx.fillStyle = 'rgb(' + (barHeight + 100) + ', 162, 235)';
           canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
           x += barWidth + 1;
@@ -3286,7 +3305,7 @@
     miState.difficulty = miEl('miConfDiffSelect').value;
     miState.language = miEl('miConfLangSelect').value;
 
-    const candidateName = currentResumeData?.name || 'Vaishnavi';
+    const candidateName = currentResumeData?.name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Candidate';
 
     miEl('miConfirmationView').style.display = 'none';
     miEl('miEvalLoading').style.display = 'block';
@@ -3336,8 +3355,10 @@
     miState.followUpQuestionText = '';
     miState.followUpAnswerText = '';
 
-    // Apply language to speech service
-    speechService.recognition.lang = miState.language;
+    // Apply language to speech service safely
+    if (speechService && speechService.recognition) {
+      speechService.recognition.lang = miState.language;
+    }
 
     // Update active screen meta elements
     miEl('miActiveCandidateName').textContent = candidateName;
@@ -3363,7 +3384,7 @@
     });
   }
 
-  // Helper for TTS + Speaking animation
+  // Helper for TTS + Speaking animation with timeout fallback
   function speakInterviewer(text, onComplete) {
     miEl('miListeningStatus').innerHTML = `<span class="status-speaking">AI Interviewer is speaking...</span>`;
     miEl('miSpeakingIndicator').style.display = 'flex';
@@ -3375,17 +3396,26 @@
     miEl('miReplayBtn').style.display = 'none';
     miEl('miNextQuestionBtn').style.display = 'none';
 
-    ttsService.speak(text, null, () => {
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      if (safetyTimer) clearTimeout(safetyTimer);
       miEl('miSpeakingIndicator').style.display = 'none';
       miEl('miInterviewerAvatar').classList.remove('avatar-speaking');
       miEl('miListeningStatus').innerHTML = `<span class="status-muted">AI is idle</span>`;
       if (onComplete) onComplete();
-    }, () => {
-      miEl('miSpeakingIndicator').style.display = 'none';
-      miEl('miInterviewerAvatar').classList.remove('avatar-speaking');
-      miEl('miListeningStatus').innerHTML = `<span class="status-muted">AI is idle</span>`;
-      if (onComplete) onComplete();
-    });
+    };
+
+    // Safety timeout: if TTS stalls or browser speech synthesis hangs, advance automatically
+    const maxWaitMs = Math.min(Math.max((text.length / 12) * 1000, 3000), 8000);
+    const safetyTimer = setTimeout(() => {
+      console.warn("TTS playback timeout - advancing interview workflow.");
+      ttsService.cancel();
+      finish();
+    }, maxWaitMs);
+
+    ttsService.speak(text, null, finish, finish);
   }
 
   function loadVoiceQuestion() {
@@ -3393,9 +3423,15 @@
       toast("No questions available.", "error");
       return;
     }
-    const q = miState.questions[miState.index] || miState.questions[0];
+
+    // Boundary guard: finish interview when all questions are exhausted
+    if (miState.index >= miState.questionCount || miState.index >= miState.questions.length) {
+      finishVoiceInterview();
+      return;
+    }
+    const q = miState.questions[miState.index];
     if (!q) {
-      toast("Error loading question.", "error");
+      finishVoiceInterview();
       return;
     }
     miState.isFollowUp = false;
@@ -3426,11 +3462,19 @@
     miState.currentTranscript = '';
     miEl('miListeningStatus').innerHTML = `<span>AI is processing follow-up question...</span>`;
     
-    const q = miState.questions[miState.index] || miState.questions[0] || { text: "" };
+    const q = miState.questions[miState.index] || { text: "" };
     const previousContext = miState.answers.slice(0, miState.index);
-    let followUp = "Can you expand on that?";
+    const defaultFollowUp = miState.round === 'hr'
+      ? "Can you share more about how that experience affected you personally?"
+      : "Can you expand on that in more detail?";
+    let followUp = defaultFollowUp;
     try {
-      followUp = await QuestionService.getFollowUpQuestion(q.text || "", miState.answers[miState.index]?.text || "", previousContext);
+      followUp = await QuestionService.getFollowUpQuestion(
+        q.text || "",
+        miState.answers[miState.index]?.text || "",
+        previousContext,
+        miState.round
+      );
     } catch (e) {
       console.warn("Follow-up generation failed, using fallback:", e);
     }
@@ -3553,9 +3597,9 @@
 
       let report;
       if (miState.round === 'technical') {
-        report = EvaluationService.evaluateTechnicalInterview(miState.questions, miState.answers, miState.selectedRole);
+        report = await EvaluationService.evaluateTechnicalInterview(miState.questions, miState.answers, miState.selectedRole);
       } else {
-        report = EvaluationService.evaluateHrInterview(miState.questions, miState.answers);
+        report = await EvaluationService.evaluateHrInterview(miState.questions, miState.answers);
       }
 
       await HistoryService.saveInterview(user.id, report);
