@@ -15,7 +15,7 @@ const uniqueQuestionsList = Array.from(uniqueMap.values());
 let quizQuestions = [];
 let currentQuestion = 0;
 let answers = [];
-let timeLeft = 10 * 60; // 10 minutes
+let timeLeft = 5 * 60; // 5 minutes
 let timer;
 let selectedLanguage = "";
 
@@ -171,6 +171,22 @@ function initializeQuiz() {
       ? "Java"
       : "C";
 
+    // Track used questions by reference to guarantee no duplicates
+    const usedSet = new Set();
+
+    function pickUnique(pool, count) {
+        const result = [];
+        const shuffled = shuffleArray([...pool]);
+        for (const q of shuffled) {
+            if (!usedSet.has(q)) {
+                usedSet.add(q);
+                result.push(q);
+                if (result.length === count) break;
+            }
+        }
+        return result;
+    }
+
     // 1. Language-specific coding/technical questions
     const langSpecific = uniqueQuestionsList.filter(q => q.language === targetLang);
 
@@ -178,21 +194,23 @@ function initializeQuiz() {
     const aptitude = uniqueQuestionsList.filter(q => q.category === "Aptitude");
     const comm = uniqueQuestionsList.filter(q => q.category === "Communication");
 
-    // 3. Balanced assembly: 5 Language specific, 3 Aptitude, 2 Communication = 10 total
-    const selectedLang = shuffleArray([...langSpecific]).slice(0, 5);
-    const selectedApt = shuffleArray([...aptitude]).slice(0, 3);
-    const selectedComm = shuffleArray([...comm]).slice(0, 2);
+    // 3. Balanced assembly: 3 Language + 1 Aptitude + 1 Communication = 5 total
+    const selectedLang = pickUnique(langSpecific, 3);
+    const selectedApt  = pickUnique(aptitude, 1);
+    const selectedComm = pickUnique(comm, 1);
 
     let combined = [...selectedLang, ...selectedApt, ...selectedComm];
 
-    // Fallback if any section is short
-    if (combined.length < 10) {
-      const remainingNeeded = 10 - combined.length;
-      const unused = uniqueQuestionsList.filter(q => !combined.includes(q));
-      combined = combined.concat(shuffleArray(unused).slice(0, remainingNeeded));
+    // Fallback: fill remaining slots with unused questions (no repeats)
+    if (combined.length < 5) {
+        const remainingNeeded = 5 - combined.length;
+        const unused = uniqueQuestionsList.filter(q => !usedSet.has(q));
+        const extras = pickUnique(unused, remainingNeeded);
+        combined = combined.concat(extras);
     }
 
-    quizQuestions = shuffleArray(combined).slice(0, 10);
+    quizQuestions = shuffleArray(combined).slice(0, 5);
+    console.log("✅ Quiz initialized with", quizQuestions.length, "questions");
     
     // 4. Shuffle options for each selected question
     quizQuestions.forEach(q => {
@@ -201,7 +219,7 @@ function initializeQuiz() {
 
     answers = new Array(quizQuestions.length).fill(null);
     currentQuestion = 0;
-    timeLeft = 10 * 60; // 10 minutes
+    timeLeft = 5 * 60; // 5 minutes
 
     showQuestion();
     startTimer();
