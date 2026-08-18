@@ -95,6 +95,30 @@ export class QuestionService {
         idealAnswer: "Web performance can be optimized in several ways: 1) Asset optimization (compressing images, minifying CSS/JS). 2) Code splitting and lazy loading of React components to reduce bundle size. 3) Utilizing CDNs and browser caching headers. 4) Minimizing render-blocking resources and critical path rendering.",
         missingPoints: ["Critical rendering path", "Code splitting / lazy loading", "CDN deployment advantages"],
         improvementSuggestions: ["Categorize your answer into Network, Asset, and Render optimizations.", "Mention metrics like First Contentful Paint (FCP)."]
+      },
+      {
+        text: "What is the event loop in JavaScript and how does async handling work?",
+        level: "EASY",
+        keywords: ["event loop", "call stack", "task queue", "microtasks", "promises"],
+        idealAnswer: "The JavaScript event loop monitors the Call Stack and Callback Queue. When the Call Stack is empty, it moves pending callbacks from the Microtask Queue (Promises) first, and then the Macrotask Queue (setTimeout) into the stack.",
+        missingPoints: ["Call Stack state", "Microtask vs Macrotask priority", "Single-threaded nature"],
+        improvementSuggestions: ["Differentiate Promise microtasks from setTimeout macrotasks."]
+      },
+      {
+        text: "Compare CSS Flexbox and CSS Grid layout models and when to use each.",
+        level: "MEDIUM",
+        keywords: ["flexbox", "grid", "one-dimensional", "two-dimensional", "layout"],
+        idealAnswer: "Flexbox is designed for one-dimensional layouts (a row OR a column), ideal for alignment and small component positioning. CSS Grid is built for two-dimensional layouts (rows AND columns simultaneously), perfect for overall page structure.",
+        missingPoints: ["1D vs 2D structural layout differences", "Alignment flexibility", "Page vs Component scoping"],
+        improvementSuggestions: ["Highlight 1D vs 2D design intentions."]
+      },
+      {
+        text: "What is server-side rendering (SSR) vs client-side rendering (CSR)?",
+        level: "ADVANCED",
+        keywords: ["ssr", "csr", "hydration", "seo", "nextjs", "initial load"],
+        idealAnswer: "In CSR, the browser downloads a minimal HTML file and renders HTML dynamically via JavaScript. In SSR, the server pre-renders HTML on each request, delivering fully populated HTML to the client for better SEO and faster Initial Contentful Paint.",
+        missingPoints: ["SEO impact", "Hydration step", "Server load trade-offs"],
+        improvementSuggestions: ["Explain the hydration process clearly."]
       }
     ],
     backend: [
@@ -102,7 +126,7 @@ export class QuestionService {
         text: "What is the difference between REST APIs and GraphQL?",
         level: "EASY",
         keywords: ["rest", "graphql", "endpoints", "over-fetching", "single endpoint"],
-        idealAnswer: "REST is architectural pattern where each resource has a specific URL/endpoint. GraphQL is a query language that allows clients to request exactly the data they need from a single endpoint, solving issues like over-fetching and under-fetching.",
+        idealAnswer: "REST is an architectural pattern where each resource has a specific URL/endpoint. GraphQL is a query language that allows clients to request exactly the data they need from a single endpoint, solving issues like over-fetching and under-fetching.",
         missingPoints: ["Over-fetching / Under-fetching solutions", "Single endpoint routing", "Multiple HTTP verbs usage in REST"],
         improvementSuggestions: ["Contrast the resource-centric view of REST with the graph schema of GraphQL.", "Mention caching implications."]
       },
@@ -121,6 +145,30 @@ export class QuestionService {
         idealAnswer: "Microservices split a monolithic application into small, independent, and loosely coupled services that govern separate domain contexts. They communicate synchronously using REST/HTTP or gRPC, or asynchronously using message brokers like RabbitMQ or Kafka.",
         missingPoints: ["Domain-driven design", "Message brokers (Kafka/RabbitMQ)", "Synchronous vs Asynchronous communications"],
         improvementSuggestions: ["Explain loose coupling.", "Briefly cover service discovery and API gateways."]
+      },
+      {
+        text: "What is the CAP Theorem in distributed system design?",
+        level: "EASY",
+        keywords: ["consistency", "availability", "partition tolerance", "cap theorem", "trade-offs"],
+        idealAnswer: "CAP theorem states that a distributed system can guarantee at most two out of three properties simultaneously: Consistency (all nodes see same data), Availability (every request receives a response), and Partition Tolerance (system operates despite network breaks).",
+        missingPoints: ["Partition tolerance is mandatory in network failure", "CP vs AP classification"],
+        improvementSuggestions: ["Give examples of CP vs AP databases like MongoDB vs Cassandra."]
+      },
+      {
+        text: "Explain Connection Pooling in relational databases.",
+        level: "MEDIUM",
+        keywords: ["connection pool", "database connection", "overhead", "reuse", "concurrency"],
+        idealAnswer: "Connection pooling maintains a cache of open database connections that can be reused across requests, avoiding the expensive overhead of creating and tearing down TCP connections for every query.",
+        missingPoints: ["TCP handshake cost", "Resource consumption limit", "Pool sizing management"],
+        improvementSuggestions: ["Discuss how unreleased connections cause connection leaks."]
+      },
+      {
+        text: "How do you handle authentication securely using JWT (JSON Web Tokens)?",
+        level: "ADVANCED",
+        keywords: ["jwt", "signature", "httponly cookie", "xss", "refresh token", "stateless"],
+        idealAnswer: "JWT allows stateless authentication. The server signs a payload with a secret key and sends it to the client. Secure implementations store access tokens in short-lived memory or HTTP-Only cookies to protect against XSS, and use refresh tokens stored securely for token rotation.",
+        missingPoints: ["HTTP-Only cookie protection against XSS", "Stateless verification", "Token revocation strategy"],
+        improvementSuggestions: ["Explain token structure: Header, Payload, Signature."]
       }
     ],
     ai_ml: [
@@ -147,6 +195,48 @@ export class QuestionService {
         idealAnswer: "Overfitting occurs when a neural network memorizes noise in the training dataset and fails to generalize to unseen test data. To prevent it, we use: 1) Dropout (randomly turning off neurons). 2) L1/L2 Regularization (penalizing large weights). 3) Early stopping based on validation loss. 4) Data augmentation.",
         missingPoints: ["Generalization error", "Dropout mechanism", "Early stopping boundaries"],
         improvementSuggestions: ["State the symptom: high training accuracy, low validation accuracy.", "Discuss regularization techniques clearly."]
+      },
+      {
+        text: "What is the difference between Precision and Recall in model evaluation?",
+        level: "EASY",
+        keywords: ["precision", "recall", "false positive", "false negative", "f1-score"],
+        idealAnswer: "Precision measures out of all positive predictions, how many were actually correct (True Positives / (True Positives + False Positives)). Recall measures out of all actual positive cases, how many the model identified (True Positives / (True Positives + False Negatives)).",
+        missingPoints: ["False positive vs False negative trade-off", "F1-score harmonic mean"],
+        improvementSuggestions: ["Give a medical diagnosis example to illustrate recall importance."]
+      },
+      {
+        text: "Explain the Transformer architecture and self-attention mechanism.",
+        level: "ADVANCED",
+        keywords: ["transformer", "self-attention", "query key value", "positional encoding", "llm"],
+        idealAnswer: "Transformers replace sequential RNNs by processing sequence elements in parallel using Self-Attention. Self-attention computes attention weights using Query, Key, and Value vectors, allowing each token to dynamically focus on all other tokens in the context window regardless of distance.",
+        missingPoints: ["Query Key Value dot products", "Parallelization over RNNs", "Positional encoding requirement"],
+        improvementSuggestions: ["Explain why positional encoding is needed since attention is permutation-invariant."]
+      }
+    ],
+    devops: [
+      {
+        text: "What is Containerization vs Virtualization?",
+        level: "EASY",
+        keywords: ["docker", "container", "virtual machine", "hypervisor", "kernel sharing"],
+        idealAnswer: "Virtualization runs multiple complete Guest OS instances on top of a Hypervisor. Containerization packages an application and its dependencies into lightweight containers that share the host OS kernel, resulting in faster startup times and lower resource consumption.",
+        missingPoints: ["Shared OS kernel", "Hypervisor overhead in VMs", "Resource isolation"],
+        improvementSuggestions: ["Emphasize startup speed and lightweight memory footprints of Docker."]
+      },
+      {
+        text: "Explain how CI/CD pipelines automate testing and deployment.",
+        level: "MEDIUM",
+        keywords: ["ci/cd", "pipeline", "github actions", "docker build", "automation"],
+        idealAnswer: "A CI/CD pipeline triggers automatically on code pushes. The Continuous Integration stage builds artifacts and runs automated linting and unit tests. The Continuous Delivery stage automatically deploys passed builds to staging/production environments.",
+        missingPoints: ["Automated testing feedback loops", "Artifact repository storage", "Rollback readiness"],
+        improvementSuggestions: ["Mention stages: Lint -> Build -> Test -> Deploy."]
+      },
+      {
+        text: "What is Kubernetes and how does it manage container orchestration?",
+        level: "ADVANCED",
+        keywords: ["kubernetes", "pods", "deployments", "auto-scaling", "self-healing"],
+        idealAnswer: "Kubernetes is a container orchestration platform that manages container lifecycle, auto-scaling, load balancing, and self-healing (restarting failed containers). It defines applications declaratively via YAML manifests using constructs like Pods, Deployments, and Services.",
+        missingPoints: ["Declarative state reconciliation", "Self-healing restarts", "Service discovery"],
+        improvementSuggestions: ["Describe control plane components like kube-apiserver and etcd."]
       }
     ],
     generic: [
@@ -173,6 +263,30 @@ export class QuestionService {
         idealAnswer: "CI/CD stands for Continuous Integration and Continuous Delivery/Deployment. It involves setting up automated pipelines that run code linting, unit tests, and integrations on every push, then automatically deploy build artifacts to server environments. This reduces human error and accelerates release cycles.",
         missingPoints: ["Automated testing suites", "Artifact deployment", "Feedback loops"],
         improvementSuggestions: ["Define CI and CD separately first.", "Explain the concept of build pipelines."]
+      },
+      {
+        text: "Explain the difference between process and thread in operating systems.",
+        level: "EASY",
+        keywords: ["process", "thread", "memory space", "context switching", "concurrency"],
+        idealAnswer: "A process is an independent executing program with its own dedicated memory space. A thread is a lightweight execution unit inside a process that shares memory and resources with other threads in the same process.",
+        missingPoints: ["Memory sharing vs Isolation", "Context switching cost differences"],
+        improvementSuggestions: ["Highlight IPC (Inter-Process Communication) vs Shared Memory."]
+      },
+      {
+        text: "What are SOLID design principles in software engineering?",
+        level: "MEDIUM",
+        keywords: ["single responsibility", "open closed", "liskov substitution", "interface segregation", "dependency inversion"],
+        idealAnswer: "SOLID consists of 5 principles: Single Responsibility, Open/Closed (extendable without modification), Liskov Substitution (subtypes must be substitutable for base types), Interface Segregation (focused interfaces), and Dependency Inversion (depend on abstractions).",
+        missingPoints: ["Explanation of all 5 acronym letters", "Maintainability benefits"],
+        improvementSuggestions: ["Explain Single Responsibility and Open/Closed with clear examples."]
+      },
+      {
+        text: "Explain how DNS resolution works when you type a URL into a browser.",
+        level: "ADVANCED",
+        keywords: ["dns", "a record", "root server", "tld server", "recursive resolver", "ip lookup"],
+        idealAnswer: "The browser checks local cache -> Recursive DNS resolver -> Root DNS server -> TLD (.com) server -> Authoritative Name Server to fetch the IP address mapped to the domain name, allowing the browser to initiate a TCP handshake.",
+        missingPoints: ["Recursive resolver path", "Root and TLD server hierarchy", "Caching layers"],
+        improvementSuggestions: ["Trace the step-by-step resolution path."]
       }
     ]
   };
@@ -254,7 +368,7 @@ export class QuestionService {
     return this.getLocalTechnicalQuestions(profile, count);
   }
 
-  static getLocalTechnicalQuestions(profile, count) {
+  static getLocalTechnicalQuestions(profile, count = 5) {
     const selectedRole = profile?.selectedRole || "Software Engineer";
     const roleLower = selectedRole.toLowerCase();
 
@@ -265,17 +379,26 @@ export class QuestionService {
       category = "backend";
     } else if (roleLower.includes("machine") || roleLower.includes("ai") || roleLower.includes("nlp") || roleLower.includes("vision") || roleLower.includes("data") || roleLower.includes("science")) {
       category = "ai_ml";
+    } else if (roleLower.includes("devops") || roleLower.includes("cloud") || roleLower.includes("docker") || roleLower.includes("kubernetes")) {
+      category = "devops";
     }
 
     const primaryPool = this.QUESTIONS_DB[category] || this.QUESTIONS_DB["generic"];
     const genericPool = this.QUESTIONS_DB["generic"];
-    const combinedPool = [...primaryPool, ...genericPool];
+    
+    // Combine primary pool first, then generic pool
+    const combinedPool = [...primaryPool];
+    genericPool.forEach(q => {
+      if (!combinedPool.some(existing => existing.text === q.text)) {
+        combinedPool.push(q);
+      }
+    });
 
     const picked = [];
     const used = new Set();
 
-    const addQuestion = (level) => {
-      let matches = combinedPool.filter(q => q.level === level && !used.has(q.text));
+    const addQuestion = (preferredLevel) => {
+      let matches = combinedPool.filter(q => q.level === preferredLevel && !used.has(q.text));
       if (matches.length === 0) {
         matches = combinedPool.filter(q => !used.has(q.text));
       }
@@ -292,10 +415,13 @@ export class QuestionService {
     addQuestion("MEDIUM");
     addQuestion("ADVANCED");
 
-    // Ensure we return the correct count
+    // Strictly enforce NO duplicates during fill
     while (picked.length < count) {
-      const fallbackItem = combinedPool[Math.floor(Math.random() * combinedPool.length)];
+      const remainingUnused = combinedPool.filter(q => !used.has(q.text));
+      if (remainingUnused.length === 0) break; // All available pool questions picked
+      const fallbackItem = remainingUnused[Math.floor(Math.random() * remainingUnused.length)];
       picked.push(this.normalizeQuestion(fallbackItem, "Technical"));
+      used.add(fallbackItem.text);
     }
 
     return picked.slice(0, count).map((q, idx) => ({ ...q, index: idx + 1 }));
@@ -325,7 +451,7 @@ export class QuestionService {
     return this.getLocalHrQuestions(count);
   }
 
-  static getLocalHrQuestions(count) {
+  static getLocalHrQuestions(count = 5) {
     const hrBank = [
       {
         text: "Tell me about yourself and your background.",
@@ -366,16 +492,40 @@ export class QuestionService {
         idealAnswer: "In five years, I see myself as a senior technical contributor or system lead, possessing deep expertise in engineering architectures. I plan to take on larger code ownership tasks and mentor junior engineers, while continuously contributing to the growth of this organization.",
         missingPoints: ["Professional skill growth goals", "Leadership/Mentorship targets", "Longevity signal with company"],
         improvementSuggestions: ["Balance technical skill acquisition with leadership/collaboration goals."]
+      },
+      {
+        text: "How do you handle tight deadlines or severe work pressure?",
+        level: "BEHAVIOURAL",
+        keywords: ["pressure", "prioritization", "time management", "communication", "calm"],
+        idealAnswer: "When faced with tight deadlines, I start by prioritizing tasks based on urgency and business impact using the Eisenhower Matrix. I break down large deliverables into actionable daily sub-tasks, communicate proactively with stakeholders if delays seem probable, and stay focused by eliminating non-essential distractions.",
+        missingPoints: ["Task prioritization framework", "Proactive stakeholder communication", "Stress management techniques"],
+        improvementSuggestions: ["Give a concrete example using the STAR method."]
+      },
+      {
+        text: "Describe a scenario where you had to adapt quickly to a major change in a project.",
+        level: "BEHAVIOURAL",
+        keywords: ["adaptability", "flexibility", "change", "agile", "resilience"],
+        idealAnswer: "Midway through a project, client requirements shifted from a REST backend to GraphQL. Instead of being frustrated, I quickly read through GraphQL tutorials, refactored our query schemas, and led a 30-minute knowledge-sharing session for my team to ensure a seamless transition without missing our release milestone.",
+        missingPoints: ["Positive attitude towards change", "Speed of skill acquisition", "Team alignment"],
+        improvementSuggestions: ["Highlight how your proactive attitude saved project timeline."]
+      },
+      {
+        text: "What is your biggest weakness and how are you working to overcome it?",
+        level: "BEHAVIOURAL",
+        keywords: ["weakness", "self-awareness", "improvement", "growth mindset"],
+        idealAnswer: "My biggest weakness used to be saying yes to too many tasks simultaneously, which occasionally led to burnout. I recognised this and started using task management boards like Trello to set strict daily work limits and communicate realistic capacity boundaries to project leads.",
+        missingPoints: ["Genuine non-fatal weakness", "Actionable steps taken for improvement", "Self-awareness indicator"],
+        improvementSuggestions: ["Ensure the weakness is authentic and focus mostly on your self-improvement steps."]
       }
     ];
 
-    const mapped = hrBank.map(q => this.normalizeQuestion(q, "HR"));
-    
-    while (mapped.length < count) {
-      mapped.push(this.normalizeQuestion(null, "HR"));
-    }
+    const shuffled = [...hrBank].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, count).map((q, idx) => ({
+      ...this.normalizeQuestion(q, "HR"),
+      index: idx + 1
+    }));
 
-    return mapped.slice(0, count).map((q, idx) => ({ ...q, index: idx + 1 }));
+    return selected;
   }
 
   static async getFollowUpQuestion(questionText, answerText, previousContext = [], round = 'technical') {
