@@ -1,8 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://owhsjcqhnnsjirrpypds.supabase.co';
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || 'sb_publishable_a0KhOgRRcqNJSAq4H8ieKw_fIWRausn';
-
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://bclvjalagjcnsvsxhvjf.supabase.co';
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || 'sb_publishable_2heEolPKVf0XdYAKeVQMhQ_30vsCH8_'
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
 });
@@ -171,25 +170,36 @@ export async function requireUser() {
 
 // -------- Resume data (Supabase + Local storage fallback) --------
 export async function saveResumeData(userId, resumeDoc) {
+  const isDemoUser = typeof userId === 'string' && (userId.startsWith('local-') || userId.startsWith('demo-'));
+  if (isDemoUser) {
+    toast('Using local browser session. Please check your connection or sign in again to sync to cloud.', 'warning');
+  }
   try {
     const { error } = await supabase
       .from('resumes')
       .upsert({ user_id: userId, ...resumeDoc, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
     if (!error) return;
+    console.warn('Supabase saveResumeData error:', error);
+    toast('Cloud sync issue — saved to local storage. Please check your connection or sign in again.', 'warning');
   } catch (e) {
     console.warn('Supabase saveResumeData fallback to localStorage:', e);
+    toast('Cloud server unreachable — saved locally. Please check your connection.', 'warning');
   }
   localStorage.setItem('demo_resume_' + userId, JSON.stringify(resumeDoc));
 }
 
 export async function getResumeData(userId) {
+  const isDemoUser = typeof userId === 'string' && (userId.startsWith('local-') || userId.startsWith('demo-'));
   try {
-    const { data, error } = await supabase
-      .from('resumes')
-      .select('*')
-      .eq('user_id', userId)
-      .maybeSingle();
-    if (!error && data) return data;
+    if (!isDemoUser) {
+      const { data, error } = await supabase
+        .from('resumes')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle();
+      if (!error && data) return data;
+      if (error) console.warn('Supabase getResumeData error:', error);
+    }
   } catch (e) {
     console.warn('Supabase getResumeData fallback to localStorage:', e);
   }

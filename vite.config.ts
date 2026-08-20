@@ -7,9 +7,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, resolve(__dirname, "../"), "");
+  const env = loadEnv(mode, __dirname, "");
   
-  const OPENAI_API_KEY = env.OPENAI_API_KEY || process.env.OPENAI_API_KEY || "";
+  const OPENAI_API_KEY = env.OPENAI_API_KEY || env.OPENAI_KEY || process.env.OPENAI_API_KEY || process.env.OPENAI_KEY || "";
   const GEMINI_API_KEY = env.GEMINI_API_KEY || process.env.GEMINI_API_KEY || "";
 
   // Helper to read JSON request bodies safely in Node middleware
@@ -27,13 +27,16 @@ export default defineConfig(({ mode }) => {
     });
   }
 
-  // Clean LLM JSON outputs (strip markdown code blocks and extract JSON structure)
-  function cleanJsonOutput(output: string): string {
+  // Clean LLM JSON outputs (strip markdown code blocks and extract JSON structure based on expected target type)
+  function cleanJsonOutput(output: string, expectedType: 'array' | 'object' = 'object'): string {
     let clean = output.replace(/```json/gi, "").replace(/```/g, "").trim();
-    const arrayMatch = clean.match(/\[[\s\S]*\]/);
-    if (arrayMatch) return arrayMatch[0];
-    const objectMatch = clean.match(/\{[\s\S]*\}/);
-    if (objectMatch) return objectMatch[0];
+    if (expectedType === 'array') {
+      const arrayMatch = clean.match(/\[[\s\S]*\]/);
+      if (arrayMatch) return arrayMatch[0];
+    } else {
+      const objectMatch = clean.match(/\{[\s\S]*\}/);
+      if (objectMatch) return objectMatch[0];
+    }
     return clean;
   }
 
@@ -113,7 +116,7 @@ export default defineConfig(({ mode }) => {
               }`;
 
               const output = await generateLLMText(prompt, "You are a professional technical interviewer who only outputs valid JSON arrays.");
-              const cleanOutput = cleanJsonOutput(output);
+              const cleanOutput = cleanJsonOutput(output, 'array');
               
               // Validate that the output is indeed a parsable JSON array
               try {
@@ -162,49 +165,66 @@ export default defineConfig(({ mode }) => {
                 return res.end(JSON.stringify({ error: "API_KEYS_MISSING" }));
               }
 
-              const prompt = `Evaluate this ${round} interview performance for a ${selectedRole} position.
-              Interview Q&As: ${JSON.stringify(answers)}
-              
-              Calculate overall score, role readiness, metrics, strengths, weaknesses, suggested resources, and scores out of 10 for each question.
-              
-              You MUST return a raw JSON object (no markdown blocks, no enclosing backticks) with the schema:
-              {
-                "type": "${round === "hr" ? "HR" : "Technical"}",
-                "selectedRole": "${selectedRole}",
-                "overallScore": 82,
-                "roleReadinessScore": 82,
-                "hiringRecommendation": "STRONG HIRE" | "HIRE" | "NEEDS PRACTICE",
-                "strengths": ["strength 1", "strength 2"],
-                "weakAreas": ["weakness 1", "weakness 2"],
-                "recommendedTopics": ["topic 1", "topic 2"],
-                "suggestedResources": [{"title": "resource title", "type": "Docs" | "Course"}],
-                "recommendedPractice": ["STAR Method", "Pacing"],
-                "answers": [
-                  {
-                    "question": "Q1 text",
-                    "answer": "Candidate answer",
-                    "keywords": ["key 1"],
-                    "matched": ["key 1"],
-                    "coverageScore": 90,
-                    "idealAnswer": "Sample response text",
-                    "missingPoints": ["missed point 1"],
-                    "improvementSuggestions": ["tip 1"],
-                    "scores": {
-                      "accuracy": 8,
-                      "communication": 8,
-                      "confidence": 7,
-                      "completeness": 8,
-                      "clarity": 8,
-                      "problemSolving": 7
-                    },
-                    "followUpQuestion": "follow-up text",
-                    "followUpAnswer": "candidate follow-up response"
-                  }
-                ]
-              }`;
+              const isHrRound = round === "hr";
+              const prompt = `You are an expert ${isHrRound ? "HR" : "technical"} interviewer. Evaluate the following ${round} job interview for the role of ${selectedRole}.
+
+CANDIDATE TRANSCRIPT:
+${JSON.stringify(answers, null, 2)}
+
+INSTRUCTIONS:
+- Read every question and the candidate's actual answer carefully.
+- Score each answer individually based on its actual content.
+- Do NOT use placeholder or example values. Compute all scores from the transcript above.
+- Overall score must reflect the candidate's actual performance (0-100).
+- If the candidate says "I don't know" or gives a blank/irrelevant answer, score that question low (1-4 out of 10).
+- If the candidate gives a strong, detailed answer, score it high (8-10 out of 10).
+
+Return ONLY a valid JSON object with this exact structure (no markdown, no backticks):
+{
+  "type": "${isHrRound ? "HR" : "Technical"}",
+  "selectedRole": "${selectedRole}",
+  "overallScore": <integer 0-100 based on candidate performance>,
+  "roleReadinessScore": <integer 0-100>,
+  "hiringRecommendation": <"STRONG HIRE" if overallScore>=80, "HIRE" if >=60, "NEEDS PRACTICE" if below 60>,
+  "verdict": <"Excellent" if >=85, "Interview Ready" if >=70, "Needs Minor Improvement" if >=55, "Needs More Practice" if below 55>,
+  "strengths": [<4 to 6 specific strengths observed in the candidate's actual answers>],
+  "weakAreas": [<2 to 4 specific weaknesses from the actual answers — be precise>],
+  "recommendedTopics": [<topics the candidate clearly struggled with or did not mention>],
+  "suggestedResources": [{"title": <resource name>, "type": "Docs" or "Course"}],
+  "recommendedPractice": [<specific practice methods based on weak areas>],
+  "metrics": {
+    "technicalKnowledge": <integer 0-100>,
+    "communication": <integer 0-100>,
+    "confidence": <integer 0-100>,
+    "problemSolving": <integer 0-100>,
+    "behavioralSkills": <integer 0-100>
+  },
+  "answers": [
+    {
+      "question": <exact question text from transcript>,
+      "answer": <exact candidate answer from transcript>,
+      "keywords": [<2-5 key concepts this question should cover>],
+      "matched": [<which keywords the candidate actually mentioned>],
+      "coverageScore": <integer 0-100 — what % of expected concepts were covered>,
+      "idealAnswer": <a concise expert-level model answer for this question>,
+      "missingPoints": [<specific concepts the candidate missed or got wrong>],
+      "improvementSuggestions": [<actionable, specific suggestions for this answer>],
+      "scores": {
+        "accuracy": <integer 1-10>,
+        "communication": <integer 1-10>,
+        "confidence": <integer 1-10>,
+        "completeness": <integer 1-10>,
+        "clarity": <integer 1-10>,
+        "problemSolving": <integer 1-10>
+      },
+      "followUpQuestion": <the follow-up question asked, or empty string>,
+      "followUpAnswer": <the candidate's follow-up answer, or empty string>
+    }
+  ]
+}`;
 
               const output = await generateLLMText(prompt, "You are an expert technical interviewer and senior talent manager who only outputs valid JSON.");
-              const cleanOutput = cleanJsonOutput(output);
+              const cleanOutput = cleanJsonOutput(output, 'object');
               try {
                 JSON.parse(cleanOutput);
                 return res.end(cleanOutput);
@@ -221,7 +241,7 @@ export default defineConfig(({ mode }) => {
 
               if (!OPENAI_API_KEY) {
                 res.statusCode = 400;
-                return res.end(JSON.stringify({ error: "OPENAI_KEY_MISSING" }));
+                return res.end(JSON.stringify({ error: "OPENAI_KEY_MISSING", message: "OPENAI_API_KEY or OPENAI_KEY missing in server environment" }));
               }
 
               const response = await fetch("https://api.openai.com/v1/audio/speech", {
@@ -238,7 +258,10 @@ export default defineConfig(({ mode }) => {
               });
 
               if (!response.ok) {
-                throw new Error("OpenAI TTS failed");
+                const errTxt = await response.text().catch(() => "");
+                console.error("OpenAI TTS API error:", response.status, errTxt);
+                res.statusCode = response.status;
+                return res.end(JSON.stringify({ error: "OPENAI_TTS_FAILED", message: errTxt }));
               }
 
               const arrayBuffer = await response.arrayBuffer();
@@ -253,7 +276,7 @@ export default defineConfig(({ mode }) => {
               const { audio, filename } = body;
 
               if (!OPENAI_API_KEY) {
-                return res.end(JSON.stringify({ error: "OPENAI_KEY_MISSING" }));
+                return res.end(JSON.stringify({ error: "OPENAI_KEY_MISSING", message: "OPENAI_API_KEY or OPENAI_KEY missing in server environment" }));
               }
 
               const audioBuffer = Buffer.from(audio, "base64");
@@ -292,7 +315,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     root: "public",
-    envDir: "../",
+    envDir: "./",
     plugins: [apiMiddlewarePlugin],
     build: {
       rollupOptions: {

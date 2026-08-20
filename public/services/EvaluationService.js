@@ -27,11 +27,21 @@ export class EvaluationService {
       body: JSON.stringify({ selectedRole, round: "technical", answers })
     });
 
-    if (data && !data.error && Array.isArray(data.answers)) {
-      return {
-        ...data,
-        date: new Date().toLocaleDateString()
-      };
+    if (data && !data.error) {
+      if (Array.isArray(data.answers)) {
+        return {
+          ...data,
+          date: data.date || new Date().toLocaleDateString()
+        };
+      } else if (Array.isArray(data)) {
+        // Handle case where LLM returned array of answer evaluations directly
+        const local = this.getLocalTechnicalEvaluation(questions, answers, selectedRole);
+        return {
+          ...local,
+          answers: data,
+          date: new Date().toLocaleDateString()
+        };
+      }
     }
 
     console.warn("LLM evaluation failed or returned invalid format, falling back to local technical analysis:", data);
@@ -137,13 +147,20 @@ export class EvaluationService {
     const accuracy = Math.min(100, Math.max(35, Math.round(keywordMatchPct)));
     const communication = Math.min(100, Math.max(40, Math.round(Math.min(80, wordCountSum / 6) + 20)));
     const confidence = Math.min(100, Math.max(40, Math.round(90 - Math.abs(20 - averageResponseTime) * 1.2)));
+    const behavioralSkills = Math.min(100, Math.max(40, Math.round((communication + confidence) / 2)));
     
     const overallScore = Math.round((technicalKnowledge + problemSolving + accuracy + communication + confidence) / 5);
     const roleReadinessScore = overallScore;
 
+    const verdict = overallScore >= 85 ? "Excellent" :
+                    overallScore >= 70 ? "Interview Ready" :
+                    overallScore >= 55 ? "Needs Minor Improvement" : "Needs More Practice";
+
     const strengths = [
       `Demonstrates familiarity with ${selectedRole} domain concepts.`,
-      wordCountSum > 100 ? "Communicates responses with substantial depth and length." : "Direct and concise answering style."
+      wordCountSum > 100 ? "Communicates responses with substantial depth and length." : "Direct and concise answering style.",
+      communication >= 65 ? "Articulates ideas in a structured and understandable manner." : "Attempts to structure responses logically.",
+      confidence >= 65 ? "Maintains confident delivery throughout the session." : "Shows potential to grow in confidence with more practice."
     ];
     const weakAreas = [
       totalMatchedKeywords < totalKeywordsCount ? "Missed some essential technical keywords and deep dive concepts." : "Could improve speed of structured technical delivery.",
@@ -156,19 +173,21 @@ export class EvaluationService {
     ];
 
     const hiringRecommendation = overallScore >= 80 ? "STRONG HIRE" :
-                                 overallScore >= 60 ? "HIRE (With minor training)" : "NEEDS PRACTICE";
+                                 overallScore >= 60 ? "HIRE" : "NEEDS PRACTICE";
 
     return {
       type: 'Technical',
       selectedRole,
       overallScore,
       roleReadinessScore,
+      verdict,
       metrics: {
         technicalKnowledge,
         problemSolving,
         accuracy,
         communication,
         confidence,
+        behavioralSkills,
         averageResponseTime
       },
       strengths,
@@ -189,11 +208,20 @@ export class EvaluationService {
       body: JSON.stringify({ selectedRole: "General HR Role", round: "hr", answers })
     });
 
-    if (data && !data.error && Array.isArray(data.answers)) {
-      return {
-        ...data,
-        date: new Date().toLocaleDateString()
-      };
+    if (data && !data.error) {
+      if (Array.isArray(data.answers)) {
+        return {
+          ...data,
+          date: data.date || new Date().toLocaleDateString()
+        };
+      } else if (Array.isArray(data)) {
+        const local = this.getLocalHrEvaluation(questions, answers);
+        return {
+          ...local,
+          answers: data,
+          date: new Date().toLocaleDateString()
+        };
+      }
     }
 
     console.warn("LLM evaluation failed or returned invalid format, falling back to local HR analysis:", data);
@@ -297,8 +325,24 @@ export class EvaluationService {
     const overallScore = Math.round((communication + confidence + leadership + professionalism + teamwork + adaptability) / 6);
     const roleReadinessScore = overallScore;
 
-    const strengths = ["Articulate delivery with clear professional tone.", "Strong adaptability in responding to interview prompts."];
-    const weaknesses = ["Include more quantifiable metrics when discussing achievements."];
+    const behavioralSkills = Math.round((leadership + teamwork + adaptability) / 3);
+    const technicalKnowledge = Math.min(100, Math.max(40, Math.round(keywordMatchPct * 0.6 + 40)));
+    const problemSolving = Math.min(100, Math.max(40, Math.round((leadership + adaptability) / 2)));
+
+    const verdict = overallScore >= 85 ? "Excellent" :
+                    overallScore >= 70 ? "Interview Ready" :
+                    overallScore >= 55 ? "Needs Minor Improvement" : "Needs More Practice";
+
+    const strengths = [
+      "Articulate delivery with clear professional tone.",
+      communication >= 65 ? "Communicates ideas clearly and with good structure." : "Attempts to structure responses logically.",
+      confidence >= 65 ? "Demonstrates steady confidence throughout the interview." : "Shows willingness to engage with all questions.",
+      leadership >= 65 ? "Shows clear ownership and initiative in past experiences." : "Demonstrates awareness of team dynamics."
+    ];
+    const weaknesses = [
+      "Include more quantifiable metrics when discussing achievements.",
+      keywordMatchPct < 50 ? "Responses lack coverage of key behavioral themes (STAR method)." : "Deepen responses with more specific outcome-driven examples."
+    ];
     const recommendations = ["Practice speaking out loud using the STAR method (Situation, Task, Action, Result)."];
     const recommendedPractice = ["STAR Method Storytelling", "Executive Presence & Pacing"];
 
@@ -309,13 +353,18 @@ export class EvaluationService {
       type: 'HR',
       overallScore,
       roleReadinessScore,
+      verdict,
       metrics: {
+        technicalKnowledge,
+        problemSolving,
         communication,
         confidence,
+        behavioralSkills,
         leadership,
         professionalism,
         teamwork,
-        adaptability
+        adaptability,
+        averageResponseTime
       },
       strengths,
       weaknesses,

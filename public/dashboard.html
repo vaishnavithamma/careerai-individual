@@ -3120,13 +3120,18 @@
   function stopWaveform() {
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     if (audioCtx) {
-      try {
-        audioCtx.close();
-      } catch (e) {}
+      if (audioCtx.state !== 'closed') {
+        try {
+          audioCtx.close().catch(() => {});
+        } catch (e) {}
+      }
+      audioCtx = null;
     }
     const canvas = document.getElementById('miWaveformCanvas');
-    const canvasCtx = canvas.getContext('2d');
-    drawFlatLine(canvas, canvasCtx);
+    if (canvas) {
+      const canvasCtx = canvas.getContext('2d');
+      if (canvasCtx) drawFlatLine(canvas, canvasCtx);
+    }
   }
 
   // Timer Helper
@@ -3408,7 +3413,8 @@
     };
 
     // Safety timeout: if TTS stalls or browser speech synthesis hangs, advance automatically
-    const maxWaitMs = Math.min(Math.max((text.length / 12) * 1000, 3000), 8000);
+    // Allow appropriate time based on text length (~8 chars per second, min 10s, max 45s)
+    const maxWaitMs = Math.min(Math.max((text.length / 8) * 1000, 10000), 45000);
     const safetyTimer = setTimeout(() => {
       console.warn("TTS playback timeout - advancing interview workflow.");
       ttsService.cancel();

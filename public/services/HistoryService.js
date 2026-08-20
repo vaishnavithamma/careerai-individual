@@ -12,10 +12,12 @@ export class HistoryService {
       created_at: new Date().toISOString()
     };
 
+    const isDemoUser = typeof userId === 'string' && (userId.startsWith('local-') || userId.startsWith('demo-'));
+
     // Try Supabase first
     try {
-      const { supabase } = await import('/app.js');
-      if (supabase && typeof supabase.from === 'function') {
+      const { supabase, toast } = await import('/app.js');
+      if (supabase && typeof supabase.from === 'function' && !isDemoUser) {
         const { error } = await supabase
           .from('interview_history')
           .insert(record);
@@ -26,6 +28,11 @@ export class HistoryService {
           return;
         }
         console.warn("Supabase interview history save error:", error);
+        if (typeof toast === 'function') {
+          toast("Cloud sync error — interview saved to local storage. Please check your connection or sign in again.", "warning");
+        }
+      } else if (isDemoUser && typeof toast === 'function') {
+        toast("Using local browser session — interview saved locally. Please check your connection or sign in again to sync.", "warning");
       }
     } catch (e) {
       console.warn("Supabase not available or failed, falling back to LocalStorage:", e);
@@ -75,6 +82,9 @@ export class HistoryService {
             date: row.date || new Date().toLocaleDateString(),
             report_data: row.report_data || row
           }));
+        }
+        if (error) {
+          console.warn("Supabase interview_history table missing or query failed. Falling back to LocalStorage:", error.message || error);
         }
       }
     } catch (e) {

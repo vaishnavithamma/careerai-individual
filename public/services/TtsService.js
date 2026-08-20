@@ -108,7 +108,10 @@ export class TtsService {
     };
 
     utterance.onerror = (e) => {
-      console.warn("SpeechSynthesis error on chunk:", e);
+      if (e.error === 'interrupted' || e.error === 'canceled') {
+        return;
+      }
+      console.warn("SpeechSynthesis warning on chunk:", e.error || e);
       // Advance to next chunk or finish gracefully
       this.currentChunkIndex++;
       if (this.currentChunkIndex < this.currentChunks.length) {
@@ -132,11 +135,11 @@ export class TtsService {
   startHeartbeatTimer() {
     this.stopHeartbeatTimer();
     this.resumeInterval = setInterval(() => {
-      if (this.synth && this.synth.speaking) {
+      if (this.synth && this.synth.speaking && !this.synth.paused) {
         this.synth.pause();
         this.synth.resume();
       }
-    }, 5000);
+    }, 14000);
   }
 
   stopHeartbeatTimer() {
