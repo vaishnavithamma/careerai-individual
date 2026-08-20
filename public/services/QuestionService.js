@@ -352,7 +352,8 @@ export class QuestionService {
         selectedRole: profile?.selectedRole || "Software Engineer",
         skills: profile?.skills || [],
         count,
-        difficulty: profile?.difficulty || "progressive",
+        difficulty: "easy",
+        style: "definition",
         round: "technical"
       })
     });

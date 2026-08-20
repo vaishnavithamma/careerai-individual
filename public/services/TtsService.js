@@ -14,48 +14,9 @@ export class TtsService {
     return true;
   }
 
-  async speak(text, onStart, onEnd, onError) {
-    this.cancel();
-
-    try {
-      const response = await fetch("/api/speak", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text })
-      });
-
-      const contentType = response.headers.get("content-type") || "";
-      if (!response.ok || contentType.includes("application/json")) {
-        const errData = contentType.includes("application/json") ? await response.json().catch(() => ({})) : {};
-        throw new Error(errData.error || "TTS Failed");
-      }
-
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      
-      this.audioElement = new Audio(audioUrl);
-      
-      this.audioElement.onplay = () => {
-        this.isSpeaking = true;
-        if (onStart) onStart();
-      };
-      
-      this.audioElement.onended = () => {
-        this.isSpeaking = false;
-        if (onEnd) onEnd();
-      };
-      
-      this.audioElement.onerror = (e) => {
-        console.error("Audio playback error:", e);
-        this.fallbackSpeak(text, onStart, onEnd, onError);
-      };
-
-      this.audioElement.play();
-
-    } catch (e) {
-      console.warn("OpenAI TTS unconfigured or failed, falling back to native browser speechSynthesis:", e.message || e);
-      this.fallbackSpeak(text, onStart, onEnd, onError);
-    }
+  speak(text, onStart, onEnd, onError) {
+    // Native browser SpeechSynthesis (Fast, 100% free, reliable, offline-capable)
+    this.fallbackSpeak(text, onStart, onEnd, onError);
   }
 
   fallbackSpeak(text, onStart, onEnd, onError) {
