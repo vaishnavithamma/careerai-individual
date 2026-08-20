@@ -579,12 +579,16 @@
     </div>
 
     <!-- Roadmap Tab -->
-    <!-- Roadmap Tab -->
-<div id="roadmapTab" class="tab-content">
-  <div class="page-header" style="margin-bottom:1.5rem;">
-    <div class="page-title" style="font-weight:800;font-size:20px;">Learning Path</div>
-    <div class="page-sub" style="color:var(--muted);font-size:14px;">Step by step roadmap to close your skill gaps and raise your Readiness Score</div>
-  </div>
+    <div id="roadmapTab" class="tab-content">
+      <div class="page-header" style="margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div class="page-title" style="font-weight:800;font-size:20px;">Learning Path</div>
+          <div class="page-sub" style="color:var(--muted);font-size:14px;">Step by step roadmap to close your skill gaps and raise your Readiness Score</div>
+        </div>
+        <button class="btn btn-outline" id="regenerateRoadmapBtn" style="display:inline-flex;align-items:center;gap:8px;font-weight:600;padding:8px 16px;">
+          🔄 Regenerate Roadmap
+        </button>
+      </div>
 
   <div class="learning-path-layout">
     <!-- Timeline Left -->
@@ -593,37 +597,42 @@
       <div id="learningPathSteps"></div>
     </div>
 
-    <!-- Sidebar Right -->
+    <!-- Sidebar Right: Progress Summary & Next Best Action -->
     <div class="learning-path-right">
-      <div class="learning-path-right-card">
-        <div class="learning-path-right-illustration">
-          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="100" cy="100" r="80" fill="url(#illustGlow)" opacity="0.3"/>
-            <path d="M75 145h50v8H75z" fill="#d97706"/>
-            <path d="M85 130h30v15H85z" fill="#f59e0b"/>
-            <path d="M93 110h14v20H93z" fill="#d97706"/>
-            <path d="M60 65h80v25c0 22-18 40-40 40s-40-18-40-40V65z" fill="#f59e0b"/>
-            <path d="M50 72c0-8 10-8 10 0v16c0 8-10 8-10 0V72z" stroke="#f59e0b" stroke-width="6" fill="none"/>
-            <path d="M140 72c0-8 10-8 10 0v16c0 8-10 8-10 0V72z" stroke="#f59e0b" stroke-width="6" fill="none"/>
-            <path d="M50 42l50-18 50 18-50 18-50-18z" fill="#4f46e5"/>
-            <path d="M72 45v18c0 8 12 14 28 14s28-6 28-14V45" fill="#312e81"/>
-            <path d="M145 42v30" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="145" cy="72" r="5" fill="#f59e0b"/>
-            <defs>
-              <radialGradient id="illustGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" transform="rotate(90 0 100) scale(80)">
-                <stop stop-color="#c7d2fe"/>
-                <stop offset="1" stop-color="#ede9fe" stop-opacity="0"/>
-              </radialGradient>
-            </defs>
-          </svg>
+      <div class="card" id="learningPathSummaryCard" style="position:sticky;top:20px;">
+        <h3 style="font-weight:700;font-size:16px;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+          📊 Learning Progress
+        </h3>
+        
+        <div style="display:grid;gap:14px;margin-bottom:20px;">
+          <div style="background:var(--card-2, rgba(255,255,255,0.03));padding:14px;border-radius:12px;border:1px solid var(--border);">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Step Completion</div>
+            <div style="font-size:18px;font-weight:800;" id="lpStepsProgressVal">0 of 0 completed</div>
+            <div class="learning-path-progress-bar" style="margin-top:8px;height:6px;background:var(--border);">
+              <div class="learning-path-progress-fill" id="lpStepsProgressBar" style="width:0%;background:var(--brand);"></div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="background:var(--card-2, rgba(255,255,255,0.03));padding:12px;border-radius:12px;border:1px solid var(--border);">
+              <div style="font-size:11px;color:var(--muted);">Current Score</div>
+              <div style="font-size:22px;font-weight:800;color:var(--brand);margin-top:2px;" id="lpCurrentReadinessVal">0%</div>
+            </div>
+            <div style="background:var(--card-2, rgba(255,255,255,0.03));padding:12px;border-radius:12px;border:1px solid var(--border);">
+              <div style="font-size:11px;color:var(--muted);">Projected Max</div>
+              <div style="font-size:22px;font-weight:800;color:var(--success, #10b981);margin-top:2px;" id="lpProjectedReadinessVal">0%</div>
+            </div>
+          </div>
         </div>
-        <div class="learning-path-right-title">Become a Job Ready Professional</div>
-        <div class="learning-path-right-list">
-          <div class="learning-path-right-item"><i data-lucide="check"></i> Hands-on Projects</div>
-          <div class="learning-path-right-item"><i data-lucide="check"></i> Skill-matched Roadmap</div>
-          <div class="learning-path-right-item"><i data-lucide="check"></i> Interview Prep</div>
+
+        <div id="lpNextBestActionBlock" style="background:linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);border:1px solid rgba(59, 130, 246, 0.3);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s ease;">
+          <div style="font-size:11px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;">
+            <span>🚀 Next Best Action</span>
+            <span id="lpNextImpactBadge" class="badge badge-hot" style="font-size:10px;">+0 Readiness</span>
+          </div>
+          <div style="font-weight:700;font-size:14px;color:var(--fg);line-height:1.4;" id="lpNextStepTitle">No pending steps</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;" id="lpNextStepSub">All learning path steps are complete!</div>
         </div>
-        <button class="learning-path-right-btn" id="keepLearningBtn">Keep Learning!</button>
       </div>
     </div>
   </div>
@@ -2611,62 +2620,123 @@
     animateCounter(jobMatchesVal, matchedCount, 1000);
     document.getElementById('jobsProgressBar').style.width = Math.min(100, matchedCount * 15) + '%';
 
-    // Roadmap Generation
-    const allRoadmapItems = [
-      { task: 'Optimize resume contact and header details', req: 'none', reward: 'Readiness +5', impact: 5 },
-      { task: 'Incorporate quantifiable metrics in experience descriptions', req: 'none', reward: 'Readiness +10', impact: 10 },
-      { task: 'Add TailwindCSS or clean layout frameworks to skills list', missing: 'TailwindCSS', reward: 'Readiness +8', impact: 8 },
-      { task: 'Master TypeScript principles and code standard layouts', missing: 'TypeScript', reward: 'Readiness +12', impact: 12 },
-      { task: 'Learn Postgres relational indexing and query scaling', missing: 'PostgreSQL', reward: 'Readiness +10', impact: 10 },
-      { task: 'Build Figma prototype layouts for UI workflow alignment', missing: 'Figma', reward: 'Readiness +9', impact: 9 },
-      { task: 'Integrate LLM API workflows into custom web applications', missing: 'LLMs', reward: 'Readiness +15', impact: 15 }
+    // ── Roadmap Generation ───────────────────────────────────────────────────────
+    // Compute missing skills by diffing against every job's requirements
+    const allMissingSkills = [...new Set(
+      matchedJobs.flatMap(j => j.missing.map(r => r.skill))
+    )].slice(0, 6);
+
+    // readinessScore is computed from the same formula used in loadResumeData
+    const readScoreObj = computeCareerReadiness(resumeScore, maxMatch, skills.length, interviewCount);
+    const readinessScore = readScoreObj.total;
+
+    // Load interview weak points saved after last mock interview
+    let interviewWeakPoints = [];
+    try {
+      const stored = localStorage.getItem('latest_interview_weak_points_' + (typeof user !== 'undefined' && user?.id ? user.id : ''));
+      if (stored) interviewWeakPoints = JSON.parse(stored);
+    } catch (e) {}
+
+    // Readiness score bonus from completed roadmap steps (persisted in localStorage)
+    const readinessBonusKey = 'roadmap_readiness_bonus_' + (typeof user !== 'undefined' && user?.id ? user.id : '');
+    let readinessBonus = 0;
+    try { readinessBonus = parseInt(localStorage.getItem(readinessBonusKey) || '0', 10) || 0; } catch(e) {}
+
+    // Completed steps set (persisted)
+    const completedStepsKey = 'roadmap_completed_steps_' + (typeof user !== 'undefined' && user?.id ? user.id : '');
+    let completedSteps = new Set();
+    try { completedSteps = new Set(JSON.parse(localStorage.getItem(completedStepsKey) || '[]')); } catch(e) {}
+
+    // Show effective readiness (base + bonus from completed steps) on the ring
+    const effectiveReadiness = Math.min(100, readinessScore + readinessBonus);
+    if (readinessBonus > 0) {
+      animateCounter(document.getElementById('scoreNum'), effectiveReadiness);
+      document.getElementById('ringFill').style.strokeDashoffset =
+        String(327 - (327 * effectiveReadiness / 100));
+    }
+
+    // Dashboard mini roadmap — uses cached Gemini roadmap if available, else fallback
+    const cachedRoadmapKey = 'gemini_roadmap_' + (typeof user !== 'undefined' && user?.id ? user.id : '');
+    let cachedRoadmap = null;
+    try { cachedRoadmap = JSON.parse(localStorage.getItem(cachedRoadmapKey) || 'null'); } catch(e) {}
+
+    const fallbackRoadmap = [
+      { id: 'fr-1', task: 'Optimize resume contact and header details', reward: 'Readiness +5', impact: 5, resource_label: 'Resume Writing Guide', resource_url: 'https://www.freecodecamp.org/news/writing-a-killer-software-engineering-resume-b11c9ee5f99a/' },
+      { id: 'fr-2', task: 'Incorporate quantifiable metrics in experience descriptions', reward: 'Readiness +10', impact: 10, resource_label: 'How to Quantify Resume Achievements', resource_url: 'https://www.themuse.com/advice/how-to-quantify-your-resume-bullets-when-you-dont-work-with-numbers' },
+      { id: 'fr-3', task: 'Master TypeScript Generics & Interfaces', reward: 'Readiness +12', impact: 12, resource_label: 'TypeScript Official Handbook: Generics', resource_url: 'https://www.typescriptlang.org/docs/handbook/2/generics.html' },
+      { id: 'fr-4', task: 'Learn Postgres relational indexing and query scaling', reward: 'Readiness +10', impact: 10, resource_label: 'PostgreSQL Official Tutorial', resource_url: 'https://www.postgresql.org/docs/current/tutorial.html' },
     ];
 
-    const activeRoadmap = allRoadmapItems.filter(item => {
-      if (item.req === 'none') return true;
-      if (item.missing && !skills.includes(item.missing)) return true;
-      return false;
-    });
+    const activeRoadmap = cachedRoadmap || fallbackRoadmap;
 
-    // Dashboard Roadmap (4 items)
+    // Dashboard Roadmap preview (4 items)
     const roadmapList = document.getElementById('roadmapList');
     roadmapList.innerHTML = '';
     activeRoadmap.slice(0, 4).forEach((item, idx) => {
-      const isDone = idx === 0; // mark first item as done for interactive contrast
+      const stepId = item.id || ('step-' + idx);
+      const isDone = completedSteps.has(stepId);
       const div = document.createElement('div');
       div.className = 'task-item';
       div.innerHTML = `
-        <div class="checkbox ${isDone ? 'done' : ''}">${isDone ? '✓' : ''}</div>
+        <div class="checkbox ${isDone ? 'done' : ''}" data-stepid="${escapeHtml(stepId)}" data-impact="${item.impact || 5}">${isDone ? '✓' : ''}</div>
         <div style="flex:1;">
           <div class="job-title" style="${isDone ? 'text-decoration:line-through;color:var(--muted);' : ''}">${item.task}</div>
-          <div class="job-meta">${isDone ? 'Completed' : item.reward}</div>
+          <div class="job-meta">${isDone ? 'Completed' : item.reward || ('Readiness +' + (item.impact || 5))}</div>
         </div>
       `;
       div.querySelector('.checkbox').addEventListener('click', function() {
-        this.classList.toggle('done');
-        this.innerHTML = this.classList.contains('done') ? '✓' : '';
-        const title = this.nextElementSibling.firstElementChild;
-        title.style.textDecoration = this.classList.contains('done') ? 'line-through' : 'none';
-        title.style.color = this.classList.contains('done') ? 'var(--muted)' : 'inherit';
+        const sid = this.dataset.stepid;
+        const impactVal = parseInt(this.dataset.impact || '5', 10);
+        const nowDone = !this.classList.contains('done');
+        this.classList.toggle('done', nowDone);
+        this.innerHTML = nowDone ? '✓' : '';
+        const titleEl = this.nextElementSibling.firstElementChild;
+        titleEl.style.textDecoration = nowDone ? 'line-through' : 'none';
+        titleEl.style.color = nowDone ? 'var(--muted)' : 'inherit';
+
+        // Update completed set & bonus
+        if (nowDone) { completedSteps.add(sid); readinessBonus = Math.min(30, readinessBonus + impactVal); }
+        else { completedSteps.delete(sid); readinessBonus = Math.max(0, readinessBonus - impactVal); }
+        try {
+          localStorage.setItem(completedStepsKey, JSON.stringify([...completedSteps]));
+          localStorage.setItem(readinessBonusKey, String(readinessBonus));
+        } catch(e) {}
+
+        // Recalculate and animate readiness ring
+        const newScore = Math.min(100, readinessScore + readinessBonus);
+        animateCounter(document.getElementById('scoreNum'), newScore);
+        document.getElementById('ringFill').style.strokeDashoffset = String(327 - (327 * newScore / 100));
+        document.getElementById('readinessTrend').textContent = newScore > 75 ? 'Excellent readiness' : 'Room to grow';
+        toast(nowDone ? `✅ Step complete! Readiness is now ${newScore}%` : `Step unmarked. Readiness adjusted to ${newScore}%`);
       });
       roadmapList.appendChild(div);
     });
 
-    // Learning Path (replaces Roadmap Tab)
+    // ── Full Learning Path Tab ────────────────────────────────────────────────────
     const stepsWrap = document.getElementById('learningPathSteps');
-    if (stepsWrap) {
+    if (!stepsWrap) return;
+
+    function renderLearningPathSteps(roadmapItems) {
       stepsWrap.innerHTML = '';
-      // Track progress per task in-memory (resets on reload — fine for a prototype)
       window._learningProgress = window._learningProgress || {};
 
-      let inProgressIdx = activeRoadmap.length > 1 ? 1 : (activeRoadmap.length ? 0 : -1);
+      const firstIncomplete = roadmapItems.findIndex(item => !completedSteps.has(item.id || item.task));
+      const inProgressIdx = firstIncomplete >= 0 ? firstIncomplete : -1;
 
-      activeRoadmap.forEach((item, idx) => {
+      roadmapItems.forEach((item, idx) => {
+        const stepId = item.id || ('step-' + idx);
         const key = item.task;
         const storedPct = window._learningProgress[key] || 0;
-        const isCompleted = idx === 0 || storedPct >= 100;
+        const isCompleted = completedSteps.has(stepId) || storedPct >= 100;
         const isInProgress = !isCompleted && idx === inProgressIdx;
         const progressPct = isInProgress ? (storedPct || 35) : 0;
+        const resourceHtml = (item.resource_url && item.resource_label)
+          ? `<a href="${escapeHtml(item.resource_url)}" target="_blank" rel="noopener noreferrer"
+               style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--brand);font-weight:600;text-decoration:none;margin-top:4px;"
+               title="${escapeHtml(item.resource_label)}">
+               📚 ${escapeHtml(item.resource_label)} ↗
+             </a>`
+          : '';
 
         const step = document.createElement('div');
         step.className = 'learning-path-step';
@@ -2679,7 +2749,7 @@
           badgeHtml = `
             <div style="display:flex;align-items:center;gap:1rem;">
               <span class="learning-path-badge-inprogress">${progressPct}%</span>
-              <button class="btn btn-primary btn-sm" data-task="${escapeHtml(key)}" data-skill="${escapeHtml(item.missing || '')}">Continue</button>
+              <button class="btn btn-primary btn-sm" data-task="${escapeHtml(key)}" data-stepid="${escapeHtml(stepId)}" data-impact="${item.impact || 5}" data-resourceurl="${escapeHtml(item.resource_url || '')}" data-resourcelabel="${escapeHtml(item.resource_label || '')}">Continue</button>
             </div>`;
           cardClass = 'in-progress-card';
         } else {
@@ -2687,13 +2757,14 @@
         }
 
         step.innerHTML = `
-          <div class="learning-path-circle">${idx + 1}</div>
+          <div class="learning-path-circle">${isCompleted ? '✓' : idx + 1}</div>
           <div class="learning-path-card ${cardClass}">
             <div class="learning-path-details">
               <div class="learning-path-number">${idx + 1}</div>
               <div class="learning-path-info">
-                <div class="learning-path-title" style="${isCompleted ? 'text-decoration:line-through;color:var(--muted);' : ''}">${item.task}</div>
-                <div class="learning-path-meta">${item.reward}</div>
+                <div class="learning-path-title" style="${isCompleted ? 'text-decoration:line-through;color:var(--muted);' : ''}">${escapeHtml(item.task)}</div>
+                <div class="learning-path-meta">${escapeHtml(item.reward || ('Readiness +' + (item.impact || 5)))}</div>
+                ${resourceHtml}
                 ${isInProgress ? `
                   <div class="learning-path-progress-container" style="margin-top:0.35rem;">
                     <div class="learning-path-progress-bar">
@@ -2705,45 +2776,243 @@
             ${badgeHtml}
           </div>
         `;
+
+        // "Mark as Complete" checkbox click on circle
+        step.querySelector('.learning-path-circle').style.cursor = 'pointer';
+        step.querySelector('.learning-path-circle').title = isCompleted ? 'Mark incomplete' : 'Mark complete';
+        step.querySelector('.learning-path-circle').addEventListener('click', () => {
+          const nowDone = !isCompleted;
+          const impactVal = parseInt(item.impact || 5, 10);
+          if (nowDone) { completedSteps.add(stepId); readinessBonus = Math.min(30, readinessBonus + impactVal); }
+          else { completedSteps.delete(stepId); readinessBonus = Math.max(0, readinessBonus - impactVal); }
+          try {
+            localStorage.setItem(completedStepsKey, JSON.stringify([...completedSteps]));
+            localStorage.setItem(readinessBonusKey, String(readinessBonus));
+          } catch(e) {}
+          const newScore = Math.min(100, readinessScore + readinessBonus);
+          animateCounter(document.getElementById('scoreNum'), newScore);
+          document.getElementById('ringFill').style.strokeDashoffset = String(327 - (327 * newScore / 100));
+          document.getElementById('readinessTrend').textContent = newScore > 75 ? 'Excellent readiness' : 'Room to grow';
+          toast(nowDone ? `✅ Step complete! Readiness → ${newScore}%` : `Step unmarked. Readiness → ${newScore}%`);
+          renderLearningPathSteps(roadmapItems);
+        });
+
         stepsWrap.appendChild(step);
       });
 
-      function handleContinueClick(taskKey, skillName) {
+      // Continue button handler
+      function handleContinueClick(taskKey, stepId, impactVal, resourceUrl, resourceLabel) {
         const current = window._learningProgress[taskKey] || 35;
         const next = Math.min(100, current + 35);
         window._learningProgress[taskKey] = next;
 
-        const meta = skillName ? metaFor(skillName) : null;
-        if (meta && meta.courses && meta.courses.length) {
-          toast(next >= 100 ? `Marked complete! Great work on: ${taskKey}` : `Opening course resource — ${next}% progress logged`);
-          window.open(`https://www.google.com/search?q=${encodeURIComponent(meta.courses[0])}`, '_blank', 'noopener');
+        if (next >= 100) {
+          completedSteps.add(stepId);
+          readinessBonus = Math.min(30, readinessBonus + impactVal);
+          try {
+            localStorage.setItem(completedStepsKey, JSON.stringify([...completedSteps]));
+            localStorage.setItem(readinessBonusKey, String(readinessBonus));
+          } catch(e) {}
+          const newScore = Math.min(100, readinessScore + readinessBonus);
+          animateCounter(document.getElementById('scoreNum'), newScore);
+          document.getElementById('ringFill').style.strokeDashoffset = String(327 - (327 * newScore / 100));
+          document.getElementById('readinessTrend').textContent = newScore > 75 ? 'Excellent readiness' : 'Room to grow';
+          toast(`🎉 Step complete! Readiness is now ${newScore}%`);
         } else {
-          toast(next >= 100 ? `Marked complete! Great work on: ${taskKey}` : `${next}% progress logged`);
+          toast(`${next}% progress logged`);
         }
-        // Re-render to reflect new progress / unlock next step
-        generateDynamicContent(currentResumeData?.skills || [], currentResumeData?.name, resumeScore, maxMatch, interviewCount);
+        if (resourceUrl) {
+          window.open(resourceUrl, '_blank', 'noopener');
+        }
+        renderLearningPathSteps(roadmapItems);
       }
 
       stepsWrap.querySelectorAll('[data-task]').forEach(btn => {
-        btn.addEventListener('click', () => handleContinueClick(btn.dataset.task, btn.dataset.skill));
+        btn.addEventListener('click', () => handleContinueClick(
+          btn.dataset.task,
+          btn.dataset.stepid,
+          parseInt(btn.dataset.impact || '5', 10),
+          btn.dataset.resourceurl,
+          btn.dataset.resourcelabel
+        ));
       });
 
-      // Continue Learning footer — driven by the current in-progress item
+      // Continue Learning footer
       const footer = document.getElementById('continueLearningCard');
       if (footer) {
-        const activeItem = activeRoadmap[inProgressIdx];
-        if (activeItem && (window._learningProgress[activeItem.task] || 35) < 100) {
+        const activeIdx = roadmapItems.findIndex(item => !completedSteps.has(item.id || item.task));
+        const activeItem = activeIdx >= 0 ? roadmapItems[activeIdx] : null;
+        if (activeItem) {
           const pct = window._learningProgress[activeItem.task] || 35;
           footer.style.display = 'flex';
           document.getElementById('continueLearningSubject').textContent = activeItem.task;
           document.getElementById('continueLearningBarFill').style.width = pct + '%';
           document.getElementById('continueLearningPct').textContent = pct + '%';
-          document.getElementById('continueLearningBtn').onclick = () => handleContinueClick(activeItem.task, activeItem.missing || '');
+          document.getElementById('continueLearningBtn').onclick = () => handleContinueClick(
+            activeItem.task,
+            activeItem.id || activeItem.task,
+            parseInt(activeItem.impact || '5', 10),
+            activeItem.resource_url || '',
+            activeItem.resource_label || ''
+          );
         } else {
           footer.style.display = 'none';
         }
       }
+
+      // Update Progress Summary Panel (Right Sidebar)
+      const totalStepsCount = roadmapItems.length;
+      const completedCount = roadmapItems.filter(item => completedSteps.has(item.id || item.task)).length;
+      const completionPct = totalStepsCount > 0 ? Math.round((completedCount / totalStepsCount) * 100) : 0;
+      
+      const currentLiveReadiness = Math.min(100, readinessScore + readinessBonus);
+      
+      // Calculate remaining potential impact
+      const remainingImpact = roadmapItems
+        .filter(item => !completedSteps.has(item.id || item.task))
+        .reduce((sum, item) => sum + parseInt(item.impact || 5, 10), 0);
+      const projectedReadiness = Math.min(100, currentLiveReadiness + remainingImpact);
+
+      // Identify single incomplete step with highest impact
+      const incompleteSteps = roadmapItems
+        .filter(item => !completedSteps.has(item.id || item.task))
+        .sort((a, b) => (parseInt(b.impact || 5, 10) - parseInt(a.impact || 5, 10)));
+
+      const nextBestStep = incompleteSteps[0] || null;
+
+      const lpStepsProgressVal = document.getElementById('lpStepsProgressVal');
+      if (lpStepsProgressVal) lpStepsProgressVal.textContent = `${completedCount} of ${totalStepsCount} completed`;
+      
+      const lpStepsProgressBar = document.getElementById('lpStepsProgressBar');
+      if (lpStepsProgressBar) lpStepsProgressBar.style.width = `${completionPct}%`;
+
+      const lpCurrentReadinessVal = document.getElementById('lpCurrentReadinessVal');
+      if (lpCurrentReadinessVal) lpCurrentReadinessVal.textContent = `${currentLiveReadiness}%`;
+
+      const lpProjectedReadinessVal = document.getElementById('lpProjectedReadinessVal');
+      if (lpProjectedReadinessVal) lpProjectedReadinessVal.textContent = `${projectedReadiness}%`;
+
+      const nextBlock = document.getElementById('lpNextBestActionBlock');
+      const nextTitle = document.getElementById('lpNextStepTitle');
+      const nextSub = document.getElementById('lpNextStepSub');
+      const nextBadge = document.getElementById('lpNextImpactBadge');
+
+      if (nextBestStep) {
+        const stepId = nextBestStep.id || ('step-' + roadmapItems.indexOf(nextBestStep));
+        const impactVal = parseInt(nextBestStep.impact || 5, 10);
+        if (nextTitle) nextTitle.textContent = nextBestStep.task;
+        if (nextSub) nextSub.textContent = `High-impact target to boost readiness by +${impactVal}`;
+        if (nextBadge) {
+          nextBadge.textContent = `+${impactVal} Readiness`;
+          nextBadge.style.display = 'inline-block';
+        }
+        
+        if (nextBlock) {
+          nextBlock.onclick = () => {
+            const targetStepEl = stepsWrap.querySelector(`[data-stepid="${stepId}"]`) || stepsWrap.children[roadmapItems.indexOf(nextBestStep)];
+            if (targetStepEl) {
+              targetStepEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              const card = targetStepEl.querySelector('.learning-path-card');
+              if (card) {
+                card.style.transition = 'all 0.3s ease';
+                card.style.boxShadow = '0 0 0 2px var(--brand)';
+                setTimeout(() => { card.style.boxShadow = ''; }, 1800);
+              }
+            }
+          };
+        }
+      } else {
+        if (nextTitle) nextTitle.textContent = 'All steps completed! 🎉';
+        if (nextSub) nextSub.textContent = 'You have completed every step in your learning path.';
+        if (nextBadge) nextBadge.style.display = 'none';
+        if (nextBlock) nextBlock.onclick = null;
+      }
     }
+
+    // Always render immediately (fallback or cache) so the tab is never blank
+    console.log('[Roadmap] Immediate render — items:', activeRoadmap.length, activeRoadmap);
+    renderLearningPathSteps(activeRoadmap);
+
+    // ── Async Gemini Roadmap Fetch (non-blocking) ─────────────────────────────
+    async function fetchAndRenderGeminiRoadmap(forceRefresh = false) {
+      if (!forceRefresh && cachedRoadmap) {
+        console.log('[Roadmap] Skipping fetch — using cached roadmap:', cachedRoadmap.length, 'steps');
+        return;
+      }
+
+      const btn = document.getElementById('regenerateRoadmapBtn');
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating...'; }
+      // DO NOT blank out stepsWrap — keep showing fallback/cached steps during fetch
+      // Just show a subtle inline status at the top of the steps wrap
+      const loadingBanner = document.createElement('div');
+      loadingBanner.id = 'roadmapLoadingBanner';
+      loadingBanner.style.cssText = 'padding:8px 12px;background:var(--card-2,rgba(255,255,255,0.05));border-radius:8px;font-size:13px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px;';
+      loadingBanner.innerHTML = '<div class="spinner" style="width:14px;height:14px;border-width:2px;"></div> AI is personalizing your roadmap...';
+      stepsWrap.prepend(loadingBanner);
+
+      try {
+        const selectedRole = currentResumeData?.selectedRole ||
+          (matchedJobs[0] ? matchedJobs[0].title : 'Software Engineer');
+
+        console.log('[Roadmap] Fetching from Gemini — role:', selectedRole, '| missing:', allMissingSkills, '| weakPoints:', interviewWeakPoints);
+
+        const resp = await fetch('/api/generate-roadmap', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            selectedRole,
+            skills: skills || [],
+            missingSkills: allMissingSkills,
+            interviewWeakPoints
+          })
+        });
+        const rawText = await resp.text();
+        console.log('[Roadmap] RAW Gemini response text:', rawText);
+
+        let newRoadmap;
+        try {
+          newRoadmap = JSON.parse(rawText);
+          console.log('[Roadmap] Parsed roadmap JSON:', newRoadmap);
+        } catch (parseErr) {
+          console.error('[Roadmap] JSON.parse failed:', parseErr, '| raw:', rawText);
+          newRoadmap = null;
+        }
+
+        if (Array.isArray(newRoadmap) && newRoadmap.length > 0) {
+          const newItems = newRoadmap.map(item => ({
+            ...item,
+            id: item.id || ('gemini-' + item.task.replace(/\s+/g, '-').toLowerCase().slice(0, 30))
+          }));
+          console.log('[Roadmap] Rendering', newItems.length, 'Gemini steps:', newItems);
+          try { localStorage.setItem(cachedRoadmapKey, JSON.stringify(newItems)); } catch(e) {}
+          renderLearningPathSteps(newItems);
+          toast('✨ Learning path updated by Gemini AI!');
+        } else {
+          console.warn('[Roadmap] Gemini returned non-array or empty:', newRoadmap, '— keeping fallback visible');
+          // Fallback is already showing — just remove the loading banner
+          toast('AI roadmap unavailable. Showing built-in learning path.');
+        }
+      } catch (err) {
+        console.error('[Roadmap] Fetch/parse error — keeping fallback visible:', err);
+        // Fallback is already visible — no need to re-render
+      } finally {
+        const banner = document.getElementById('roadmapLoadingBanner');
+        if (banner) banner.remove();
+        if (btn) { btn.disabled = false; btn.textContent = '🔄 Regenerate Roadmap'; }
+      }
+    }
+
+    // Wire up Regenerate button
+    const regenBtn = document.getElementById('regenerateRoadmapBtn');
+    if (regenBtn) {
+      regenBtn.onclick = () => fetchAndRenderGeminiRoadmap(true);
+    }
+
+    // Auto-fetch on first load if no cache
+    if (!cachedRoadmap) {
+      fetchAndRenderGeminiRoadmap(false);
+    }
+
     // Dynamic AI Insight
     let insight = "Your resume has been successfully scanned. Try introducing more numerical parameters (like budgets managed, team members led, or performance gains) under experience to raise your readiness score.";
     if (skills.length < 5) {
@@ -3609,6 +3878,14 @@
       }
 
       await HistoryService.saveInterview(user.id, report);
+
+      // Store mock interview weak points to feed into Learning Path roadmap generation
+      const weakPoints = [...(report.weakAreas || []), ...(report.recommendedTopics || []), ...(report.weaknesses || [])].filter(Boolean);
+      if (weakPoints.length > 0) {
+        try {
+          localStorage.setItem('latest_interview_weak_points_' + user.id, JSON.stringify(weakPoints));
+        } catch (e) {}
+      }
 
       const unlockedIds = AnalyticsService.evaluateAchievements(report);
       if (unlockedIds.length > 0) {

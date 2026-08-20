@@ -259,6 +259,56 @@ INSTRUCTIONS:
               }
             }
 
+            // 4. Generate Personalized Learning Roadmap (Gemini API)
+            if (urlPath === "/api/generate-roadmap" && req.method === "POST") {
+              const body = await getRequestBody(req);
+              const { selectedRole, skills, missingSkills, interviewWeakPoints } = body;
+
+              if (!GEMINI_API_KEY) {
+                return res.end(JSON.stringify({ error: "GEMINI_KEY_MISSING" }));
+              }
+
+              const prompt = `You are a senior technical engineering lead and career mentor.
+Create a personalized 5-step learning path roadmap for a candidate targetting the role of ${selectedRole || "Software Engineer"}.
+
+CANDIDATE CONTEXT:
+- Existing Skills: ${(skills || []).join(", ") || "General Programming"}
+- Identified Skill Gaps: ${(missingSkills || []).join(", ") || "Cloud Architecture, Advanced System Design"}
+- Recent Mock Interview Weak Points: ${(interviewWeakPoints || []).join(", ") || "None recorded yet"}
+
+REQUIREMENTS:
+1. Focus heavily on addressing the candidate's specific skill gaps and mock interview weak points.
+2. For EVERY step, include a specific, real, high-quality learning resource URL (e.g. official documentation on MDN, React Docs, Python Docs, or freeCodeCamp/W3Schools) and a resource_label.
+3. Include an "impact" weight (number between 5 and 15) for readiness score recalculation.
+
+Return ONLY a valid JSON array of objects fitting this exact schema (no markdown blocks, no backticks, no explanatory filler):
+[
+  {
+    "id": "step-1",
+    "task": "Master TypeScript Interfaces & Generics",
+    "description": "Learn static typing, interface contracts, and generics to build robust scalable applications.",
+    "missingSkill": "TypeScript",
+    "impact": 10,
+    "reward": "Readiness +10",
+    "resource_label": "Official TypeScript Docs: Generics Handbook",
+    "resource_url": "https://www.typescriptlang.org/docs/handbook/2/generics.html"
+  }
+]`;
+
+              const systemInstruction = "You are a senior career advisor who returns ONLY valid JSON arrays of learning roadmap steps. Always provide real resource_url and resource_label per step.";
+
+              const output = await generateLLMText(prompt, systemInstruction, true);
+              const cleanOutput = cleanJsonOutput(output, 'array');
+              
+              try {
+                JSON.parse(cleanOutput);
+                return res.end(cleanOutput);
+              } catch (e) {
+                console.warn("Gemini roadmap output is not valid JSON array:", cleanOutput);
+                return res.end(JSON.stringify({ error: "INVALID_LLM_JSON" }));
+              }
+            }
+
             res.writeHead(404);
             res.end(JSON.stringify({ error: "Not Found" }));
 
