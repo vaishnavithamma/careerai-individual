@@ -309,6 +309,67 @@ Return ONLY a valid JSON array of objects fitting this exact schema (no markdown
               }
             }
 
+            // 5. Generate Mock Assessment Questions (Gemini API with local fallback)
+            if (urlPath === "/api/generate-assessment" && req.method === "POST") {
+              const body = await getRequestBody(req);
+              const { track, count = 5 } = body;
+
+              if (!GEMINI_API_KEY) {
+                return res.end(JSON.stringify({ error: "GEMINI_KEY_MISSING" }));
+              }
+
+              const isAptitude = String(track).toLowerCase() === "aptitude";
+
+              let prompt = "";
+              let systemInstruction = "";
+
+              if (isAptitude) {
+                prompt = `Generate exactly ${count} multiple-choice placement test questions strictly for Quantitative Aptitude & Logical Reasoning.
+                Topics: Basic Math, Numbers, Percentages, Ratios, Speed & Distance, Puzzles, Series & Pattern Recognition.
+                Do NOT include any programming, coding, or computer science questions.
+
+                Return ONLY a JSON array of objects fitting this exact schema (no markdown, no backticks):
+                [
+                  {
+                    "language": "Aptitude",
+                    "category": "Aptitude",
+                    "question": "If a train travels 60 km in 1 hour, how far will it travel in 5 hours at the same speed?",
+                    "options": ["60 km", "120 km", "300 km", "150 km"],
+                    "answer": "300 km"
+                  }
+                ]`;
+
+                systemInstruction = "You are a placement exam creator specializing in quantitative aptitude and logical reasoning. Output ONLY a valid JSON array of multiple-choice questions.";
+              } else {
+                prompt = `Generate exactly ${count} multiple-choice technical assessment questions for the ${track} programming language track.
+                Topics: Core syntax, Object-Oriented Programming, Data Structures, Memory Management, and standard libraries for ${track}.
+                
+                Return ONLY a JSON array of objects fitting this exact schema (no markdown, no backticks):
+                [
+                  {
+                    "language": "${track}",
+                    "category": "Technical",
+                    "question": "Which keyword is used to inherit a class in Java?",
+                    "options": ["extends", "implements", "inherits", "using"],
+                    "answer": "extends"
+                  }
+                ]`;
+
+                systemInstruction = `You are a technical examiner for ${track}. Output ONLY a valid JSON array of multiple-choice questions.`;
+              }
+
+              const output = await generateLLMText(prompt, systemInstruction, true);
+              const cleanOutput = cleanJsonOutput(output, 'array');
+
+              try {
+                JSON.parse(cleanOutput);
+                return res.end(cleanOutput);
+              } catch (e) {
+                console.warn("Gemini assessment output is not valid JSON array:", cleanOutput);
+                return res.end(JSON.stringify({ error: "INVALID_LLM_JSON" }));
+              }
+            }
+
             res.writeHead(404);
             res.end(JSON.stringify({ error: "Not Found" }));
 

@@ -163,7 +163,28 @@ startBtn.onclick = () => {
     initializeQuiz();
 };
 
-function initializeQuiz() {
+async function initializeQuiz() {
+    const isAptitudeMode = selectedLanguage.toLowerCase() === "aptitude";
+
+    // 1. Attempt live Gemini API question generation
+    try {
+        const response = await fetch("/api/generate-assessment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ track: selectedLanguage, count: 5 })
+        });
+        const liveData = await response.json();
+        if (Array.isArray(liveData) && liveData.length === 5 && !liveData.error) {
+            quizQuestions = liveData;
+            console.log("✅ Assessment initialized via live Gemini API for track:", selectedLanguage);
+            validateAndFinalizeQuiz(isAptitudeMode);
+            return;
+        }
+    } catch (err) {
+        console.warn("Live Gemini assessment unavailable, using local question bank fallback:", err);
+    }
+
+    // 2. Fallback: Local Question Bank
     const langLower = selectedLanguage.toLowerCase();
     const targetLang = langLower.includes("python")
       ? "Python"
@@ -171,7 +192,6 @@ function initializeQuiz() {
       ? "Java"
       : "C";
 
-    // Track used questions by reference to guarantee no duplicates
     const usedSet = new Set();
 
     function pickUnique(pool, count) {
@@ -187,32 +207,83 @@ function initializeQuiz() {
         return result;
     }
 
-    // 1. Language-specific coding/technical questions
-    const langSpecific = uniqueQuestionsList.filter(q => q.language === targetLang);
+    let combined = [];
 
-    // 2. Aptitude & Communication questions
-    const aptitude = uniqueQuestionsList.filter(q => q.category === "Aptitude");
-    const comm = uniqueQuestionsList.filter(q => q.category === "Communication");
+    if (isAptitudeMode) {
+        // Aptitude mode: Filter strictly for Quantitative Aptitude & Logic questions
+        const pureAptitudePool = uniqueQuestionsList.filter(q => {
+            const isApt = q.category === "Aptitude" || q.language === "Aptitude";
+            const text = (q.question || "").toLowerCase();
+            const isCoding = text.includes("code") || text.includes("program") || text.includes("java") || 
+                             text.includes("python") || text.includes("javascript") || text.includes("html") || 
+                             text.includes("css") || text.includes("sql") || text.includes("pointer") || 
+                             text.includes("class") || text.includes("function") || text.includes("variable");
+            return isApt && !isCoding;
+        });
 
-    // 3. Balanced assembly: 3 Language + 1 Aptitude + 1 Communication = 5 total
-    const selectedLang = pickUnique(langSpecific, 3);
-    const selectedApt  = pickUnique(aptitude, 1);
-    const selectedComm = pickUnique(comm, 1);
+        combined = pickUnique(pureAptitudePool, 5);
+        
+        // Fill up to 5 if needed strictly from pureAptitudePool
+        if (combined.length < 5) {
+            const remaining = pureAptitudePool.filter(q => !usedSet.has(q));
+            combined = combined.concat(pickUnique(remaining, 5 - combined.length));
+        }
+    } else {
+        // Technical language tracks (Java, Python, C)
+        const langSpecific = uniqueQuestionsList.filter(q => q.language === targetLang);
+        const aptitude = uniqueQuestionsList.filter(q => q.category === "Aptitude");
+        const comm = uniqueQuestionsList.filter(q => q.category === "Communication");
 
-    let combined = [...selectedLang, ...selectedApt, ...selectedComm];
+        const selectedLang = pickUnique(langSpecific, 3);
+        const selectedApt  = pickUnique(aptitude, 1);
+        const selectedComm = pickUnique(comm, 1);
 
-    // Fallback: fill remaining slots with unused questions (no repeats)
-    if (combined.length < 5) {
-        const remainingNeeded = 5 - combined.length;
-        const unused = uniqueQuestionsList.filter(q => !usedSet.has(q));
-        const extras = pickUnique(unused, remainingNeeded);
-        combined = combined.concat(extras);
+        combined = [...selectedLang, ...selectedApt, ...selectedComm];
+
+        if (combined.length < 5) {
+            const unused = uniqueQuestionsList.filter(q => !usedSet.has(q));
+            combined = combined.concat(pickUnique(unused, 5 - combined.length));
+        }
     }
 
     quizQuestions = shuffleArray(combined).slice(0, 5);
-    console.log("✅ Quiz initialized with", quizQuestions.length, "questions");
-    
-    // 4. Shuffle options for each selected question
+    console.log("✅ Assessment initialized via local question bank for track:", selectedLanguage);
+    validateAndFinalizeQuiz(isAptitudeMode);
+}
+
+function validateAndFinalizeQuiz(isAptitudeMode) {
+    if (isAptitudeMode) {
+        // Final Safety Filter: Ensure 100% Aptitude / Logic, zero coding questions
+        quizQuestions = quizQuestions.filter(q => {
+            const text = (q.question || "").toLowerCase();
+            const isCoding = text.includes("code") || text.includes("program") || text.includes("java") || 
+                             text.includes("python") || text.includes("javascript") || text.includes("html") || 
+                             text.includes("css") || text.includes("sql") || text.includes("pointer") || 
+                             text.includes("class") || text.includes("function") || text.includes("variable");
+            return !isCoding;
+        });
+
+        // If any question was removed by safety check, backfill strictly from local aptitude pool
+        if (quizQuestions.length < 5) {
+            const safeAptitude = uniqueQuestionsList.filter(q => {
+                const text = (q.question || "").toLowerCase();
+                return (q.category === "Aptitude" || q.language === "Aptitude") &&
+                       !text.includes("java") && !text.includes("python") && !text.includes("javascript") && 
+                       !text.includes("css") && !text.includes("html") && !text.includes("sql");
+            });
+            for (const q of safeAptitude) {
+                if (!quizQuestions.some(existing => existing.question === q.question)) {
+                    quizQuestions.push(q);
+                    if (quizQuestions.length === 5) break;
+                }
+            }
+        }
+    }
+
+    setupQuizState();
+}
+
+function setupQuizState() {
     quizQuestions.forEach(q => {
         q.shuffledOptions = shuffleArray([...q.options]);
     });
